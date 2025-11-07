@@ -4,24 +4,18 @@ import {
   useContext,
   type ReactNode,
   useMemo,
-  useState,
-  useEffect,
 } from 'react';
 import type { FirebaseApp } from 'firebase/app';
 import type { Auth } from 'firebase/auth';
 import type { Firestore } from 'firebase/firestore';
 
 interface FirebaseContextValue {
-  app: FirebaseApp | null;
-  auth: Auth | null;
-  firestore: Firestore | null;
+  app: FirebaseApp;
+  auth: Auth;
+  firestore: Firestore;
 }
 
-const FirebaseContext = createContext<FirebaseContextValue>({
-  app: null,
-  auth: null,
-  firestore: null,
-});
+const FirebaseContext = createContext<FirebaseContextValue | undefined>(undefined);
 
 export function FirebaseProvider({
   children,
@@ -38,35 +32,35 @@ export function FirebaseProvider({
 }
 
 export function useFirebaseApp() {
-  const { app } = useContext(FirebaseContext);
-  if (!app) {
-    throw new Error('useFirebaseApp must be used within a FirebaseProvider');
+  const context = useContext(FirebaseContext);
+  if (context === undefined) {
+      throw new Error('useFirebaseApp must be used within a FirebaseProvider');
   }
-  return app;
+  return context.app;
 }
 
 export function useAuth() {
-  const { auth } = useContext(FirebaseContext);
-  if (!auth) {
-    throw new Error('useAuth must be used within a FirebaseProvider');
+  const context = useContext(FirebaseContext);
+  if (context === undefined) {
+      throw new Error('useAuth must be used within a FirebaseProvider');
   }
-  return auth;
+  return context.auth;
 }
 
 export function useFirestore() {
-  const { firestore } = useContext(FirebaseContext);
-  if (!firestore) {
-    throw new Error('useFirestore must be used within a FirebaseProvider');
+  const context = useContext(FirebaseContext);
+  if (context === undefined) {
+      throw new Error('useFirestore must be used within a FirebaseProvider');
   }
-  return firestore;
+  return context.firestore;
 }
 
 export function useFirebase() {
   const context = useContext(FirebaseContext);
-  if (!context.app || !context.auth || !context.firestore) {
+  if (context === undefined) {
     throw new Error('useFirebase must be used within a FirebaseProvider');
   }
-  return context as Required<FirebaseContextValue>;
+  return context;
 }
 
 export function useMemoFirebase<T>(

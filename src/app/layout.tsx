@@ -3,7 +3,7 @@ import { Toaster } from "@/components/ui/toaster"
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import CursorPhoenix from '@/components/CursorPhoenix';
-import { FirebaseClientProvider } from '@/firebase';
+import { FirebaseClientProvider } from '@/firebase/client-provider';
 import './globals.css';
 
 export const metadata: Metadata = {
@@ -27,11 +27,11 @@ export default function RootLayout({
         <FirebaseClientProvider>
           <CursorPhoenix />
           <div className="flex flex-col min-h-screen">
-            <Header />
-            <main className="flex-grow">
+              <Header />
+              <main className="flex-grow">
               {children}
-            </main>
-            <Footer />
+              </main>
+              <Footer />
           </div>
           <Toaster />
         </FirebaseClientProvider>

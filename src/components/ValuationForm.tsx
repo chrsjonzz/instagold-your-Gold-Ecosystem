@@ -215,7 +215,7 @@ export default function ValuationForm() {
                             <p className="text-xs text-yellow-300 mt-4">*This is an estimate. Final value subject to physical verification by our partners.</p>
                         </div>
                     ) : (
-                        <div className="flex flex-col items-center justify-center min-h-[180px]">
+                        <div className="flex flex-col items-center justify-center">
                             {placeholderImage && <Image
                                 src={placeholderImage.imageUrl}
                                 alt={placeholderImage.description}
@@ -236,9 +236,12 @@ export default function ValuationForm() {
                             <input type="hidden" name="estimatedValue" value={currentValuation.estimatedValue} />
                             <ProceedToSellButton />
                         </form>
-                        <div className="mt-2 w-full text-center p-3 rounded-full bg-black/10">
-                            <p className="text-sm text-yellow-100">Estimated Market Value</p>
-                        </div>
+                        <Button variant="link" asChild className="text-white opacity-80 hover:opacity-100">
+                                <Link href="/rate-card" target="_blank">
+                                    <Download className="mr-2 h-4 w-4" />
+                                    Download Rate Card
+                                </Link>
+                        </Button>
                         </>
                     )}
                     <Button variant="link" className="text-white" onClick={handleNewValuation}>Start New Valuation</Button>

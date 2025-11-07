@@ -65,6 +65,18 @@
       "description": "Gold coins with an Indian flag overlay, representing the 'tola' weight.",
       "imageUrl": "https://images.unsplash.com/photo-1586974710160-55f48f417990?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxnb2xkJTIwY29pbnN8ZW58MHx8fHwxNzYyNDIyNTIwfDA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "gold coins"
+    },
+    {
+      "id": "about-us-mission",
+      "description": "A compass pointing towards a direction, symbolizing mission.",
+      "imageUrl": "https://images.unsplash.com/photo-1470433230623-f3b7936d5c64?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxjb21wYXNzfGVufDB8fHx8MTc2MjYyMTU5NHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "compass direction"
+    },
+    {
+      "id": "about-us-values",
+      "description": "Hands holding a glowing lightbulb, symbolizing values and ideas.",
+      "imageUrl": "https://images.unsplash.com/photo-1545299438-163914a229df?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxnbG93aW5nJTIwbGlnaHRidWxifGVufDB8fHx8MTc2MjYyMTY0Nnww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "glowing lightbulb"
     }
   ]
 }

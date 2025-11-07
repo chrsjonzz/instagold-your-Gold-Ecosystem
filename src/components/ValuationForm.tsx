@@ -18,6 +18,7 @@ import { Slider } from '@/components/ui/slider';
 import { useToast } from '@/hooks/use-toast';
 import { Sparkles, Loader2, Gem, ArrowRight, Download } from 'lucide-react';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
+import GoldToRupeeAnimation from './GoldToRupeeAnimation';
 
 const initialFormState: ValuationFormState = {
     message: '',
@@ -86,6 +87,7 @@ export default function ValuationForm() {
     });
     
     const [currentValuation, setCurrentValuation] = useState<ValuationFormState | null>(null);
+    const [showAnimation, setShowAnimation] = useState(false);
 
     useEffect(() => {
         if (formState.message) {
@@ -100,7 +102,11 @@ export default function ValuationForm() {
                     title: 'Valuation Complete!',
                     description: `We've estimated the value of your gold item.`,
                 });
-                setCurrentValuation(formState);
+                setShowAnimation(true);
+                setTimeout(() => {
+                    setCurrentValuation(formState);
+                    setShowAnimation(false);
+                }, 4000); // Duration of the animation
                 valuationFormRef.current?.reset();
                 form.reset();
             }
@@ -204,8 +210,10 @@ export default function ValuationForm() {
                         Your online gold valuation will appear here.
                     </CardDescription>
                 </CardHeader>
-                <CardContent className="text-center">
-                    {currentValuation?.estimatedValue ? (
+                <CardContent className="text-center min-h-[224px] flex items-center justify-center">
+                    {showAnimation ? (
+                         <GoldToRupeeAnimation />
+                    ) : currentValuation?.estimatedValue ? (
                         <div>
                             <p className="text-sm text-yellow-200">Estimated Market Value</p>
                             <p className="text-5xl font-bold font-headline tracking-tight my-2">
@@ -214,7 +222,7 @@ export default function ValuationForm() {
                             <p className="text-xs text-yellow-300 mt-4">*This is an estimate. Final value subject to physical verification by our partners.</p>
                         </div>
                     ) : (
-                         <div className="flex flex-col items-center justify-center h-48">
+                         <div className="flex flex-col items-center justify-center">
                             {placeholderImage && <Image
                                 src={placeholderImage.imageUrl}
                                 alt={placeholderImage.description}

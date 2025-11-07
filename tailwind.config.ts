@@ -104,6 +104,19 @@ export default {
             '0%, 100%': { transform: 'translateY(0) skewX(0)' },
             '50%': { transform: 'translateY(-2px) skewX(5deg)' },
         },
+        'fall': {
+            '0%': { transform: 'translateY(-100%)', opacity: '1' },
+            '100%': { transform: 'translateY(250px)', opacity: '0' },
+        },
+        'coin-to-rupee': {
+            '0%': { opacity: '1', transform: 'scale(1)' },
+            '50%': { opacity: '0', transform: 'scale(0.5) rotate(360deg)' },
+            '100%': { opacity: '0', transform: 'scale(0)' },
+        },
+        'rupee-show': {
+            '0%': { opacity: '0', transform: 'scale(0.5)' },
+            '100%': { opacity: '1', transform: 'scale(1)' },
+        },
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
@@ -112,6 +125,9 @@ export default {
         'wing-flap': 'wing-flap 1.5s ease-in-out infinite',
         'wing-flap-slow': 'wing-flap-slow 2s ease-in-out infinite',
         'wing-flap-delay': 'wing-flap-delay 2.5s ease-in-out infinite',
+        'fall': 'fall 2s linear forwards',
+        'coin-to-rupee': 'coin-to-rupee 1s forwards',
+        'rupee-show': 'rupee-show 1s forwards',
       },
     },
   },

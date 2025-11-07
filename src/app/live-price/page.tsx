@@ -36,9 +36,9 @@ export default function LivePricePage() {
             <CardContent className="p-6 md:p-8">
               <div className="grid grid-cols-1 md:grid-cols-1 gap-6 items-center">
                 {prices.map((item, index) => (
-                  <div key={item.title} className={`relative p-6 rounded-lg`}>
+                  <div key={item.title} className="relative p-6 rounded-lg text-center">
                     <h3 className="text-lg font-semibold text-muted-foreground">{item.title}</h3>
-                    <div className="flex items-baseline gap-2 mt-2">
+                    <div className="flex items-baseline justify-center gap-2 mt-2">
                       <p className="text-4xl font-bold font-headline text-primary">
                         INR {item.price}
                       </p>

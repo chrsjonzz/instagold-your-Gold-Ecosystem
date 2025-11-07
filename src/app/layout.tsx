@@ -1,6 +1,9 @@
 import type { Metadata } from 'next';
 import { Toaster } from "@/components/ui/toaster"
-import { Providers } from './providers';
+import { FirebaseProvider } from '@/firebase/provider';
+import CursorPhoenix from "@/components/CursorPhoenix";
+import Header from "@/components/layout/Header";
+import Footer from "@/components/layout/Footer";
 import './globals.css';
 
 export const metadata: Metadata = {
@@ -21,10 +24,17 @@ export default function RootLayout({
         <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=PT+Sans:wght@400;700&display=swap" rel="stylesheet" />
       </head>
       <body className="font-body antialiased">
-        <Providers>
-          {children}
-          <Toaster />
-        </Providers>
+        <FirebaseProvider>
+            <CursorPhoenix />
+            <div className="flex flex-col min-h-screen">
+                <Header />
+                <main className="flex-grow">
+                    {children}
+                </main>
+                <Footer />
+            </div>
+            <Toaster />
+        </FirebaseProvider>
       </body>
     </html>
   );

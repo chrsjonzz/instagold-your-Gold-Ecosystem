@@ -6,9 +6,7 @@ let parsedConfig: FirebaseOptions = {};
 
 try {
   if (firebaseConfigString) {
-    // Replace single quotes with double quotes for valid JSON
-    const validJsonString = firebaseConfigString.replace(/'/g, '"');
-    parsedConfig = JSON.parse(validJsonString);
+    parsedConfig = JSON.parse(firebaseConfigString);
   } else {
     console.warn("NEXT_PUBLIC_FIREBASE_CONFIG is not set. Using empty config.");
   }

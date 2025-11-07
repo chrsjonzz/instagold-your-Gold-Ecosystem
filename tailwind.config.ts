@@ -92,11 +92,21 @@ export default {
           '0%': { transform: 'translateX(0%)' },
           '100%': { transform: 'translateX(-100%)' },
         },
+        'wing-flap-left': {
+          '0%, 100%': { transform: 'rotate(-10deg)' },
+          '50%': { transform: 'rotate(5deg)' },
+        },
+        'wing-flap-right': {
+          '0%, 100%': { transform: 'rotate(10deg)' },
+          '50%': { transform: 'rotate(-5deg)' },
+        },
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
         'marquee': 'marquee 40s linear infinite',
+        'wing-flap-left': 'wing-flap-left 2s ease-in-out infinite',
+        'wing-flap-right': 'wing-flap-right 2s ease-in-out infinite',
       },
     },
   },

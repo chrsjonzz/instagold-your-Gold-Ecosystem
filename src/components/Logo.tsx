@@ -3,9 +3,8 @@ import { cn } from "@/lib/utils";
 const PhoenixIcon = ({ className, ...props }: React.SVGProps<SVGSVGElement>) => (
     <svg
         xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 24 24"
-        fill="url(#goldGradient)"
-        className={className}
+        viewBox="0 0 200 200"
+        className={cn("overflow-visible", className)}
         {...props}
     >
         <defs>
@@ -14,15 +13,65 @@ const PhoenixIcon = ({ className, ...props }: React.SVGProps<SVGSVGElement>) => 
                 <stop offset="100%" stopColor="#D97706" />
             </linearGradient>
         </defs>
-        <path d="M12 2C9.5 2 7.1 3.2 5.5 5.1C4.7 6.1 4.2 7.4 4 8.7C5.5 8.1 6.9 8.2 8.2 8.9C9.3 9.5 10.2 10.4 10.7 11.6C10.9 12.1 11 12.7 11 13.3C11 14.1 10.8 14.8 10.5 15.5C10.2 16.2 9.8 16.8 9.3 17.3C9.2 17.4 9.1 17.5 9 17.6C8.8 17.8 8.6 18 8.3 18.2C8.1 18.4 7.8 18.6 7.5 18.9C8.9 20.9 11.2 22 13.9 22C16.8 22 19.3 20.8 21 18.7C20.6 17.3 19.8 16.1 18.7 15.1C18.1 14.5 17.3 14 16.5 13.6C15.8 13.2 15 13 14.2 13C13.8 13 13.5 13 13.2 13.1C13.1 11.9 12.6 10.8 11.8 9.9C11.1 9.1 10.1 8.5 9 8.2C9.1 7.2 9.4 6.3 10 5.5C10.6 4.7 11.4 4 12.3 3.5C13.2 3.8 14 4.3 14.7 5.1C15.4 5.9 15.9 6.8 16.2 7.8C16.7 7.7 17.3 7.7 17.8 8C18.7 8.5 19.4 9.3 19.8 10.2C20.3 11.1 20.5 12.1 20.5 13.1C20.5 14.2 20.2 15.3 19.6 16.2C19 17.1 18.2 17.9 17.2 18.4C18.5 19.8 19.5 20.6 20 21.1C18.6 22.3 16.8 23 15 23C12.3 23 9.9 21.8 8.2 20C8.5 19.7 8.8 19.4 9.1 19.1C9.4 18.8 9.7 18.5 10 18.2C10.2 18 10.4 17.8 10.6 17.6C11.2 17.1 11.7 16.4 12 15.7C12.3 15 12.5 14.2 12.5 13.4C12.5 12.6 12.3 11.9 12 11.2C11.6 10.5 11.1 9.9 10.4 9.4C9.7 8.9 8.9 8.6 8 8.5C7.9 7.3 7.4 6.2 6.5 5.3C5.6 4.4 4.5 3.8 3.3 3.5C4.1 2.6 5.1 2 6.3 2C7.4 2 8.4 2.3 9.3 2.9C8.4 3.8 7.8 4.9 7.5 6.2C6.3 5.7 5 6 4 7C3.5 7.5 3.1 8.1 2.9 8.7C2.3 10.5 2.5 12.4 3.5 14.1C4.5 15.8 6.2 17.1 8.1 17.5C7.9 18.5 7.1 19.3 6 19.9C5.5 20.2 5 20.5 4.5 20.8C5.5 21.9 6.9 22.7 8.5 23.1C10.1 23.5 11.7 23.5 13.3 23C13.6 21.8 13.5 20.6 13 19.5C12.5 18.4 11.6 17.5 10.6 16.8C10.3 16.6 10.1 16.4 9.9 16.2C9.5 15.8 9.2 15.3 9 14.8C8.8 14.3 8.7 13.8 8.7 13.3C8.7 12.4 9 11.6 9.5 10.9C10 10.2 10.7 9.7 11.5 9.4C12.3 9.1 13.1 9 14 9C14.7 9 15.4 9.2 16.1 9.5C16.8 9.8 17.4 10.3 17.9 10.9C18.4 11.5 18.8 12.2 19 13C17.5 12.8 16.1 13.1 14.9 13.8C14.7 14.7 14.2 15.8 14.2 16.9C14.2 17.5 14.1 18.1 13.8 18.7C13.5 19.3 13.1 19.8 12.6 20.2C12.1 20.6 11.5 20.9 10.9 21C11.5 21.5 12.2 21.8 13 22C13.8 22.2 14.6 22.2 15.4 22C16.2 21.8 16.9 21.4 17.5 20.9C18.1 20.4 18.6 19.8 19 19.1C19.4 18.4 19.7 17.6 19.8 16.8C21.4 15.9 22 13.6 22 11.8C22 9.6 21.1 7.6 19.6 6.1C18.1 4.6 16.1 3.5 13.9 3.5C13.1 3.5 12.3 3.6 11.5 3.9C12.3 3 13.3 2.4 14.5 2.1C13.5 2.1 12.8 2 12 2Z"/>
+        
+        {/* Body and Tail */}
+        <path 
+            fill="url(#goldGradient)" 
+            d="M100 55 C 110 70, 115 90, 100 120 C 85 90, 90 70, 100 55"
+        />
+        <path 
+            fill="url(#goldGradient)" 
+            d="M100 120 C 90 140, 80 155, 70 170 C 90 165, 110 165, 130 170 C 120 155, 110 140, 100 120"
+            style={{
+                filter: 'drop-shadow(0 2px 4px rgba(217, 119, 6, 0.4))'
+            }}
+        />
+
+        {/* Head */}
+        <path 
+            fill="url(#goldGradient)" 
+            d="M100 55 C 95 45, 95 35, 100 30 C 105 35, 105 45, 100 55"
+        />
+        <circle cx="100" cy="30" r="3" fill="#D97706"/>
+
+
+        {/* Left Wing - Animated */}
+        <g className="animate-wing-flap-left" style={{ transformOrigin: '100px 80px' }}>
+            <path 
+                fill="url(#goldGradient)"
+                d="M100 80 C 70 70, 40 90, 20 120 C 50 110, 75 100, 100 80"
+            />
+            <path 
+                fill="url(#goldGradient)"
+                d="M60 95 C 40 100, 20 120, 10 140 C 30 130, 50 120, 60 95"
+                 style={{
+                    opacity: 0.8
+                }}
+            />
+        </g>
+
+        {/* Right Wing - Animated */}
+        <g className="animate-wing-flap-right" style={{ transformOrigin: '100px 80px' }}>
+            <path 
+                fill="url(#goldGradient)"
+                d="M100 80 C 130 70, 160 90, 180 120 C 150 110, 125 100, 100 80"
+            />
+             <path 
+                fill="url(#goldGradient)"
+                d="M140 95 C 160 100, 180 120, 190 140 C 170 130, 150 120, 140 95"
+                style={{
+                    opacity: 0.8
+                }}
+            />
+        </g>
     </svg>
 );
 
 
 export const Logo = ({ className }: { className?: string }) => {
     return (
-        <div className={cn("flex items-center gap-2 text-2xl font-bold font-headline text-primary", className)}>
-            <PhoenixIcon className="h-10 w-10" />
+        <div className={cn("flex items-center gap-1 text-2xl font-bold font-headline text-primary", className)}>
+            <PhoenixIcon className="h-12 w-12" />
             <span>InstaGold</span>
         </div>
     );

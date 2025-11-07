@@ -36,7 +36,7 @@ export default function Header() {
           </nav>
 
           {/* Mobile Navigation Trigger */}
-          <div className="md:hidden ml-auto">
+          <div className="md:hidden">
              <Sheet open={isMenuOpen} onOpenChange={setIsMenuOpen}>
               <SheetTrigger asChild>
                 <Button variant="ghost" size="icon">
@@ -74,10 +74,6 @@ export default function Header() {
                 </div>
               </SheetContent>
             </Sheet>
-          </div>
-
-          <div className="hidden md:flex items-center">
-            {/* Placeholder for potential buttons */}
           </div>
         </div>
       </div>

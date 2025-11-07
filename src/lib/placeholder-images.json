@@ -77,6 +77,30 @@
       "description": "Hands holding a glowing lightbulb, symbolizing values and ideas.",
       "imageUrl": "https://images.unsplash.com/photo-1545299438-163914a229df?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxnbG93aW5nJTIwbGlnaHRidWxifGVufDB8fHx8MTc2MjYyMTY0Nnww&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "glowing lightbulb"
+    },
+    {
+      "id": "blog-investment",
+      "description": "Gold coins stacked in front of a financial chart.",
+      "imageUrl": "https://images.unsplash.com/photo-1644361594918-4731a2c98d6c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxnb2xkJTIwY29pbnMlMjBjaGFydHxlbnwwfHx8fDE3NjMxOTk2MDV8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "gold coins chart"
+    },
+    {
+      "id": "blog-industrial",
+      "description": "A close-up of gold components inside a computer circuit board.",
+      "imageUrl": "https://images.unsplash.com/photo-1578632767115-351597cf247c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxnb2xkJTIwZWxlY3Ryb25pY3N8ZW58MHx8fHwxNzYzMTk5NjMxfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "gold electronics"
+    },
+    {
+      "id": "blog-fake-gold",
+      "description": "A jeweler inspecting a gold ring with a magnifying glass.",
+      "imageUrl": "https://images.unsplash.com/photo-1611855909939-23112668c22a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxtYWduaWZ5aW5nJTIwZ2xhc3MlMjBnb2xkfGVufDB8fHx8MTc2MzE5OTY0OXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "magnifying glass gold"
+    },
+    {
+      "id": "blog-gold-estate",
+      "description": "A conceptual image showing a house and gold bars on a weighing scale.",
+      "imageUrl": "https://images.unsplash.com/photo-1644361594918-4731a2c98d6c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxnb2xkJTIwY29pbnMlMjBjaGFydHxlbnwwfHx8fDE3NjMxOTk2MDV8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "gold house"
     }
   ]
 }

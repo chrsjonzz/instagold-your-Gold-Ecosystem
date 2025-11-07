@@ -4,20 +4,20 @@
 
 @layer base {
   :root {
-    --background: 60 56% 91%; /* Light Beige */
+    --background: 45 70% 95%; /* Lighter, warmer gold */
     --foreground: 240 10% 3.9%;
-    --card: 60 56% 91%;
+    --card: 45 60% 92%; /* Slightly darker card background */
     --card-foreground: 240 10% 3.9%;
-    --popover: 60 56% 91%;
+    --popover: 45 70% 95%;
     --popover-foreground: 240 10% 3.9%;
     --primary: 49 61% 52%; /* Deep Gold */
     --primary-foreground: 240 10% 3.9%;
-    --secondary: 60 20% 80%;
+    --secondary: 45 30% 88%; /* Muted gold for secondary elements */
     --secondary-foreground: 240 10% 3.9%;
-    --muted: 60 10% 85%;
+    --muted: 45 20% 90%;
     --muted-foreground: 240 5.9% 10%;
     --accent: 180 100% 25%; /* Teal */
-    --accent-foreground: 60 56% 91%;
+    --accent-foreground: 45 70% 95%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
     --border: 49 30% 62%;

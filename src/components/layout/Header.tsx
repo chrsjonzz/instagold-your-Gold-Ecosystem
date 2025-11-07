@@ -5,7 +5,6 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Gem, Menu, X } from 'lucide-react';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import { cn } from '@/lib/utils';
 import GoldRateTicker from '../GoldRateTicker';
 
 const navLinks = [
@@ -35,10 +34,6 @@ export default function Header() {
               </Link>
             ))}
           </nav>
-
-          <div className="hidden md:flex items-center gap-2">
-            {/* Login and Sign up buttons removed */}
-          </div>
 
           {/* Mobile Navigation Trigger */}
           <div className="md:hidden">

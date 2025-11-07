@@ -1,5 +1,6 @@
 import Link from 'next/link';
-import { Gem, Facebook, Twitter, Linkedin, Instagram, Phone } from 'lucide-react';
+import { Facebook, Twitter, Linkedin, Instagram, Phone } from 'lucide-react';
+import { Logo } from '../Logo';
 
 const socialLinks = [
   { icon: <Facebook className="h-5 w-5" />, href: '#' },
@@ -32,9 +33,9 @@ export default function Footer() {
       <div className="container mx-auto px-4 py-12">
         <div className="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-5 gap-8">
           <div className="lg:col-span-2">
-            <Link href="/" className="flex items-center gap-2 text-2xl font-bold font-headline text-primary mb-4">
-              <Gem className="h-7 w-7 text-glow" />
-              InstaGold
+            <Link href="/" className="mb-4 inline-block">
+                <Logo />
+                <span className="sr-only">InstaGold Home</span>
             </Link>
             <p className="text-muted-foreground max-w-sm">
               The complete gold ecosystem to unify India’s gold market. We help you sell your gold with confidence.

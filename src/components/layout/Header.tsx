@@ -3,9 +3,10 @@
 import Link from 'next/link';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Gem, Menu, X } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import GoldRateTicker from '../GoldRateTicker';
+import { Logo } from '../Logo';
 
 const navLinks = [
   { href: '/live-price', label: 'Live Prices' },
@@ -21,9 +22,9 @@ export default function Header() {
     <header className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md shadow-sm">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-20">
-          <Link href="/" className="flex items-center gap-2 text-2xl font-bold font-headline text-primary">
-            <Gem className="h-7 w-7 text-glow" />
-            InstaGold
+          <Link href="/">
+            <Logo />
+            <span className="sr-only">InstaGold Home</span>
           </Link>
 
           {/* Desktop Navigation */}
@@ -47,9 +48,9 @@ export default function Header() {
               <SheetContent side="left" className="w-full max-w-xs bg-background">
                 <div className="flex flex-col h-full p-4">
                   <div className="flex items-center justify-between mb-8">
-                     <Link href="/" onClick={() => setIsMenuOpen(false)} className="flex items-center gap-2 text-2xl font-bold font-headline text-primary">
-                        <Gem className="h-7 w-7 text-glow" />
-                        InstaGold
+                     <Link href="/" onClick={() => setIsMenuOpen(false)}>
+                        <Logo />
+                        <span className="sr-only">InstaGold Home</span>
                       </Link>
                       <Button variant="ghost" size="icon" onClick={() => setIsMenuOpen(false)}>
                         <X className="h-6 w-6" />

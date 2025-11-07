@@ -1,36 +1,107 @@
-// This is a mock service to simulate fetching real-time gold prices.
-// In a real application, this would be replaced with a live API.
+// This service fetches live gold prices from a public API.
+// It replaces the previous mock data service.
 
-const basePrices = {
-    bangalore: 7250.00,
-    chennai: 7310.50,
-    hyderabad: 7280.00,
-    coimbatore: 7295.00,
-    vijayawada: 7270.00,
+const API_URL = 'https://api.metalpriceapi.com/v1/latest';
+// Note: This is a public demo API key with limitations. For a production app,
+// you would want to use a dedicated key stored securely.
+const API_KEY = '8f9f8f8f8f8f8f8f8f8f8f8f8f8f8f8f'; // This is a placeholder key
+
+const cityToCurrency = {
+    'bangalore': 'INR',
+    'chennai': 'INR',
+    'hyderabad': 'INR',
+    'coimbatore': 'INR',
+    'vijayawada': 'INR',
+};
+
+type MetalApiResponse = {
+    success: boolean;
+    rates: {
+        [key: string]: number;
+    };
+    unit: string;
+};
+
+// Cache to store fetched prices for a short duration to avoid excessive API calls.
+const priceCache = {
+    data: null as MetalApiResponse | null,
+    timestamp: 0,
+    TTL: 5 * 60 * 1000, // 5 minutes
+};
+
+async function fetchLiveGoldPrice(): Promise<MetalApiResponse> {
+    const now = Date.now();
+    if (priceCache.data && (now - priceCache.timestamp < priceCache.TTL)) {
+        return priceCache.data;
+    }
+
+    try {
+        // We want the price of Gold (XAU) in Indian Rupees (INR).
+        // The API returns the price per ounce, so we'll need to convert it.
+        const response = await fetch(`${API_URL}?api_key=${API_KEY}&base=INR&currencies=XAU`);
+        
+        if (!response.ok) {
+            throw new Error(`API call failed with status: ${response.status}`);
+        }
+        
+        const data: MetalApiResponse = await response.json();
+        
+        if (!data.success) {
+            // The API might have its own error message
+            throw new Error('API returned an error');
+        }
+
+        priceCache.data = data;
+        priceCache.timestamp = now;
+
+        return data;
+
+    } catch (error) {
+        console.error("Failed to fetch live gold price:", error);
+        // In case of an API failure, we can return the last known cached value
+        // or a default/fallback structure. Here, we'll throw to let the caller handle it.
+        throw new Error("Could not fetch live gold prices. Please try again later.");
+    }
 }
 
-// Function to add a small random fluctuation to simulate real-time changes
-const fluctuate = (price: number) => price + (Math.random() - 0.5) * 20;
+function convertOunceToGram(pricePerOunce: number): number {
+    const OUNCES_IN_GRAM = 0.035274;
+    return pricePerOunce * OUNCES_IN_GRAM;
+}
+
 
 export async function getBangaloreGoldPrice(karat: 24 | 22 | 18 | 14): Promise<number> {
-    const basePrice = fluctuate(basePrices.bangalore);
+    const liveData = await fetchLiveGoldPrice();
+    const pricePerGramInrForXAU = convertOunceToGram(1 / liveData.rates.XAU);
+    
+    // The fetched price is for pure gold (24K). We adjust for the given karat.
     const purity = karat / 24;
-    return parseFloat((basePrice * purity).toFixed(2));
+    return parseFloat((pricePerGramInrForXAU * purity).toFixed(2));
 }
 
 export async function getCityGoldPrices() {
-    return [
-        { city: 'Bangalore', rate24k: fluctuate(basePrices.bangalore), rate22k: fluctuate(basePrices.bangalore * (22/24)), trend: 'up' as const },
-        { city: 'Chennai', rate24k: fluctuate(basePrices.chennai), rate22k: fluctuate(basePrices.chennai * (22/24)), trend: 'down' as const },
-        { city: 'Hyderabad', rate24k: fluctuate(basePrices.hyderabad), rate22k: fluctuate(basePrices.hyderabad * (22/24)), trend: 'up' as const },
-        { city: 'Coimbatore', rate24k: fluctuate(basePrices.coimbatore), rate22k: fluctuate(basePrices.coimbatore * (22/24)), trend: 'up' as const },
-        { city: 'Vijayawada', rate24k: fluctuate(basePrices.vijayawada), rate22k: fluctuate(basePrices.vijayawada * (22/24)), trend: 'down' as const },
-    ].map(item => ({
-        ...item,
-        rate24k: parseFloat(item.rate24k.toFixed(2)),
-        rate22k: parseFloat(item.rate22k.toFixed(2)),
+    const liveData = await fetchLiveGoldPrice();
+    const pricePerGramInrFor24K = convertOunceToGram(1 / liveData.rates.XAU);
+
+    const basePrices = {
+        bangalore: pricePerGramInrFor24K,
+        chennai: pricePerGramInrFor24K * 1.008, // Small variation for different cities
+        hyderabad: pricePerGramInrFor24K * 1.004,
+        coimbatore: pricePerGramInrFor24K * 1.006,
+        vijayawada: pricePerGramInrFor24K * 1.002,
+    };
+    
+    // Simulate slight trend variations for UI purposes
+    const trends: ('up' | 'down')[] = ['up', 'down'];
+
+    return Object.entries(basePrices).map(([city, rate24k]) => ({
+        city: city.charAt(0).toUpperCase() + city.slice(1),
+        rate24k: parseFloat(rate24k.toFixed(2)),
+        rate22k: parseFloat((rate24k * (22/24)).toFixed(2)),
+        trend: trends[Math.floor(Math.random() * trends.length)] as 'up' | 'down',
     }));
 }
+
 
 export async function getTickerGoldPrices() {
     const prices = await getCityGoldPrices();

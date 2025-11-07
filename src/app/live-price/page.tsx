@@ -1,6 +1,7 @@
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { TrendingUp, TrendingDown, Download } from 'lucide-react';
+import { TrendingUp, TrendingDown, Download, Phone } from 'lucide-react';
+import Link from 'next/link';
 
 const prices = [
   {
@@ -8,6 +9,7 @@ const prices = [
     price: '11993.59',
     trend: 'up',
     action: 'Sell Now',
+    href: '/sell',
   },
 ];
 
@@ -16,6 +18,8 @@ const buybackPrice = {
   price: '11597.00',
   trend: 'down',
   action: 'Contact Us',
+  href: 'tel:+919620433303',
+  phone: '+91 96204 33303',
 };
 
 export default function LivePricePage() {
@@ -45,7 +49,9 @@ export default function LivePricePage() {
                        <span className="text-sm text-muted-foreground">/gm</span>
                        {item.trend === 'up' ? <TrendingUp className="h-5 w-5 text-green-600" /> : <TrendingDown className="h-5 w-5 text-red-600" />}
                     </div>
-                     <Button className="mt-4 w-full sm:w-auto">{item.action}</Button>
+                     <Button asChild className="mt-4 w-full sm:w-auto">
+                      <Link href={item.href}>{item.action}</Link>
+                     </Button>
                   </div>
                 ))}
               </div>
@@ -59,7 +65,12 @@ export default function LivePricePage() {
                        <span className="text-sm text-muted-foreground">/gm</span>
                        {buybackPrice.trend === 'up' ? <TrendingUp className="h-5 w-5 text-green-600" /> : <TrendingDown className="h-5 w-5 text-red-600" />}
                     </div>
-                     <Button variant="secondary" className="mt-4 w-full sm:w-auto">{buybackPrice.action}</Button>
+                     <Button variant="secondary" className="mt-4 w-full sm:w-auto" asChild>
+                      <Link href={buybackPrice.href}>
+                        <Phone className="mr-2 h-4 w-4" />
+                        {buybackPrice.phone}
+                      </Link>
+                     </Button>
                 </div>
             </CardContent>
           </Card>

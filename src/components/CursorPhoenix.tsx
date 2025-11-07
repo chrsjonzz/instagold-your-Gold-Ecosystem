@@ -101,17 +101,29 @@ export default function CursorPhoenix() {
         setIsVisible(true);
       }
     };
+    
+    const handleMouseLeave = () => {
+        setIsVisible(false);
+    }
+    
+    const handleMouseEnter = () => {
+        setIsVisible(true);
+    }
 
-    window.addEventListener('mousemove', handleMouseMove);
+    document.body.addEventListener('mousemove', handleMouseMove);
+    document.body.addEventListener('mouseleave', handleMouseLeave);
+    document.body.addEventListener('mouseenter', handleMouseEnter);
 
     return () => {
-      window.removeEventListener('mousemove', handleMouseMove);
+      document.body.removeEventListener('mousemove', handleMouseMove);
+      document.body.removeEventListener('mouseleave', handleMouseLeave);
+      document.body.removeEventListener('mouseenter', handleMouseEnter);
     };
   }, [isVisible]);
 
   return (
     <div
-      className="pointer-events-none fixed top-0 left-0 z-[9999] transition-transform duration-75 ease-out hidden md:block"
+      className="pointer-events-none fixed top-0 left-0 z-[9999] transition-opacity duration-300 hidden md:block"
       style={{
         transform: `translate(${position.x}px, ${position.y}px)`,
         opacity: isVisible ? 1 : 0,

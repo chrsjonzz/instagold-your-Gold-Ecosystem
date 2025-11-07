@@ -12,18 +12,20 @@ const socialLinks = [
 const footerLinks = {
   'Company': [
     { label: 'About Us', href: '/about-us' },
-    { label: 'Blog', href: '#' },
     { label: 'Partner With Us', href: '#' },
+  ],
+  'Learn': [
+    { label: 'About Gold', href: '/about-gold'},
+    { label: 'Gold Purity', href: '/purity'},
+    { label: 'FAQ', href: '/faq' },
   ],
   'Support': [
     { label: 'Contact Us', href: '/support' },
-    { label: 'FAQ', href: '/faq' },
     { label: 'Support Center', href: '/support' },
   ],
   'Legal': [
     { label: 'Privacy Policy', href: '#' },
     { label: 'Terms & Conditions', href: '#' },
-    { label: 'Legal', href: '#' },
   ],
 };
 

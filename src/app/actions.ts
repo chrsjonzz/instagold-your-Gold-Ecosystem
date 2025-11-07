@@ -41,6 +41,11 @@ export async function getGoldValuation(
         });
 
         if (result && result.estimatedValue) {
+            console.log("Valuation Inquiry:", { 
+                phone, 
+                estimatedValue: `INR ${result.estimatedValue}`
+            });
+
             return {
                 message: "Valuation successful!",
                 estimatedValue: result.estimatedValue,

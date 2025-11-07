@@ -52,7 +52,7 @@ export default function AboutUsPage() {
             imageDescription="A compass symbolizing our mission"
           >
             <p>
-              Our mission is to create a unified digital ecosystem for gold in India. We aim to empower every individual by providing a seamless, transparent, and trusted platform to buy, sell, pledge, and manage their gold assets. We believe in leveraging technology to bring efficiency and accessibility to a market that has been fragmented for too long.
+              Our mission is to create a unified digital ecosystem for gold in India. We aim to empower every individual by providing a seamless, transparent, and trusted platform to buy, sell, and manage their gold assets. We believe in leveraging technology to bring efficiency and accessibility to a market that has been fragmented for too long.
             </p>
           </ContentCard>
 
@@ -70,7 +70,7 @@ export default function AboutUsPage() {
               <b>Transparency:</b> We provide clear, real-time information to help you make informed decisions. No hidden fees, no surprises.
             </p>
             <p>
-              <b>Innovation:</b> We continuously innovate to provide the best possible experience for our users, from AI-powered valuations to seamless digital transactions.
+              <b>Innovation:</b> We continuously innovate to provide the best possible experience for our users, from instant online valuations to seamless digital transactions.
             </p>
           </ContentCard>
 

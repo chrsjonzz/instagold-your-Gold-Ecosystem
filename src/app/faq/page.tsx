@@ -19,6 +19,18 @@ const faqs = [
     answer: "The AI valuation provides a highly accurate estimate based on the data you provide and current market prices. However, the final price is subject to a physical inspection and verification by our certified partners."
   },
   {
+    question: "What is gold resale value?",
+    answer: "The resale value of gold depends on its purity (karat), weight, and the current market price. Our AI valuation tool gives you a real-time estimate, but the final price is determined by the buyer after a physical inspection of the item."
+  },
+  {
+    question: "What are the documents required for the process and what is the duration of the process?",
+    answer: "Typically, you will need a valid government-issued ID (like an Aadhar card or PAN card) and proof of purchase if available. The duration of the process is very quick. Once you accept an offer on our platform, you can complete the transaction with a verified partner, often on the same day."
+  },
+  {
+    question: "Is it safe to sell gold through InstaGold?",
+    answer: "Absolutely. Security is our top priority. We connect you with a network of verified and trusted jewelers and refiners. All transactions are transparent, and your assets are handled with the utmost care."
+  },
+  {
     question: "What is the difference between 24K, 22K, and 18K gold?",
     answer: "Gold purity is measured in karats. 24K gold is 99.9% pure gold and is very soft. 22K gold (91.6% pure) and 18K gold (75% pure) are mixed with other metals like copper, silver, or zinc to increase their durability, making them more suitable for jewelry."
   },
@@ -47,7 +59,7 @@ export default function FAQPage() {
           </div>
 
           <Accordion type="single" collapsible className="w-full">
-            {faqs.map((faq, index) => (
+            {faqs.sort((a, b) => faqs.indexOf(a) - faqs.indexOf(b)).map((faq, index) => (
               <AccordionItem key={index} value={`item-${index}`}>
                 <AccordionTrigger className="text-left font-headline text-lg hover:no-underline">
                   {faq.question}

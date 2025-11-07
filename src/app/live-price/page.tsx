@@ -1,28 +1,30 @@
+'use client';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { TrendingUp, TrendingDown, Download, Phone } from 'lucide-react';
 import Link from 'next/link';
+import { getCityGoldPrices } from '@/lib/gold-price-service';
+import { useEffect, useState } from 'react';
 
-const prices = [
-  {
-    title: 'Online Gold Sell Rate',
-    price: '11993.59',
-    trend: 'up',
-    action: 'Sell Now',
-    href: '/sell',
-  },
-];
-
-const buybackPrice = {
-  title: 'Jewellery Buyback Rate',
-  price: '11597.00',
-  trend: 'down',
-  action: 'Contact Us',
-  href: 'tel:+919620433303',
-  phone: '+91 96204 33303',
+type Price = {
+  city: string;
+  rate24k: number;
+  rate22k: number;
+  trend: 'up' | 'down';
 };
 
 export default function LivePricePage() {
+  const [prices, setPrices] = useState<Price[]>([]);
+
+  useEffect(() => {
+    const fetchPrices = async () => {
+      const fetchedPrices = await getCityGoldPrices();
+      setPrices(fetchedPrices);
+    };
+    fetchPrices();
+  }, []);
+  
   return (
     <div className="bg-gradient-to-b from-background via-yellow-50 to-background min-h-full">
       <div className="container mx-auto px-4 py-24 md:py-32">
@@ -32,54 +34,53 @@ export default function LivePricePage() {
               Today's Gold Sell Prices
             </h1>
             <p className="mt-4 max-w-2xl mx-auto text-lg text-muted-foreground">
-              Real-time prices for selling your gold online or via our buyback partners.
+              Real-time prices for selling your gold online or via our buyback partners in South India.
             </p>
           </div>
 
           <Card className="shadow-lg border-2 border-primary/20">
-            <CardContent className="p-6 md:p-8">
-              <div className="grid grid-cols-1 md:grid-cols-1 gap-6 items-center">
-                {prices.map((item, index) => (
-                  <div key={item.title} className="relative p-6 rounded-lg text-center">
-                    <h3 className="text-lg font-semibold text-muted-foreground">{item.title}</h3>
-                    <div className="flex items-baseline justify-center gap-2 mt-2">
-                      <p className="text-4xl font-bold font-headline text-primary">
-                        INR {item.price}
-                      </p>
-                       <span className="text-sm text-muted-foreground">/gm</span>
-                       {item.trend === 'up' ? <TrendingUp className="h-5 w-5 text-green-600" /> : <TrendingDown className="h-5 w-5 text-red-600" />}
-                    </div>
-                     <Button asChild className="mt-4 w-full sm:w-auto">
-                      <Link href={item.href}>{item.action}</Link>
-                     </Button>
-                  </div>
-                ))}
-              </div>
-              <div className="border-t border-border my-6"></div>
-               <div className="relative p-6 rounded-lg text-center">
-                    <h3 className="text-lg font-semibold text-muted-foreground">{buybackPrice.title}</h3>
-                    <div className="flex items-baseline justify-center gap-2 mt-2">
-                      <p className="text-4xl font-bold font-headline text-primary">
-                        INR {buybackPrice.price}
-                      </p>
-                       <span className="text-sm text-muted-foreground">/gm</span>
-                       {buybackPrice.trend === 'up' ? <TrendingUp className="h-5 w-5 text-green-600" /> : <TrendingDown className="h-5 w-5 text-red-600" />}
-                    </div>
-                     <Button variant="secondary" className="mt-4 w-full sm:w-auto" asChild>
-                      <Link href={buybackPrice.href}>
-                        <Phone className="mr-2 h-4 w-4" />
-                        {buybackPrice.phone}
-                      </Link>
-                     </Button>
-                </div>
+            <CardHeader>
+                <CardTitle>Live Online Sell Rates (per gram)</CardTitle>
+                <CardDescription>All rates are for selling gold online.</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead className="font-bold">City</TableHead>
+                    <TableHead className="text-right font-bold">24K Rate (INR)</TableHead>
+                    <TableHead className="text-right font-bold">22K Rate (INR)</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {prices.map((item) => (
+                    <TableRow key={item.city}>
+                      <TableCell className="font-medium flex items-center gap-2">
+                        {item.city}
+                        {item.trend === 'up' ? <TrendingUp className="h-4 w-4 text-green-600" /> : <TrendingDown className="h-4 w-4 text-red-600" />}
+                      </TableCell>
+                      <TableCell className="text-right font-mono">₹{item.rate24k.toLocaleString('en-IN')}</TableCell>
+                      <TableCell className="text-right font-mono">₹{item.rate22k.toLocaleString('en-IN')}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
             </CardContent>
+            <CardFooter className="flex-col gap-4 pt-6">
+                <Button asChild className="w-full sm:w-auto">
+                  <Link href="/sell">Sell Gold Now</Link>
+                </Button>
+                <p className="text-xs text-muted-foreground">
+                    For jewellery buyback rates, please contact our partners.
+                </p>
+            </CardFooter>
           </Card>
           
            <div className="text-center mt-8">
               <Button variant="link" asChild>
                 <Link href="/rate-card" target="_blank">
                     <Download className="mr-2 h-4 w-4" />
-                    Download Rate Card
+                    Download Full Rate Card
                 </Link>
               </Button>
             </div>

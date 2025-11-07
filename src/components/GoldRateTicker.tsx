@@ -2,19 +2,16 @@
 
 import { TrendingUp, TrendingDown } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import { getTickerGoldPrices } from '@/lib/gold-price-service';
 
-const mockRates = [
-  { city: 'Mumbai', rate: '7,150.50', change: '+0.25%', trend: 'up' },
-  { city: 'Delhi', rate: '7,160.00', change: '+0.28%', trend: 'up' },
-  { city: 'Chennai', rate: '7,145.75', change: '-0.10%', trend: 'down' },
-  { city: 'Kolkata', rate: '7,155.20', change: '+0.15%', trend: 'up' },
-  { city: 'Bengaluru', rate: '7,180.00', change: '+0.45%', trend: 'up' },
-  { city: 'Hyderabad', rate: '7,175.50', change: '+0.32%', trend: 'down' },
-  { city: '24K Gold/gm', rate: '7,158.30', change: '+0.21%', trend: 'up' },
-  { city: '22K Gold/gm', rate: '6,560.10', change: '+0.19%', trend: 'up' },
-];
+type TickerRate = {
+  city: string;
+  rate: string;
+  change: string;
+  trend: 'up' | 'down';
+};
 
-const TickerItem = ({ city, rate, change, trend }: typeof mockRates[0]) => (
+const TickerItem = ({ city, rate, change, trend }: TickerRate) => (
   <div className="flex items-center space-x-4 mx-6 flex-shrink-0">
     <span className="font-semibold text-foreground/80">{city}:</span>
     <span className="font-bold text-foreground">INR {rate}</span>
@@ -26,17 +23,21 @@ const TickerItem = ({ city, rate, change, trend }: typeof mockRates[0]) => (
 );
 
 export default function GoldRateTicker() {
-    const [isMounted, setIsMounted] = useState(false);
+    const [rates, setRates] = useState<TickerRate[]>([]);
 
     useEffect(() => {
-        setIsMounted(true);
+      const fetchRates = async () => {
+        const fetchedRates = await getTickerGoldPrices();
+        setRates(fetchedRates);
+      };
+      fetchRates();
     }, []);
 
-    if(!isMounted) {
-        return <div className="h-10 bg-primary/10" />;
+    if (rates.length === 0) {
+        return <div className="h-12 bg-primary/10" />;
     }
 
-  const extendedRates = [...mockRates, ...mockRates]; // Duplicate for seamless loop
+  const extendedRates = [...rates, ...rates]; // Duplicate for seamless loop
 
   return (
     <div className="w-full bg-primary/10 overflow-hidden h-12 flex items-center relative">

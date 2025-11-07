@@ -3,6 +3,7 @@
 import { z } from 'zod';
 import { goldValuation } from '@/ai/flows/gold-valuation';
 import { ValuationFormSchema, type ValuationFormState, SupportFormSchema, type SupportFormState, ProceedToSellSchema, PartnerFormSchema, type PartnerFormState } from '@/lib/types';
+import { getBangaloreGoldPrice } from '@/lib/gold-price-service';
 
 const GoldValuationActionSchema = ValuationFormSchema.extend({
     // Server-side will have no location for now, but we add it to the schema
@@ -31,8 +32,7 @@ export async function getGoldValuation(
     const { weight, karat, phone } = validatedFields.data;
 
     try {
-        // Mock current market price - in a real app, this would be fetched from an API
-        const currentMarketPrice = 7150 / 1; // Mock price per gram for 24K gold
+        const currentMarketPrice = await getBangaloreGoldPrice(24);
 
         const result = await goldValuation({
             weight,

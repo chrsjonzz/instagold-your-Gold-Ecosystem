@@ -214,7 +214,7 @@ export default function ValuationForm() {
                         Your online gold valuation will appear here.
                     </CardDescription>
                 </CardHeader>
-                <CardContent className="text-center min-h-[224px] flex items-center justify-center">
+                <CardContent className="text-center py-12 flex items-center justify-center">
                     {showAnimation ? (
                          <GoldToRupeeAnimation />
                     ) : currentValuation?.estimatedValue ? (

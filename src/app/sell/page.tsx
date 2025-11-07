@@ -1,5 +1,5 @@
 import ValuationForm from "@/components/ValuationForm";
-import { University, GitCompareArrows, FileText } from "lucide-react";
+import { ShieldCheck, GitCompareArrows, FileText } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export default function SellPage() {
@@ -10,9 +10,9 @@ export default function SellPage() {
             description: "Get the best buy prices from multiple jewelers and refiners, updated in real-time."
         },
         {
-            icon: <University className="w-8 h-8 text-primary" />,
-            title: "Price Lock Guarantee",
-            description: "Lock in your price for 24 hours to protect against market fluctuations and sell with confidence."
+            icon: <ShieldCheck className="w-8 h-8 text-primary" />,
+            title: "XRF Karat Analysis",
+            description: "We use state-of-the-art XRF machines for precise purity testing, ensuring you get the most accurate value."
         },
         {
             icon: <FileText className="w-8 h-8 text-primary" />,

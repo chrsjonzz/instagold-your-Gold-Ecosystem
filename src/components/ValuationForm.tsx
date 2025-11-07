@@ -15,7 +15,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Slider } from '@/components/ui/slider';
 import { useToast } from '@/hooks/use-toast';
-import { UploadCloud, Sparkles, Loader2, X, Gem } from 'lucide-react';
+import { Sparkles, Loader2, Gem } from 'lucide-react';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 
 const initialFormState: ValuationFormState = {
@@ -46,7 +46,6 @@ export default function ValuationForm() {
     const formRef = useRef<HTMLFormElement>(null);
     const { toast } = useToast();
     const [karatValue, setKaratValue] = useState(22);
-    const [imagePreview, setImagePreview] = useState<string | null>(null);
     
     const placeholderImage = PlaceHolderImages.find(p => p.id === 'valuation-placeholder');
 
@@ -55,7 +54,6 @@ export default function ValuationForm() {
         defaultValues: {
             weight: 0,
             karat: 22,
-            photo: undefined,
         },
     });
 
@@ -73,29 +71,10 @@ export default function ValuationForm() {
                 description: `We've estimated the value of your gold item.`,
             });
             form.reset();
-            setImagePreview(null);
             if (formRef.current) formRef.current.reset();
         }
 
     }, [formState, toast, form]);
-
-    const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const file = event.target.files?.[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                setImagePreview(reader.result as string);
-            };
-            reader.readAsDataURL(file);
-        }
-    };
-    
-    const handleClearImage = () => {
-        setImagePreview(null);
-        form.setValue('photo', undefined);
-        const fileInput = document.getElementById('photo-input') as HTMLInputElement;
-        if(fileInput) fileInput.value = '';
-    };
 
     return (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
@@ -138,37 +117,6 @@ export default function ValuationForm() {
                                 }}
                             />
                             <input type="hidden" {...form.register('karat')} value={karatValue} />
-                        </div>
-                        
-                        {/* Photo Upload */}
-                        <div>
-                            <Label htmlFor="photo-input">Upload Photo</Label>
-                            <div className="mt-1 relative flex justify-center items-center w-full h-48 border-2 border-dashed border-border rounded-lg group hover:border-primary transition-colors">
-                                {imagePreview ? (
-                                    <>
-                                        <Image src={imagePreview} alt="Gold item preview" fill className="object-contain rounded-lg p-2" />
-                                        <Button type="button" variant="destructive" size="icon" className="absolute top-2 right-2 z-10 h-8 w-8" onClick={handleClearImage}>
-                                            <X className="h-4 w-4" />
-                                        </Button>
-                                    </>
-                                ) : (
-                                    <div className="text-center p-4">
-                                        <UploadCloud className="mx-auto h-12 w-12 text-muted-foreground group-hover:text-primary transition-colors" />
-                                        <p className="mt-2 text-sm text-muted-foreground">
-                                            <span className="font-semibold text-primary">Click to upload</span> or drag and drop
-                                        </p>
-                                        <p className="text-xs text-muted-foreground">PNG, JPG, JPEG up to 5MB</p>
-                                    </div>
-                                )}
-                                <Input
-                                    id="photo-input"
-                                    type="file"
-                                    accept="image/*"
-                                    className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-                                    {...form.register('photo', { onChange: handleFileChange })}
-                                />
-                            </div>
-                            {form.formState.errors.photo && <p className="text-sm text-destructive mt-1">{form.formState.errors.photo.message?.toString()}</p>}
                         </div>
                     </CardContent>
                     <CardFooter>

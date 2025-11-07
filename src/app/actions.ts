@@ -15,33 +15,26 @@ export async function getGoldValuation(
     const validatedFields = GoldValuationActionSchema.safeParse({
         weight: formData.get('weight'),
         karat: formData.get('karat'),
-        photo: formData.getAll('photo'),
     });
 
     if (!validatedFields.success) {
         return {
             message: "Invalid form data.",
-            error: validatedFields.error.flatten().fieldErrors.photo?.[0] || 
-                   validatedFields.error.flatten().fieldErrors.weight?.[0] || 
+            error: validatedFields.error.flatten().fieldErrors.weight?.[0] || 
                    validatedFields.error.flatten().fieldErrors.karat?.[0] || 
                    "Please check your inputs.",
         };
     }
 
-    const { weight, karat, photo } = validatedFields.data;
-    const file = photo[0] as File;
+    const { weight, karat } = validatedFields.data;
 
     try {
-        const buffer = Buffer.from(await file.arrayBuffer());
-        const photoDataUri = `data:${file.type};base64,${buffer.toString('base64')}`;
-
         // Mock current market price - in a real app, this would be fetched from an API
         const currentMarketPrice = 7150 / 1; // Mock price per gram for 24K gold
 
         const result = await aiPoweredGoldValuation({
             weight,
             karat,
-            photoDataUri,
             currentMarketPrice,
         });
 

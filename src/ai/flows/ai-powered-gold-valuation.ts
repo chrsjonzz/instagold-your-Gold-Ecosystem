@@ -13,11 +13,6 @@ import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
 
 const AIPoweredGoldValuationInputSchema = z.object({
-  photoDataUri: z
-    .string()
-    .describe(
-      "A photo of gold items, as a data URI that must include a MIME type and use Base64 encoding. Expected format: 'data:<mimetype>;base64,<encoded_data>'."
-    ),
   karat: z.number().describe('The karat of the gold item.'),
   weight: z.number().describe('The weight of the gold item in grams.'),
   currentMarketPrice: z.number().describe('The current market price of gold per gram.'),
@@ -44,9 +39,8 @@ You will use the following information to estimate the value of the gold item.
 Karat: {{{karat}}}
 Weight (grams): {{{weight}}}
 Current Market Price (per gram): {{{currentMarketPrice}}}
-Photo: {{media url=photoDataUri}}
 
-Calculate the estimated value of the gold item based on the provided information. Consider the karat, weight, current market price, and visual information from the photo.
+Calculate the estimated value of the gold item based on the provided information. Consider the karat, weight, and current market price.
 
 Estimated Value:`, // Provide instructions for the output format
 });
@@ -58,9 +52,12 @@ const aiPoweredGoldValuationFlow = ai.defineFlow(
     outputSchema: AIPoweredGoldValuationOutputSchema,
   },
   async input => {
-    const {output} = await prompt(input);
+    // Pure gold is 24k. The value is a ratio of the item's karat to 24k.
+    const purity = input.karat / 24;
+    const estimatedValue = input.weight * input.currentMarketPrice * purity;
+    
     return {
-      estimatedValue: parseFloat(output!.estimatedValue.toString()),
+      estimatedValue: parseFloat(estimatedValue.toFixed(2)),
     };
   }
 );

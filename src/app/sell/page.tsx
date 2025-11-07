@@ -29,7 +29,7 @@ export default function SellPage() {
               Instant Gold Sell &amp; AI Valuation
             </h1>
             <p className="mt-4 max-w-2xl mx-auto text-lg text-muted-foreground">
-              Enter your gold&apos;s details and upload an image to receive an instant AI-powered valuation and compare the best offers on the market.
+              Enter your gold&apos;s details to receive an instant AI-powered valuation and compare the best offers on the market.
             </p>
           </div>
 

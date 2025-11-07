@@ -92,11 +92,26 @@ export default {
           '0%': { transform: 'translateX(0%)' },
           '100%': { transform: 'translateX(-100%)' },
         },
+        'wing-flap': {
+          '0%, 100%': { transform: 'translateY(0) rotate(0deg)' },
+          '50%': { transform: 'translateY(-5px) rotate(-5deg)' },
+        },
+        'wing-flap-slow': {
+            '0%, 100%': { transform: 'translateY(0) rotate(0deg)' },
+            '50%': { transform: 'translateY(-3px) rotate(-2deg)' },
+        },
+        'wing-flap-delay': {
+            '0%, 100%': { transform: 'translateY(0) skewX(0)' },
+            '50%': { transform: 'translateY(-2px) skewX(5deg)' },
+        },
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
         'marquee': 'marquee 40s linear infinite',
+        'wing-flap': 'wing-flap 1.5s ease-in-out infinite',
+        'wing-flap-slow': 'wing-flap-slow 2s ease-in-out infinite',
+        'wing-flap-delay': 'wing-flap-delay 2.5s ease-in-out infinite',
       },
     },
   },

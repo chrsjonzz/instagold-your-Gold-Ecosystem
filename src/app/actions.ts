@@ -2,10 +2,8 @@
 
 import { z } from 'zod';
 import { goldValuation } from '@/ai/flows/gold-valuation';
-import { ValuationFormSchema, type ValuationFormState, SupportFormSchema, type SupportFormState, ProceedToSellSchema, PartnerFormSchema, type PartnerFormState, ReviewFormSchema, type ReviewFormState } from '@/lib/types';
+import { ValuationFormSchema, type ValuationFormState, SupportFormSchema, type SupportFormState, ProceedToSellSchema, PartnerFormSchema, type PartnerFormState } from '@/lib/types';
 import { getBangaloreGoldPrice } from '@/lib/gold-price-service';
-import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
-import { getFirebase } from '@/firebase/server-provider';
 
 const GoldValuationActionSchema = ValuationFormSchema.extend({
     // Server-side will have no location for now, but we add it to the schema
@@ -162,48 +160,4 @@ export async function submitPartnerRequest(
         message: "Thank you for your interest! Our partnership team will review your application and be in touch soon.",
         success: true,
     };
-}
-
-export async function submitReview(
-    prevState: ReviewFormState,
-    formData: FormData
-): Promise<ReviewFormState> {
-    const validatedFields = ReviewFormSchema.safeParse({
-        name: formData.get('name'),
-        rating: formData.get('rating'),
-        comment: formData.get('comment'),
-    });
-
-    if (!validatedFields.success) {
-        return {
-            message: "Invalid form data.",
-            error: validatedFields.error.flatten().fieldErrors.name?.[0] ||
-                   validatedFields.error.flatten().fieldErrors.rating?.[0] ||
-                   validatedFields.error.flatten().fieldErrors.comment?.[0]
-        };
-    }
-
-    const { name, rating, comment } = validatedFields.data;
-    const { firestore } = getFirebase();
-
-    try {
-        const reviewsCollection = collection(firestore, 'reviews');
-        await addDoc(reviewsCollection, {
-            name,
-            rating,
-            comment,
-            createdAt: serverTimestamp(),
-        });
-        
-        return {
-            message: "Thank you for your review!",
-            success: true,
-        };
-    } catch (e: any) {
-        console.error("Error submitting review:", e);
-        return {
-            message: "An unexpected error occurred.",
-            error: `Server error: ${e.message || 'Could not submit review.'}`
-        };
-    }
 }

@@ -13,7 +13,6 @@ const footerLinks = {
   'Company': [
     { label: 'About Us', href: '/about-us' },
     { label: 'Partner With Us', href: '/partner' },
-    { label: 'Reviews', href: '/reviews' },
   ],
   'Services': [
     { label: 'Sell Gold', href: '/sell' },

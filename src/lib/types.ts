@@ -46,15 +46,3 @@ export type PartnerFormState = {
     error?: string;
     success?: boolean;
 };
-
-export const ReviewFormSchema = z.object({
-  name: z.string().min(2, { message: "Name must be at least 2 characters." }),
-  rating: z.coerce.number().min(1, { message: "Please provide a rating." }).max(5),
-  comment: z.string().min(10, { message: "Comment must be at least 10 characters." }),
-});
-
-export type ReviewFormState = {
-    message: string;
-    error?: string;
-    success?: boolean;
-};

@@ -1,7 +1,7 @@
 'use client';
 
-import { useEffect, useRef, useState, useActionState } from 'react';
-import { useFormStatus } from 'react-dom';
+import { useEffect, useRef, useState } from 'react';
+import { useFormState, useFormStatus } from 'react-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import type { z } from 'zod';
@@ -66,8 +66,8 @@ function ProceedToSellButton() {
 }
 
 export default function ValuationForm() {
-    const [formState, formAction] = useActionState(getGoldValuation, initialFormState);
-    const [proceedState, proceedAction] = useActionState(proceedToSell, initialProceedState);
+    const [formState, formAction] = useFormState(getGoldValuation, initialFormState);
+    const [proceedState, proceedAction] = useFormState(proceedToSell, initialProceedState);
 
     const valuationFormRef = useRef<HTMLFormElement>(null);
     const proceedFormRef = useRef<HTMLFormElement>(null);

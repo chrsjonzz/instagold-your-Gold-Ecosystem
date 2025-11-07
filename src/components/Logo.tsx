@@ -45,6 +45,7 @@ const PhoenixIcon = ({ className, ...props }: React.SVGProps<SVGSVGElement>) => 
                 fill="url(#goldGradient)"
                 d="M58,45.5 C 53 58, 48 78, 53 88 C 58 98, 68 93, 63 83 C 58 73, 61 58, 58 45.5z"
             />
+            <g className="animate-wing-flap">
              {/* Wings */}
             <path
                 fill="url(#goldGradient)"
@@ -66,6 +67,7 @@ const PhoenixIcon = ({ className, ...props }: React.SVGProps<SVGSVGElement>) => 
                 fill="url(#goldGradient)"
                 d="M42,38 C 32 28, 12 18, 2 23 C -8 28, 7 43, 17 53 C 27 63, 37 48, 42 38z"
             />
+            </g>
              {/* Sparkles */}
             <path fill="#FDE047" d="M30 55 l 2 -4 l 2 4 l -4 -2 z" />
             <path fill="#FDE047" d="M25 60 l 1 -3 l 1 3 l -2 -1.5 z" />

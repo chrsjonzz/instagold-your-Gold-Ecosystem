@@ -3,35 +3,23 @@
 import Link from 'next/link';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Menu, X, LogOut, User, LogIn } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import GoldRateTicker from '../GoldRateTicker';
 import { Logo } from '../Logo';
-import { useUser } from '@/firebase';
-import { getAuth } from 'firebase/auth';
 
 const navLinks = [
   { href: '/live-price', label: 'Live Prices' },
   { href: '/about-gold', label: 'About Gold' },
   { href: '/purity', label: 'Gold Purity' },
   { href: '/sell', label: 'Sell Gold' },
-];
-
-const authenticatedNavLinks = [
   { href: '/pledges', label: 'My Pledges' },
   { href: '/pledge-takeover', label: 'Pledge Takeover' },
 ];
 
+
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const { user } = useUser();
-
-  const handleLogout = async () => {
-    const auth = getAuth();
-    await auth.signOut();
-  };
-
-  const allNavLinks = user ? [...navLinks, ...authenticatedNavLinks] : navLinks;
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md shadow-sm">
@@ -44,25 +32,11 @@ export default function Header() {
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center gap-6">
-            {allNavLinks.map((link) => (
+            {navLinks.map((link) => (
               <Link key={link.href} href={link.href} className="text-sm font-medium text-foreground hover:text-primary transition-colors">
                 {link.label}
               </Link>
             ))}
-             {user ? (
-              <>
-                <Button variant="ghost" onClick={handleLogout}>
-                  <LogOut className="mr-2" /> Logout
-                </Button>
-                <Button asChild>
-                  <Link href="/profile"><User className="mr-2" /> Profile</Link>
-                </Button>
-              </>
-            ) : (
-              <Button asChild>
-                <Link href="/login"><LogIn className="mr-2" /> Login</Link>
-              </Button>
-            )}
           </nav>
 
           {/* Mobile Navigation Trigger */}
@@ -87,7 +61,7 @@ export default function Header() {
                       </Button>
                   </div>
                   <nav className="flex flex-col gap-6">
-                    {allNavLinks.map((link) => (
+                    {navLinks.map((link) => (
                       <Link
                         key={link.href}
                         href={link.href}
@@ -98,22 +72,6 @@ export default function Header() {
                       </Link>
                     ))}
                   </nav>
-                  <div className="mt-auto flex flex-col gap-4">
-                      {user ? (
-                        <>
-                           <Button asChild>
-                            <Link href="/profile" onClick={() => setIsMenuOpen(false)}><User className="mr-2" /> Profile</Link>
-                          </Button>
-                          <Button variant="outline" onClick={handleLogout}>
-                            <LogOut className="mr-2" /> Logout
-                          </Button>
-                        </>
-                      ) : (
-                        <Button asChild>
-                          <Link href="/login" onClick={() => setIsMenuOpen(false)}><LogIn className="mr-2" /> Login</Link>
-                        </Button>
-                      )}
-                  </div>
                 </div>
               </SheetContent>
             </Sheet>

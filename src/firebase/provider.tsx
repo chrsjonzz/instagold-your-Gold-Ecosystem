@@ -5,12 +5,10 @@ import {
   type ReactNode,
 } from 'react';
 import type { FirebaseApp } from 'firebase/app';
-import type { Auth } from 'firebase/auth';
 import type { Firestore } from 'firebase/firestore';
 
 interface FirebaseContextValue {
   app: FirebaseApp;
-  auth: Auth;
   firestore: Firestore;
 }
 
@@ -22,7 +20,6 @@ export function FirebaseProvider({
 }: {
   children: ReactNode;
   app: FirebaseApp;
-  auth: Auth;
   firestore: Firestore;
 }) {
   return (
@@ -41,11 +38,7 @@ export function useFirebaseApp() {
 }
 
 export function useAuth() {
-  const context = useContext(FirebaseContext);
-  if (context === undefined) {
-      throw new Error('useAuth must be used within a FirebaseProvider');
-  }
-  return context.auth;
+  return null;
 }
 
 export function useFirestore() {

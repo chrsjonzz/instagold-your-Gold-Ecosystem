@@ -1,6 +1,5 @@
 'use client';
 
-import AuthGuard from '@/components/AuthGuard';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -28,7 +27,7 @@ const benefits = [
 
 function PledgeTakeoverPage() {
   return (
-     <AuthGuard>
+     
         <div className="bg-gradient-to-b from-background via-yellow-50 to-background min-h-full">
         <div className="container mx-auto px-4 py-24 md:py-32">
             <div className="max-w-6xl mx-auto">
@@ -88,7 +87,6 @@ function PledgeTakeoverPage() {
             </div>
         </div>
         </div>
-    </AuthGuard>
   );
 }
 

@@ -1,32 +1,14 @@
-import Image from 'next/image';
-import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
-const ContentCard = ({ title, children, imageId, imageHint, imageDescription, reverse = false }: { title: string, children: React.ReactNode, imageId: string, imageHint: string, imageDescription: string, reverse?: boolean }) => {
-  const image = PlaceHolderImages.find(p => p.id === imageId);
+const ContentCard = ({ title, children }: { title: string, children: React.ReactNode }) => {
   return (
-    <Card className="overflow-hidden shadow-lg border-primary/20">
-      <div className={`md:flex ${reverse ? 'flex-row-reverse' : ''}`}>
-        <div className="md:w-1/2">
-          <CardHeader>
-            <CardTitle className="font-headline text-3xl text-primary">{title}</CardTitle>
-          </CardHeader>
-          <CardContent className="prose prose-lg max-w-none text-muted-foreground">
-            {children}
-          </CardContent>
-        </div>
-        <div className="md:w-1/2 relative min-h-[250px] md:min-h-full">
-          {image && (
-            <Image
-              src={image.imageUrl}
-              alt={imageDescription}
-              data-ai-hint={imageHint}
-              fill
-              className="object-cover"
-            />
-          )}
-        </div>
-      </div>
+    <Card className="overflow-hidden shadow-lg border-primary/20 bg-card/80 backdrop-blur-sm">
+      <CardHeader>
+        <CardTitle className="font-headline text-3xl text-primary">{title}</CardTitle>
+      </CardHeader>
+      <CardContent className="prose prose-lg max-w-none text-muted-foreground">
+        {children}
+      </CardContent>
     </Card>
   );
 };
@@ -35,7 +17,7 @@ export default function AboutUsPage() {
   return (
     <div className="bg-gradient-to-b from-background via-yellow-50 to-background min-h-full">
       <div className="container mx-auto px-4 py-24 md:py-32">
-        <div className="max-w-6xl mx-auto space-y-16">
+        <div className="max-w-4xl mx-auto space-y-12">
           <div className="text-center mb-12">
             <h1 className="font-headline text-4xl md:text-5xl font-bold tracking-tight bg-gradient-to-r from-yellow-800 via-amber-600 to-yellow-800 text-transparent bg-clip-text">
               About InstaGold
@@ -47,9 +29,6 @@ export default function AboutUsPage() {
 
           <ContentCard
             title="Our Mission"
-            imageId="about-us-mission"
-            imageHint="compass direction"
-            imageDescription="A compass symbolizing our mission"
           >
             <p>
               Our mission is to create a unified digital ecosystem for gold in India. We aim to empower every individual by providing a seamless, transparent, and trusted platform to buy, sell, and manage their gold assets. We believe in leveraging technology to bring efficiency and accessibility to a market that has been fragmented for too long.
@@ -58,10 +37,6 @@ export default function AboutUsPage() {
 
            <ContentCard
             title="Our Values"
-            imageId="about-us-values"
-            imageHint="glowing lightbulb"
-            imageDescription="A lightbulb symbolizing our core values"
-            reverse={true}
           >
             <p>
               <b>Trust:</b> We are committed to building a platform that our users can rely on. Every transaction is secure and every partner is verified.

@@ -15,6 +15,7 @@ const navLinks = [
   { href: '/sell', label: 'Sell Gold' },
   { href: '/pledges', label: 'My Pledges' },
   { href: '/pledge-takeover', label: 'Pledge Takeover' },
+  { href: '/reviews', label: 'Reviews' },
 ];
 
 

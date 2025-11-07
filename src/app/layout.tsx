@@ -1,8 +1,5 @@
 import type { Metadata } from 'next';
 import { Toaster } from "@/components/ui/toaster"
-import Header from '@/components/layout/Header';
-import Footer from '@/components/layout/Footer';
-import CursorPhoenix from '@/components/CursorPhoenix';
 import { Providers } from './providers';
 import './globals.css';
 
@@ -25,14 +22,7 @@ export default function RootLayout({
       </head>
       <body className="font-body antialiased">
         <Providers>
-          <CursorPhoenix />
-          <div className="flex flex-col min-h-screen">
-              <Header />
-              <main className="flex-grow">
-              {children}
-              </main>
-              <Footer />
-          </div>
+          {children}
           <Toaster />
         </Providers>
       </body>

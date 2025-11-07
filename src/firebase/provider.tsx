@@ -3,7 +3,6 @@ import {
   createContext,
   useContext,
   type ReactNode,
-  useMemo,
 } from 'react';
 import type { FirebaseApp } from 'firebase/app';
 import type { Auth } from 'firebase/auth';
@@ -19,10 +18,12 @@ const FirebaseContext = createContext<FirebaseContextValue | undefined>(undefine
 
 export function FirebaseProvider({
   children,
-  value,
+  ...value
 }: {
   children: ReactNode;
-  value: FirebaseContextValue;
+  app: FirebaseApp;
+  auth: Auth;
+  firestore: Firestore;
 }) {
   return (
     <FirebaseContext.Provider value={value}>

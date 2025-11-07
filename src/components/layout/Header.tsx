@@ -37,8 +37,7 @@ export default function Header() {
           </nav>
 
           <div className="hidden md:flex items-center gap-2">
-            <Button variant="ghost">Log In</Button>
-            <Button className="shadow-md shadow-primary/20">Sign Up</Button>
+            {/* Login and Sign up buttons removed */}
           </div>
 
           {/* Mobile Navigation Trigger */}
@@ -75,8 +74,7 @@ export default function Header() {
                     ))}
                   </nav>
                   <div className="mt-auto flex flex-col gap-4">
-                     <Button variant="ghost" size="lg">Log In</Button>
-                     <Button size="lg">Sign Up</Button>
+                     {/* Login and Sign up buttons removed */}
                   </div>
                 </div>
               </SheetContent>

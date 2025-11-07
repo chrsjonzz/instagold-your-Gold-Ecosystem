@@ -175,7 +175,7 @@ export default function Home() {
             </p>
             <div className="mt-8">
               <Button asChild size="lg" variant="secondary" className="bg-white text-primary hover:bg-yellow-50 shadow-lg">
-                <Link href="/sell">Create Your Account <ArrowRight className="ml-2"/></Link>
+                <Link href="/sell">Value Your Gold <ArrowRight className="ml-2"/></Link>
               </Button>
             </div>
           </div>

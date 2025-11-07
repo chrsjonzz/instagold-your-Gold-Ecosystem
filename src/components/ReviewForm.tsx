@@ -1,7 +1,7 @@
 'use client';
 
-import { useEffect, useRef, useState, useActionState } from 'react';
-import { useFormStatus } from 'react-dom';
+import { useEffect, useRef, useState } from 'react';
+import { useFormState, useFormStatus } from 'react-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import type { z } from 'zod';
@@ -40,7 +40,7 @@ function SubmitButton() {
 }
 
 export default function ReviewForm() {
-    const [formState, formAction] = useActionState(submitReview, initialFormState);
+    const [formState, formAction] = useFormState(submitReview, initialFormState);
     const formRef = useRef<HTMLFormElement>(null);
     const { toast } = useToast();
     const [rating, setRating] = useState(0);

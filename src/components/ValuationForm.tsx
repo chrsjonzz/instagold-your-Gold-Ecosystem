@@ -6,6 +6,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import type { z } from 'zod';
 import Image from 'next/image';
+import Link from 'next/link';
 
 import { getGoldValuation, proceedToSell } from '@/app/actions';
 import { ValuationFormSchema, type ValuationFormState } from '@/lib/types';
@@ -15,7 +16,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Slider } from '@/components/ui/slider';
 import { useToast } from '@/hooks/use-toast';
-import { Sparkles, Loader2, Gem, ArrowRight } from 'lucide-react';
+import { Sparkles, Loader2, Gem, ArrowRight, Download } from 'lucide-react';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 
 const initialFormState: ValuationFormState = {
@@ -228,11 +229,19 @@ export default function ValuationForm() {
                 </CardContent>
                 <CardFooter className="flex-col gap-2">
                     {currentValuation?.estimatedValue && (
+                        <>
                         <form action={proceedAction} ref={proceedFormRef} className="w-full">
                             <input type="hidden" name="phone" value={currentValuation.phone} />
                             <input type="hidden" name="estimatedValue" value={currentValuation.estimatedValue} />
                             <ProceedToSellButton />
                         </form>
+                        <Button variant="secondary" className="mt-2 w-full" asChild>
+                            <Link href="/rate-card" target="_blank">
+                                <Download className="mr-2 h-4 w-4" />
+                                Download Rate Card
+                            </Link>
+                        </Button>
+                        </>
                     )}
                     <Button variant="link" className="text-white" onClick={handleNewValuation}>Start New Valuation</Button>
                 </CardFooter>

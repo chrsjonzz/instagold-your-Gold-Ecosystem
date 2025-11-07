@@ -76,9 +76,11 @@ export default function LivePricePage() {
           </Card>
           
            <div className="text-center mt-8">
-              <Button variant="link">
-                <Download className="mr-2 h-4 w-4" />
-                Download Rate Card
+              <Button variant="link" asChild>
+                <Link href="/rate-card" target="_blank">
+                    <Download className="mr-2 h-4 w-4" />
+                    Download Rate Card
+                </Link>
               </Button>
             </div>
         </div>

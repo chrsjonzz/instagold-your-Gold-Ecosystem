@@ -14,6 +14,11 @@ const footerLinks = {
     { label: 'About Us', href: '/about-us' },
     { label: 'Partner With Us', href: '/partner' },
   ],
+  'Services': [
+    { label: 'Sell Gold', href: '/sell' },
+    { label: 'My Pledges', href: '/pledges' },
+    { label: 'Pledge Takeover', href: '/pledge-takeover' },
+  ],
   'Learn': [
     { label: 'About Gold', href: '/about-gold'},
     { label: 'Gold Purity', href: '/purity'},
@@ -23,10 +28,6 @@ const footerLinks = {
   'Support': [
     { label: 'Contact Us', href: '/support' },
     { label: 'Support Center', href: '/support' },
-  ],
-  'Legal': [
-    { label: 'Privacy Policy', href: '#' },
-    { label: 'Terms & Conditions', href: '#' },
   ],
 };
 

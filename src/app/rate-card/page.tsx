@@ -1,15 +1,33 @@
+'use client';
+
+import { Suspense } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Logo } from "@/components/Logo";
+import { cn } from '@/lib/utils';
 
 const rates = [
-  { purity: "24K (99.9%)", rate: "7,150.50" },
-  { purity: "22K (91.6%)", rate: "6,560.10" },
-  { purity: "18K (75.0%)", rate: "5,362.88" },
-  { purity: "14K (58.5%)", rate: "4,182.04" },
+  { purity: "24", rate: "7,150.50" },
+  { purity: "22", rate: "6,560.10" },
+  { purity: "18", rate: "5,362.88" },
+  { purity: "14", rate: "4,182.04" },
 ];
 
-export default function RateCardPage() {
+const purityMap: { [key: string]: string } = {
+    "24": "24K (99.9%)",
+    "22": "22K (91.6%)",
+    "18": "18K (75.0%)",
+    "14": "14K (58.5%)"
+}
+
+
+function RateCardContent() {
+  const searchParams = useSearchParams();
+  const weight = searchParams.get('weight');
+  const karat = searchParams.get('karat');
+  const estimatedValue = searchParams.get('estimatedValue');
+
   return (
     <div className="bg-gradient-to-b from-background via-yellow-50 to-background min-h-screen py-12 print:bg-white">
       <div className="container mx-auto px-4">
@@ -25,6 +43,29 @@ export default function RateCardPage() {
           </header>
 
           <main>
+            {estimatedValue && weight && karat && (
+              <Card className="mb-8 border-2 border-primary bg-yellow-50/50">
+                  <CardHeader>
+                      <CardTitle className="text-primary font-headline">Your Valuation</CardTitle>
+                      <CardDescription>Based on the details you provided.</CardDescription>
+                  </CardHeader>
+                  <CardContent className="grid grid-cols-2 gap-4 text-center">
+                      <div className="bg-white/50 p-3 rounded-md">
+                          <p className="text-sm font-semibold text-muted-foreground">Weight</p>
+                          <p className="text-lg font-bold font-headline text-primary">{weight} gm</p>
+                      </div>
+                      <div className="bg-white/50 p-3 rounded-md">
+                          <p className="text-sm font-semibold text-muted-foreground">Purity</p>
+                          <p className="text-lg font-bold font-headline text-primary">{karat}K</p>
+                      </div>
+                      <div className="col-span-2 bg-white/50 p-4 rounded-md mt-2">
+                          <p className="text-md font-semibold text-muted-foreground">Estimated Market Value</p>
+                          <p className="text-3xl font-bold font-headline text-primary mt-1">INR {parseFloat(estimatedValue).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+                      </div>
+                  </CardContent>
+              </Card>
+            )}
+
             <Card className="border-primary/50">
               <CardHeader>
                 <CardTitle className="text-primary font-headline">Live Gold Sell Prices</CardTitle>
@@ -40,8 +81,11 @@ export default function RateCardPage() {
                   </TableHeader>
                   <TableBody>
                     {rates.map((item) => (
-                      <TableRow key={item.purity} className="text-base">
-                        <TableCell className="font-medium">{item.purity}</TableCell>
+                      <TableRow key={item.purity} className={cn(
+                        "text-base",
+                        karat === item.purity && "bg-primary/10 font-bold"
+                      )}>
+                        <TableCell className="font-medium">{purityMap[item.purity]}</TableCell>
                         <TableCell className="text-right font-mono">INR {item.rate}</TableCell>
                       </TableRow>
                     ))}
@@ -66,4 +110,13 @@ export default function RateCardPage() {
       </div>
     </div>
   );
+}
+
+
+export default function RateCardPage() {
+    return (
+        <Suspense fallback={<div>Loading rates...</div>}>
+            <RateCardContent />
+        </Suspense>
+    )
 }

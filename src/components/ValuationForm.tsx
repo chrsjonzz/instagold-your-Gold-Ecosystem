@@ -49,7 +49,7 @@ function ValuationSubmitButton() {
 function ProceedToSellButton() {
     const { pending } = useFormStatus();
     return (
-        <Button type="submit" className="w-full bg-white text-primary hover:bg-yellow-50 rounded-full" disabled={pending} size="lg">
+        <Button type="submit" className="w-full bg-white text-primary hover:bg-yellow-50" disabled={pending} size="lg">
              {pending ? (
                 <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -79,13 +79,13 @@ export default function ValuationForm() {
     const form = useForm<z.infer<typeof ValuationFormSchema>>({
         resolver: zodResolver(ValuationFormSchema),
         defaultValues: {
-            weight: 0,
+            weight: undefined,
             karat: 22,
             phone: '',
         },
     });
     
-    const [currentValuation, setCurrentValuation] = useState<ValuationFormState | null>(null);
+    const [currentValuation, setCurrentValuation] = useState<ValuationFormState & { weight?: number } | null>(null);
 
     useEffect(() => {
         if (formState.message) {
@@ -101,7 +101,8 @@ export default function ValuationForm() {
                     title: 'Valuation Complete!',
                     description: `We've estimated the value of your gold item.`,
                 });
-                setCurrentValuation(formState);
+                const weight = valuationFormRef.current ? parseFloat(new FormData(valuationFormRef.current).get('weight') as string) : undefined;
+                setCurrentValuation({...formState, weight});
                 valuationFormRef.current?.reset();
                 form.reset();
             }
@@ -205,7 +206,7 @@ export default function ValuationForm() {
                         Your online gold valuation will appear here.
                     </CardDescription>
                 </CardHeader>
-                <CardContent className="text-center py-8 flex items-center justify-center">
+                <CardContent className="text-center flex items-center justify-center">
                     {currentValuation?.estimatedValue ? (
                         <div className="w-full">
                             <p className="text-sm text-yellow-200">Estimated Market Value</p>
@@ -215,7 +216,7 @@ export default function ValuationForm() {
                             <p className="text-xs text-yellow-300 mt-4">*This is an estimate. Final value subject to physical verification by our partners.</p>
                         </div>
                     ) : (
-                        <div className="flex flex-col items-center justify-center">
+                        <div className="flex flex-col items-center justify-center min-h-[224px]">
                             {placeholderImage && <Image
                                 src={placeholderImage.imageUrl}
                                 alt={placeholderImage.description}
@@ -228,7 +229,7 @@ export default function ValuationForm() {
                         </div>
                     )}
                 </CardContent>
-                <CardFooter className="flex-col gap-4 px-6 pb-6">
+                <CardFooter className="flex-col gap-2 px-6 pb-6">
                     {currentValuation?.estimatedValue && (
                         <>
                         <form action={proceedAction} ref={proceedFormRef} className="w-full">
@@ -236,8 +237,11 @@ export default function ValuationForm() {
                             <input type="hidden" name="estimatedValue" value={currentValuation.estimatedValue} />
                             <ProceedToSellButton />
                         </form>
-                        <Button variant="link" asChild className="text-white opacity-80 hover:opacity-100">
-                                <Link href="/rate-card" target="_blank">
+                         <Button variant="link" asChild className="text-white opacity-80 hover:opacity-100">
+                                <Link 
+                                    href={`/rate-card?weight=${currentValuation.weight}&karat=${currentValuation.karat}&estimatedValue=${currentValuation.estimatedValue}`} 
+                                    target="_blank"
+                                >
                                     <Download className="mr-2 h-4 w-4" />
                                     Download Rate Card
                                 </Link>

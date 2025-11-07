@@ -9,8 +9,8 @@ import { PlaceHolderImages } from '@/lib/placeholder-images';
 const features = [
   {
     icon: <Gem className="w-8 h-8 text-primary" />,
-    title: 'AI-Powered Valuation',
-    description: 'Enter your gold\'s details to get an instant, AI-driven value estimate. Accurate, fast, and secure.',
+    title: 'Instant Online Valuation',
+    description: 'Enter your gold\'s details to get an instant, online value estimate. Accurate, fast, and secure.',
     link: '/sell',
     image: PlaceHolderImages.find(p => p.id === 'sell-feature'),
   },
@@ -38,8 +38,8 @@ const howItWorks = [
   },
   {
     icon: <Sparkles className="w-10 h-10 text-primary" />,
-    title: "Instant AI Valuation",
-    description: "Use our form for a quick, AI-powered estimate of your gold's worth."
+    title: "Instant Valuation",
+    description: "Use our form for a quick, calculated estimate of your gold's worth."
   },
   {
     icon: <Workflow className="w-10 h-10 text-primary" />,

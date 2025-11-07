@@ -1,55 +1,38 @@
 'use server';
 
 /**
- * @fileOverview AI-powered gold valuation flow.
+ * @fileOverview Gold valuation flow.
  *
- * This flow estimates the value of gold items based on an image upload.
- * - aiPoweredGoldValuation - A function that handles the gold valuation process.
- * - AIPoweredGoldValuationInput - The input type for the aiPoweredGoldValuation function.
- * - AIPoweredGoldValuationOutput - The return type for the aiPoweredGoldValuation function.
+ * This flow estimates the value of gold items.
+ * - goldValuation - A function that handles the gold valuation process.
+ * - GoldValuationInput - The input type for the goldValuation function.
+ * - GoldValuationOutput - The return type for the goldValuation function.
  */
 
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
 
-const AIPoweredGoldValuationInputSchema = z.object({
+const GoldValuationInputSchema = z.object({
   karat: z.number().describe('The karat of the gold item.'),
   weight: z.number().describe('The weight of the gold item in grams.'),
   currentMarketPrice: z.number().describe('The current market price of gold per gram.'),
 });
-export type AIPoweredGoldValuationInput = z.infer<typeof AIPoweredGoldValuationInputSchema>;
+export type GoldValuationInput = z.infer<typeof GoldValuationInputSchema>;
 
-const AIPoweredGoldValuationOutputSchema = z.object({
+const GoldValuationOutputSchema = z.object({
   estimatedValue: z.number().describe('The estimated value of the gold item.'),
 });
-export type AIPoweredGoldValuationOutput = z.infer<typeof AIPoweredGoldValuationOutputSchema>;
+export type GoldValuationOutput = z.infer<typeof GoldValuationOutputSchema>;
 
-export async function aiPoweredGoldValuation(input: AIPoweredGoldValuationInput): Promise<AIPoweredGoldValuationOutput> {
-  return aiPoweredGoldValuationFlow(input);
+export async function goldValuation(input: GoldValuationInput): Promise<GoldValuationOutput> {
+  return goldValuationFlow(input);
 }
 
-const prompt = ai.definePrompt({
-  name: 'aiPoweredGoldValuationPrompt',
-  input: {schema: AIPoweredGoldValuationInputSchema},
-  output: {schema: AIPoweredGoldValuationOutputSchema},
-  prompt: `You are an AI expert in gold valuation.
-
-You will use the following information to estimate the value of the gold item.
-
-Karat: {{{karat}}}
-Weight (grams): {{{weight}}}
-Current Market Price (per gram): {{{currentMarketPrice}}}
-
-Calculate the estimated value of the gold item based on the provided information. Consider the karat, weight, and current market price.
-
-Estimated Value:`, // Provide instructions for the output format
-});
-
-const aiPoweredGoldValuationFlow = ai.defineFlow(
+const goldValuationFlow = ai.defineFlow(
   {
-    name: 'aiPoweredGoldValuationFlow',
-    inputSchema: AIPoweredGoldValuationInputSchema,
-    outputSchema: AIPoweredGoldValuationOutputSchema,
+    name: 'goldValuationFlow',
+    inputSchema: GoldValuationInputSchema,
+    outputSchema: GoldValuationOutputSchema,
   },
   async input => {
     // Pure gold is 24k. The value is a ratio of the item's karat to 24k.

@@ -1,7 +1,7 @@
 'use server';
 
 import { z } from 'zod';
-import { aiPoweredGoldValuation } from '@/ai/flows/ai-powered-gold-valuation';
+import { goldValuation } from '@/ai/flows/gold-valuation';
 import { ValuationFormSchema, type ValuationFormState, SupportFormSchema, type SupportFormState } from '@/lib/types';
 
 const GoldValuationActionSchema = ValuationFormSchema.extend({
@@ -39,7 +39,7 @@ export async function getGoldValuation(
         // Mock current market price - in a real app, this would be fetched from an API
         const currentMarketPrice = 7150 / 1; // Mock price per gram for 24K gold
 
-        const result = await aiPoweredGoldValuation({
+        const result = await goldValuation({
             weight,
             karat,
             currentMarketPrice,
@@ -53,7 +53,7 @@ export async function getGoldValuation(
         } else {
             return {
                 message: "Valuation failed.",
-                error: "Could not retrieve an estimated value from the AI model."
+                error: "Could not retrieve an estimated value."
             };
         }
     } catch (e) {

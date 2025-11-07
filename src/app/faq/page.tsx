@@ -11,16 +11,16 @@ const faqs = [
     answer: "InstaGold is a comprehensive digital platform that unifies India's gold ecosystem. We provide services to help you buy, sell, pledge, compare, and track gold seamlessly and with confidence."
   },
   {
-    question: "How does the AI gold valuation work?",
-    answer: "Our AI-powered valuation tool uses the information you provide—such as weight and purity (karat)—to estimate the current market value of your gold item. It references real-time market data to give you an accurate and instant estimate."
+    question: "How does the online gold valuation work?",
+    answer: "Our online valuation tool uses the information you provide—such as weight and purity (karat)—to estimate the current market value of your gold item. It references real-time market data to give you an accurate and instant estimate."
   },
   {
-    question: "Is the AI valuation accurate?",
-    answer: "The AI valuation provides a highly accurate estimate based on the data you provide and current market prices. However, the final price is subject to a physical inspection and verification by our certified partners."
+    question: "Is the online valuation accurate?",
+    answer: "The online valuation provides a highly accurate estimate based on the data you provide and current market prices. However, the final price is subject to a physical inspection and verification by our certified partners."
   },
   {
     question: "What is gold resale value?",
-    answer: "The resale value of gold depends on its purity (karat), weight, and the current market price. Our AI valuation tool gives you a real-time estimate, but the final price is determined by the buyer after a physical inspection of the item."
+    answer: "The resale value of gold depends on its purity (karat), weight, and the current market price. Our valuation tool gives you a real-time estimate, but the final price is determined by the buyer after a physical inspection of the item."
   },
   {
     question: "What are the documents required for the process and what is the duration of the process?",

@@ -34,7 +34,7 @@ function SubmitButton() {
             ) : (
                 <>
                     <Sparkles className="mr-2 h-4 w-4" />
-                    Get AI Valuation
+                    Get Instant Valuation
                 </>
             )}
         </Button>
@@ -146,7 +146,7 @@ export default function ValuationForm() {
                         <Sparkles /> Estimated Value
                     </CardTitle>
                     <CardDescription className="text-yellow-100">
-                        Your AI-powered gold valuation will appear here.
+                        Your online gold valuation will appear here.
                     </CardDescription>
                 </CardHeader>
                 <CardContent className="text-center">

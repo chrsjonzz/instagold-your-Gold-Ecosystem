@@ -26,10 +26,10 @@ export default function SellPage() {
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-12">
             <h1 className="font-headline text-4xl md:text-5xl font-bold tracking-tight bg-gradient-to-r from-yellow-800 via-amber-600 to-yellow-800 text-transparent bg-clip-text">
-              Instant Gold Sell &amp; AI Valuation
+              Instant Gold Sell &amp; Online Valuation
             </h1>
             <p className="mt-4 max-w-2xl mx-auto text-lg text-muted-foreground">
-              Enter your gold&apos;s details to receive an instant AI-powered valuation and compare the best offers on the market.
+              Enter your gold&apos;s details to receive an instant online valuation and compare the best offers on the market.
             </p>
           </div>
 

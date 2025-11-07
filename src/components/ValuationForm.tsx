@@ -97,12 +97,15 @@ export default function ValuationForm() {
                     title: 'Valuation Error',
                     description: formState.error,
                 });
+                setShowAnimation(false);
+                setCurrentValuation(null);
             } else if (formState.estimatedValue) {
                 toast({
                     title: 'Valuation Complete!',
                     description: `We've estimated the value of your gold item.`,
                 });
                 setShowAnimation(true);
+                setCurrentValuation(null);
                 setTimeout(() => {
                     setCurrentValuation(formState);
                     setShowAnimation(false);
@@ -133,6 +136,7 @@ export default function ValuationForm() {
     
     const handleNewValuation = () => {
         setCurrentValuation(null);
+        setShowAnimation(false);
         form.reset();
         if (valuationFormRef.current) valuationFormRef.current.reset();
     };

@@ -31,8 +31,12 @@ async function fetchLiveGoldPrice(): Promise<number> {
             return basePrices.bangalore;
         }
         const data = await response.json();
-        // The API gives price per ounce, we need to convert to grams. 1 ounce = 31.1035 grams
-        const pricePerGram = data.price / 31.1035;
+        // Use the price_gram_24k field directly for accuracy.
+        const pricePerGram = data.price_gram_24k;
+        if (!pricePerGram) {
+            console.warn("price_gram_24k not found in API response. Falling back to base price.");
+            return basePrices.bangalore;
+        }
         return pricePerGram;
     } catch (error) {
         console.error("Error fetching live gold price:", error);

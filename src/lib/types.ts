@@ -11,6 +11,8 @@ export type ValuationFormState = {
     estimatedValue?: number;
     error?: string;
     phone?: string;
+    weight?: number;
+    karat?: number;
 };
 
 export const ProceedToSellSchema = z.object({

@@ -19,6 +19,7 @@ import { useToast } from '@/hooks/use-toast';
 import { Sparkles, Loader2, Gem, ArrowRight, Download } from 'lucide-react';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 
+
 const initialFormState: ValuationFormState = {
     message: '',
 };
@@ -64,9 +65,6 @@ function ProceedToSellButton() {
     );
 }
 
-type ValuationResult = ValuationFormState & { weight?: number; karat?: number };
-
-
 export default function ValuationForm() {
     const [formState, formAction] = useFormState(getGoldValuation, initialFormState);
     const [proceedState, proceedAction] = useFormState(proceedToSell, initialProceedState);
@@ -87,7 +85,7 @@ export default function ValuationForm() {
         },
     });
     
-    const [currentValuation, setCurrentValuation] = useState<ValuationResult | null>(null);
+    const [currentValuation, setCurrentValuation] = useState<ValuationFormState | null>(null);
 
     useEffect(() => {
         if (formState.message) {
@@ -98,15 +96,12 @@ export default function ValuationForm() {
                     description: formState.error,
                 });
                 setCurrentValuation(null);
-            } else if (formState.estimatedValue && valuationFormRef.current) {
+            } else if (formState.estimatedValue) {
                 toast({
                     title: 'Valuation Complete!',
                     description: `We've estimated the value of your gold item.`,
                 });
-                const formData = new FormData(valuationFormRef.current);
-                const weight = parseFloat(formData.get('weight') as string);
-                const karat = parseInt(formData.get('karat') as string);
-                setCurrentValuation({...formState, weight, karat});
+                setCurrentValuation(formState);
                 valuationFormRef.current?.reset();
                 form.reset();
             }
@@ -210,9 +205,9 @@ export default function ValuationForm() {
                         Your online gold valuation will appear here.
                     </CardDescription>
                 </CardHeader>
-                <CardContent className="text-center flex items-center justify-center">
+                <CardContent className="text-center flex flex-col items-center justify-center gap-4">
                     {currentValuation?.estimatedValue ? (
-                        <div className="w-full">
+                         <div className="w-full">
                              <div className="p-4 rounded-lg bg-black/10">
                                 <p className="text-sm text-yellow-200">Estimated Market Value</p>
                                 <p className="text-5xl font-bold font-headline tracking-tight my-2">

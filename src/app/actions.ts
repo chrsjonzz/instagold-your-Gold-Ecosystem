@@ -50,6 +50,8 @@ export async function getGoldValuation(
                 message: "Valuation successful!",
                 estimatedValue: result.estimatedValue,
                 phone: phone, // Pass phone number in state
+                weight: weight,
+                karat: karat,
             };
         } else {
             return {

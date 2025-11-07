@@ -46,17 +46,6 @@ export default function GoldPurityPage() {
           </div>
 
           <ContentCard
-            title="Why LBMA is Important"
-            imageId="lbma-phone"
-            imageHint="finance app"
-            imageDescription="Phone showing LBMA information"
-          >
-            <p>
-              The London Bullion Market Association (LBMA) sets the international standard for precious metals. LBMA accreditation is a globally recognized benchmark for quality and purity. When you buy or sell LBMA-certified gold, you are assured of its authenticity and weight, which provides trust and transparency in the market. The LBMA’s Good Delivery List is the de-facto standard for the quality of gold and silver bars worldwide, ensuring they meet stringent criteria for responsible sourcing and production.
-            </p>
-          </ContentCard>
-
-          <ContentCard
             title="Evaluating Gold Purity"
             imageId="gold-purity-evaluation"
             imageHint="gold inspection"

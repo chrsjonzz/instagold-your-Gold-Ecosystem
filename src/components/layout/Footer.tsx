@@ -37,7 +37,7 @@ export default function Footer() {
               InstaGold
             </Link>
             <p className="text-muted-foreground max-w-sm">
-              The complete gold ecosystem to unify India’s gold market. Buy, sell, pledge, and track with confidence.
+              The complete gold ecosystem to unify India’s gold market. We help you sell your gold with confidence.
             </p>
              <div className="mt-4 flex items-center gap-2 text-muted-foreground">
                 <Phone className="h-4 w-4" />

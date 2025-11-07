@@ -4,13 +4,7 @@ import { TrendingUp, TrendingDown, Download } from 'lucide-react';
 
 const prices = [
   {
-    title: 'Digital Gold Buy Rate',
-    price: '12825.87',
-    trend: 'up',
-    action: 'Buy Now',
-  },
-  {
-    title: 'Digital Gold Sell Rate',
+    title: 'Online Gold Sell Rate',
     price: '11993.59',
     trend: 'up',
     action: 'Sell Now',
@@ -18,7 +12,7 @@ const prices = [
 ];
 
 const buybackPrice = {
-  title: 'Gold Buyback Rate',
+  title: 'Jewellery Buyback Rate',
   price: '11597.00',
   trend: 'down',
   action: 'Contact Us',
@@ -31,18 +25,18 @@ export default function LivePricePage() {
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-12">
             <h1 className="font-headline text-4xl md:text-5xl font-bold tracking-tight bg-gradient-to-r from-yellow-800 via-amber-600 to-yellow-800 text-transparent bg-clip-text">
-              Today's Gold Prices
+              Today's Gold Sell Prices
             </h1>
             <p className="mt-4 max-w-2xl mx-auto text-lg text-muted-foreground">
-              Real-time prices for buying, selling, and buybacks.
+              Real-time prices for selling your gold online or via our buyback partners.
             </p>
           </div>
 
           <Card className="shadow-lg border-2 border-primary/20">
             <CardContent className="p-6 md:p-8">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
+              <div className="grid grid-cols-1 md:grid-cols-1 gap-6 items-center">
                 {prices.map((item, index) => (
-                  <div key={item.title} className={`relative p-6 rounded-lg ${index === 0 ? 'md:border-r border-border' : ''}`}>
+                  <div key={item.title} className={`relative p-6 rounded-lg`}>
                     <h3 className="text-lg font-semibold text-muted-foreground">{item.title}</h3>
                     <div className="flex items-baseline gap-2 mt-2">
                       <p className="text-4xl font-bold font-headline text-primary">
@@ -73,7 +67,7 @@ export default function LivePricePage() {
            <div className="text-center mt-8">
               <Button variant="link">
                 <Download className="mr-2 h-4 w-4" />
-                Download Product Pricelist
+                Download Rate Card
               </Button>
             </div>
         </div>

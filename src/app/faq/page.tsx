@@ -8,7 +8,7 @@ import {
 const faqs = [
   {
     question: "What is InstaGold?",
-    answer: "InstaGold is a comprehensive digital platform that unifies India's gold ecosystem. We provide services to help you buy, sell, pledge, compare, and track gold seamlessly and with confidence."
+    answer: "InstaGold is a comprehensive digital platform that unifies India's gold ecosystem. We provide services to help you sell your gold seamlessly and with confidence by connecting you with verified buyers."
   },
   {
     question: "How does the online gold valuation work?",

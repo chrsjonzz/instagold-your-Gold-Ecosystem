@@ -34,7 +34,7 @@ const howItWorks = [
   {
     icon: <Search className="w-10 h-10 text-primary" />,
     title: "Discover & Compare",
-    description: "Input your gold details to find the best market prices and offers."
+    description: "Input your gold details to find the best market prices and offers for selling."
   },
   {
     icon: <Sparkles className="w-10 h-10 text-primary" />,
@@ -67,10 +67,10 @@ export default function Home() {
         </div>
         <div className="container mx-auto px-4 text-center relative">
           <h1 className="font-headline text-4xl md:text-6xl font-bold tracking-tight leading-tight bg-gradient-to-r from-yellow-800 via-amber-600 to-yellow-800 text-transparent bg-clip-text">
-            Everything Gold. One Platform.
+            The Smart Way to Sell Your Gold.
           </h1>
           <p className="mt-4 max-w-2xl mx-auto text-lg md:text-xl text-muted-foreground">
-            Unify India’s gold ecosystem — Buy, Sell, Compare, and Track — on one trusted, intelligent platform.
+            Unify India’s gold ecosystem — Sell, Compare, and Track — on one trusted, intelligent platform.
           </p>
           <div className="mt-8 flex flex-col sm:flex-row justify-center items-center gap-4">
             <Button asChild size="lg" className="w-full sm:w-auto shadow-lg shadow-primary/20 hover:shadow-primary/40 transition-shadow">

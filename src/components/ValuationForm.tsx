@@ -18,8 +18,6 @@ import { Slider } from '@/components/ui/slider';
 import { useToast } from '@/hooks/use-toast';
 import { Sparkles, Loader2, Gem, ArrowRight, Download } from 'lucide-react';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
-import GoldToRupeeAnimation from './GoldToRupeeAnimation';
-import { cn } from '@/lib/utils';
 
 const initialFormState: ValuationFormState = {
     message: '',
@@ -88,7 +86,6 @@ export default function ValuationForm() {
     });
     
     const [currentValuation, setCurrentValuation] = useState<ValuationFormState | null>(null);
-    const [showAnimation, setShowAnimation] = useState(false);
 
     useEffect(() => {
         if (formState.message) {
@@ -98,19 +95,13 @@ export default function ValuationForm() {
                     title: 'Valuation Error',
                     description: formState.error,
                 });
-                setShowAnimation(false);
                 setCurrentValuation(null);
             } else if (formState.estimatedValue) {
                 toast({
                     title: 'Valuation Complete!',
                     description: `We've estimated the value of your gold item.`,
                 });
-                setShowAnimation(true);
-                setCurrentValuation(null);
-                setTimeout(() => {
-                    setCurrentValuation(formState);
-                    setShowAnimation(false);
-                }, 4000); // Duration of the animation
+                setCurrentValuation(formState);
                 valuationFormRef.current?.reset();
                 form.reset();
             }
@@ -137,133 +128,125 @@ export default function ValuationForm() {
     
     const handleNewValuation = () => {
         setCurrentValuation(null);
-        setShowAnimation(false);
         form.reset();
         if (valuationFormRef.current) valuationFormRef.current.reset();
     };
 
 
     return (
-        <>
-            {showAnimation && (
-                <div className="fixed inset-0 z-[100] bg-black/50 backdrop-blur-sm">
-                    <GoldToRupeeAnimation />
-                </div>
-            )}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
-                <Card className="shadow-lg border-2 border-primary/20">
-                    <form ref={valuationFormRef} action={formAction} className="space-y-6">
-                        <CardHeader>
-                            <CardTitle className="font-headline text-2xl flex items-center gap-2"><Gem className="text-primary"/> Valuation Details</CardTitle>
-                            <CardDescription>All fields are required for an accurate estimation.</CardDescription>
-                        </CardHeader>
-                        <CardContent className="space-y-6">
-                            {/* Weight */}
-                            <div>
-                                <Label htmlFor="weight">Weight (in grams)</Label>
-                                <Input
-                                    id="weight"
-                                    type="number"
-                                    step="0.01"
-                                    placeholder="e.g., 10.5"
-                                    {...form.register('weight')}
-                                    className="mt-1"
-                                />
-                                {form.formState.errors.weight && <p className="text-sm text-destructive mt-1">{form.formState.errors.weight.message}</p>}
-                            </div>
-
-                            {/* Karat */}
-                            <div>
-                                <div className="flex justify-between items-center mb-2">
-                                    <Label htmlFor="karat">Purity (Karat)</Label>
-                                    <span className="font-bold text-primary text-lg">{karatValue}K</span>
-                                </div>
-                                <Slider
-                                    id="karat"
-                                    defaultValue={[22]}
-                                    min={10}
-                                    max={24}
-                                    step={1}
-                                    onValueChange={(value) => {
-                                        setKaratValue(value[0]);
-                                        form.setValue('karat', value[0]);
-                                    }}
-                                />
-                                <input type="hidden" {...form.register('karat')} value={karatValue} />
-                            </div>
-
-                            {/* Phone Number */}
-                            <div>
-                                <Label htmlFor="phone">Phone Number</Label>
-                                <Input
-                                    id="phone"
-                                    type="tel"
-                                    placeholder="e.g., 9876543210"
-                                    {...form.register('phone')}
-                                    className="mt-1"
-                                />
-                                {form.formState.errors.phone && <p className="text-sm text-destructive mt-1">{form.formState.errors.phone.message}</p>}
-                            </div>
-
-                        </CardContent>
-                        <CardFooter>
-                            <ValuationSubmitButton />
-                        </CardFooter>
-                    </form>
-                </Card>
-
-                <Card className="sticky top-24 shadow-lg bg-gradient-to-br from-yellow-600 to-amber-500 text-white">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
+            <Card className="shadow-lg border-2 border-primary/20">
+                <form ref={valuationFormRef} action={formAction} className="space-y-6">
                     <CardHeader>
-                        <CardTitle className="font-headline text-2xl flex items-center gap-2">
-                            <Sparkles /> Estimated Value
-                        </CardTitle>
-                        <CardDescription className="text-yellow-100">
-                            Your online gold valuation will appear here.
-                        </CardDescription>
+                        <CardTitle className="font-headline text-2xl flex items-center gap-2"><Gem className="text-primary"/> Valuation Details</CardTitle>
+                        <CardDescription>All fields are required for an accurate estimation.</CardDescription>
                     </CardHeader>
-                    <CardContent className="text-center py-12 flex items-center justify-center">
-                        {currentValuation?.estimatedValue ? (
-                            <div>
-                                <p className="text-sm text-yellow-200">Estimated Market Value</p>
-                                <p className="text-5xl font-bold font-headline tracking-tight my-2">
-                                    INR {currentValuation.estimatedValue.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                                </p>
-                                <p className="text-xs text-yellow-300 mt-4">*This is an estimate. Final value subject to physical verification by our partners.</p>
+                    <CardContent className="space-y-6">
+                        {/* Weight */}
+                        <div>
+                            <Label htmlFor="weight">Weight (in grams)</Label>
+                            <Input
+                                id="weight"
+                                type="number"
+                                step="0.01"
+                                placeholder="e.g., 10.5"
+                                {...form.register('weight')}
+                                className="mt-1"
+                            />
+                            {form.formState.errors.weight && <p className="text-sm text-destructive mt-1">{form.formState.errors.weight.message}</p>}
+                        </div>
+
+                        {/* Karat */}
+                        <div>
+                            <div className="flex justify-between items-center mb-2">
+                                <Label htmlFor="karat">Purity (Karat)</Label>
+                                <span className="font-bold text-primary text-lg">{karatValue}K</span>
                             </div>
-                        ) : (
-                            <div className="flex flex-col items-center justify-center">
-                                {placeholderImage && <Image
-                                    src={placeholderImage.imageUrl}
-                                    alt={placeholderImage.description}
-                                    data-ai-hint={placeholderImage.imageHint}
-                                    width={150}
-                                    height={100}
-                                    className="opacity-20"
-                                />}
-                                <p className="mt-4 text-yellow-200">Awaiting details...</p>
-                            </div>
-                        )}
+                            <Slider
+                                id="karat"
+                                defaultValue={[22]}
+                                min={10}
+                                max={24}
+                                step={1}
+                                onValueChange={(value) => {
+                                    setKaratValue(value[0]);
+                                    form.setValue('karat', value[0]);
+                                }}
+                            />
+                            <input type="hidden" {...form.register('karat')} value={karatValue} />
+                        </div>
+
+                        {/* Phone Number */}
+                        <div>
+                            <Label htmlFor="phone">Phone Number</Label>
+                            <Input
+                                id="phone"
+                                type="tel"
+                                placeholder="e.g., 9876543210"
+                                {...form.register('phone')}
+                                className="mt-1"
+                            />
+                            {form.formState.errors.phone && <p className="text-sm text-destructive mt-1">{form.formState.errors.phone.message}</p>}
+                        </div>
+
                     </CardContent>
-                    <CardFooter className="flex-col gap-2">
-                        {currentValuation?.estimatedValue && (
-                            <>
-                            <form action={proceedAction} ref={proceedFormRef} className="w-full">
-                                <input type="hidden" name="phone" value={currentValuation.phone} />
-                                <input type="hidden" name="estimatedValue" value={currentValuation.estimatedValue} />
-                                <ProceedToSellButton />
-                            </form>
-                            <Button variant="secondary" className="mt-2 w-full" asChild>
-                                <Link href="/rate-card" target="_blank">
-                                    <Download className="mr-2 h-4 w-4" />
-                                    Download Rate Card
-                                </Link>
-                            </Button>
-                            </>
-                        )}
-                        <Button variant="link" className="text-white" onClick={handleNewValuation}>Start New Valuation</Button>
+                    <CardFooter>
+                        <ValuationSubmitButton />
                     </CardFooter>
-                </Card>
-            </div>
-        </>
+                </form>
+            </Card>
+
+            <Card className="sticky top-24 shadow-lg bg-gradient-to-br from-yellow-600 to-amber-500 text-white">
+                <CardHeader>
+                    <CardTitle className="font-headline text-2xl flex items-center gap-2">
+                        <Sparkles /> Estimated Value
+                    </CardTitle>
+                    <CardDescription className="text-yellow-100">
+                        Your online gold valuation will appear here.
+                    </CardDescription>
+                </CardHeader>
+                <CardContent className="text-center py-12 flex items-center justify-center min-h-[224px]">
+                    {currentValuation?.estimatedValue ? (
+                        <div>
+                            <p className="text-sm text-yellow-200">Estimated Market Value</p>
+                            <p className="text-5xl font-bold font-headline tracking-tight my-2">
+                                INR {currentValuation.estimatedValue.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                            </p>
+                            <p className="text-xs text-yellow-300 mt-4">*This is an estimate. Final value subject to physical verification by our partners.</p>
+                        </div>
+                    ) : (
+                        <div className="flex flex-col items-center justify-center">
+                            {placeholderImage && <Image
+                                src={placeholderImage.imageUrl}
+                                alt={placeholderImage.description}
+                                data-ai-hint={placeholderImage.imageHint}
+                                width={150}
+                                height={100}
+                                className="opacity-20"
+                            />}
+                            <p className="mt-4 text-yellow-200">Awaiting details...</p>
+                        </div>
+                    )}
+                </CardContent>
+                <CardFooter className="flex-col gap-2">
+                    {currentValuation?.estimatedValue && (
+                        <>
+                        <form action={proceedAction} ref={proceedFormRef} className="w-full">
+                            <input type="hidden" name="phone" value={currentValuation.phone} />
+                            <input type="hidden" name="estimatedValue" value={currentValuation.estimatedValue} />
+                            <ProceedToSellButton />
+                        </form>
+                        <Button variant="secondary" className="mt-2 w-full" asChild>
+                            <Link href="/rate-card" target="_blank">
+                                <Download className="mr-2 h-4 w-4" />
+                                Download Rate Card
+                            </Link>
+                        </Button>
+                        </>
+                    )}
+                    <Button variant="link" className="text-white" onClick={handleNewValuation}>Start New Valuation</Button>
+                </CardFooter>
+            </Card>
+        </div>
     );
 }

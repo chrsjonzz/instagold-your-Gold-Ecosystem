@@ -37,14 +37,17 @@ const PhoenixIcon = ({ className, ...props }: React.SVGProps<SVGSVGElement>) => 
             <g stroke="#92400E" strokeWidth="0.5" strokeLinecap="round" strokeLinejoin="round">
                 {/* Tail */}
                 <path
+                    className="animate-wing-flap-delay"
                     fill="url(#phoenixGradient)"
                     d="M118 128 Q 115 150 120 170 C 110 165, 105 150, 108 135 C 110 145, 115 140, 118 128 Z"
                 />
                 <path
+                    className="animate-wing-flap-delay"
                     fill="url(#phoenixGradient)"
                     d="M108 135 C 100 160, 105 185, 100 190 C 95 170, 100 150, 105 130 Q 107 132, 108 135 Z"
                 />
                 <path
+                    className="animate-wing-flap-delay"
                     fill="url(#phoenixGradient)"
                     d="M105 130 C 95 150, 90 170, 80 180 C 85 160, 90 145, 100 125 Q 102 128, 105 130 Z"
                 />
@@ -59,8 +62,8 @@ const PhoenixIcon = ({ className, ...props }: React.SVGProps<SVGSVGElement>) => 
                     d="M145 78 C 152 75, 160 78, 162 85 C 158 80, 152 80, 145 78 Z"
                 />
 
-                {/* Wings */}
-                 <g>
+                {/* Wings with animation */}
+                <g className="animate-wing-flap origin-bottom-right">
                     <path
                         fill="url(#phoenixGradient)"
                         d="M120 70 C 100 50, 70 45, 50 60 C 70 65, 95 75, 120 70 Z"
@@ -70,7 +73,7 @@ const PhoenixIcon = ({ className, ...props }: React.SVGProps<SVGSVGElement>) => 
                         d="M122 78 C 100 65, 75 65, 60 75 C 80 78, 100 82, 122 78 Z"
                     />
                 </g>
-                 <g>
+                <g className="animate-wing-flap-slow origin-bottom-right">
                     <path
                         fill="url(#phoenixGradient)"
                         d="M125 88 C 105 80, 85 82, 70 90 C 90 90, 110 92, 125 88 Z"

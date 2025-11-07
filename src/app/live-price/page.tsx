@@ -46,7 +46,7 @@ export default function LivePricePage() {
                     <h3 className="text-lg font-semibold text-muted-foreground">{item.title}</h3>
                     <div className="flex items-baseline gap-2 mt-2">
                       <p className="text-4xl font-bold font-headline text-primary">
-                        ₹{item.price}
+                        INR {item.price}
                       </p>
                        <span className="text-sm text-muted-foreground">/gm</span>
                        {item.trend === 'up' ? <TrendingUp className="h-5 w-5 text-green-600" /> : <TrendingDown className="h-5 w-5 text-red-600" />}
@@ -60,7 +60,7 @@ export default function LivePricePage() {
                     <h3 className="text-lg font-semibold text-muted-foreground">{buybackPrice.title}</h3>
                     <div className="flex items-baseline justify-center gap-2 mt-2">
                       <p className="text-4xl font-bold font-headline text-primary">
-                        ₹{buybackPrice.price}
+                        INR {buybackPrice.price}
                       </p>
                        <span className="text-sm text-muted-foreground">/gm</span>
                        {buybackPrice.trend === 'up' ? <TrendingUp className="h-5 w-5 text-green-600" /> : <TrendingDown className="h-5 w-5 text-red-600" />}

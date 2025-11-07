@@ -139,7 +139,7 @@ export default function ValuationForm() {
                         <div>
                             <p className="text-sm text-yellow-200">Estimated Market Value</p>
                             <p className="text-5xl font-bold font-headline tracking-tight my-2">
-                                ₹{formState.estimatedValue.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                                INR {formState.estimatedValue.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                             </p>
                             <p className="text-xs text-yellow-300 mt-4">*This is an estimate. Final value subject to physical verification by our partners.</p>
                         </div>

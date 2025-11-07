@@ -17,7 +17,7 @@ const mockRates = [
 const TickerItem = ({ city, rate, change, trend }: typeof mockRates[0]) => (
   <div className="flex items-center space-x-4 mx-6 flex-shrink-0">
     <span className="font-semibold text-foreground/80">{city}:</span>
-    <span className="font-bold text-foreground">₹{rate}</span>
+    <span className="font-bold text-foreground">INR {rate}</span>
     <div className={`flex items-center text-sm ${trend === 'up' ? 'text-green-600' : 'text-red-600'}`}>
       {trend === 'up' ? <TrendingUp className="h-4 w-4 mr-1" /> : <TrendingDown className="h-4 w-4 mr-1" />}
       <span>{change}</span>

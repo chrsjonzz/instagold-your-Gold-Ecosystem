@@ -49,7 +49,7 @@ function ValuationSubmitButton() {
 function ProceedToSellButton() {
     const { pending } = useFormStatus();
     return (
-        <Button type="submit" className="w-full bg-white text-primary hover:bg-yellow-50" disabled={pending}>
+        <Button type="submit" className="w-full bg-white text-primary hover:bg-yellow-50 rounded-full" disabled={pending} size="lg">
              {pending ? (
                 <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -198,16 +198,16 @@ export default function ValuationForm() {
 
             <Card className="sticky top-24 shadow-lg bg-gradient-to-br from-yellow-600 to-amber-500 text-white">
                 <CardHeader>
-                    <CardTitle className="font-headline text-2xl flex items-center gap-2">
+                    <CardTitle className="font-headline text-2xl flex items-center justify-center gap-2 text-center w-full">
                         <Sparkles /> Estimated Value
                     </CardTitle>
-                    <CardDescription className="text-yellow-100">
+                    <CardDescription className="text-yellow-100 text-center">
                         Your online gold valuation will appear here.
                     </CardDescription>
                 </CardHeader>
-                <CardContent className="text-center py-12 flex items-center justify-center min-h-[224px]">
+                <CardContent className="text-center py-8 flex items-center justify-center">
                     {currentValuation?.estimatedValue ? (
-                        <div>
+                        <div className="w-full">
                             <p className="text-sm text-yellow-200">Estimated Market Value</p>
                             <p className="text-5xl font-bold font-headline tracking-tight my-2">
                                 INR {currentValuation.estimatedValue.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
@@ -215,7 +215,7 @@ export default function ValuationForm() {
                             <p className="text-xs text-yellow-300 mt-4">*This is an estimate. Final value subject to physical verification by our partners.</p>
                         </div>
                     ) : (
-                        <div className="flex flex-col items-center justify-center">
+                        <div className="flex flex-col items-center justify-center min-h-[180px]">
                             {placeholderImage && <Image
                                 src={placeholderImage.imageUrl}
                                 alt={placeholderImage.description}
@@ -228,7 +228,7 @@ export default function ValuationForm() {
                         </div>
                     )}
                 </CardContent>
-                <CardFooter className="flex-col gap-2">
+                <CardFooter className="flex-col gap-4 px-6 pb-6">
                     {currentValuation?.estimatedValue && (
                         <>
                         <form action={proceedAction} ref={proceedFormRef} className="w-full">
@@ -236,12 +236,9 @@ export default function ValuationForm() {
                             <input type="hidden" name="estimatedValue" value={currentValuation.estimatedValue} />
                             <ProceedToSellButton />
                         </form>
-                        <Button variant="secondary" className="mt-2 w-full" asChild>
-                            <Link href="/rate-card" target="_blank">
-                                <Download className="mr-2 h-4 w-4" />
-                                Download Rate Card
-                            </Link>
-                        </Button>
+                        <div className="mt-2 w-full text-center p-3 rounded-full bg-black/10">
+                            <p className="text-sm text-yellow-100">Estimated Market Value</p>
+                        </div>
                         </>
                     )}
                     <Button variant="link" className="text-white" onClick={handleNewValuation}>Start New Valuation</Button>

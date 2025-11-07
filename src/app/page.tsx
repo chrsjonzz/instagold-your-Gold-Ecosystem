@@ -10,16 +10,9 @@ const features = [
   {
     icon: <Gem className="w-8 h-8 text-primary" />,
     title: 'AI-Powered Valuation',
-    description: 'Upload a photo of your gold to get an instant, AI-driven value estimate. Accurate, fast, and secure.',
+    description: 'Enter your gold\'s details to get an instant, AI-driven value estimate. Accurate, fast, and secure.',
     link: '/sell',
     image: PlaceHolderImages.find(p => p.id === 'sell-feature'),
-  },
-  {
-    icon: <GitCompareArrows className="w-8 h-8 text-primary" />,
-    title: 'Pledge Takeover Comparison',
-    description: 'Compare interest rates and find the best offers to take over your pledged gold loans, saving you money.',
-    link: '#',
-    image: PlaceHolderImages.find(p => p.id === 'pledge-feature'),
   },
   {
     icon: <ShieldCheck className="w-8 h-8 text-primary" />,
@@ -32,7 +25,7 @@ const features = [
     icon: <BarChart className="w-8 h-8 text-primary" />,
     title: 'Price Intelligence',
     description: 'Access real-time price charts, market heatmaps, and set up custom alerts to track gold prices.',
-    link: '#',
+    link: '/live-price',
     image: PlaceHolderImages.find(p => p.id === 'track-feature'),
   },
 ];
@@ -41,17 +34,17 @@ const howItWorks = [
   {
     icon: <Search className="w-10 h-10 text-primary" />,
     title: "Discover & Compare",
-    description: "Input your gold details or loan to find the best market prices and offers."
+    description: "Input your gold details to find the best market prices and offers."
   },
   {
     icon: <Sparkles className="w-10 h-10 text-primary" />,
     title: "Instant AI Valuation",
-    description: "Upload a photo for a quick, AI-powered estimate of your gold's worth."
+    description: "Use our form for a quick, AI-powered estimate of your gold's worth."
   },
   {
     icon: <Workflow className="w-10 h-10 text-primary" />,
     title: "Seamless Transaction",
-    description: "Choose an offer and complete your sale or loan takeover with just a few clicks."
+    description: "Choose an offer and complete your sale with just a few clicks."
   },
 ];
 
@@ -77,17 +70,14 @@ export default function Home() {
             Everything Gold. One Platform.
           </h1>
           <p className="mt-4 max-w-2xl mx-auto text-lg md:text-xl text-muted-foreground">
-            Unify India’s gold ecosystem — Buy, Sell, Pledge, Compare, and Track — on one trusted, intelligent platform.
+            Unify India’s gold ecosystem — Buy, Sell, Compare, and Track — on one trusted, intelligent platform.
           </p>
           <div className="mt-8 flex flex-col sm:flex-row justify-center items-center gap-4">
             <Button asChild size="lg" className="w-full sm:w-auto shadow-lg shadow-primary/20 hover:shadow-primary/40 transition-shadow">
               <Link href="/sell">Sell Instantly <ArrowRight className="ml-2" /></Link>
             </Button>
-            <Button asChild size="lg" variant="secondary" className="w-full sm:w-auto">
-              <Link href="#">Manage Pledge</Link>
-            </Button>
             <Button asChild size="lg" variant="outline" className="w-full sm:w-auto">
-              <Link href="#">Track Prices</Link>
+              <Link href="/live-price">Track Prices</Link>
             </Button>
           </div>
         </div>

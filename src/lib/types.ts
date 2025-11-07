@@ -10,7 +10,14 @@ export type ValuationFormState = {
     message: string;
     estimatedValue?: number;
     error?: string;
+    phone?: string;
 };
+
+export const ProceedToSellSchema = z.object({
+  phone: z.string(),
+  estimatedValue: z.coerce.number(),
+});
+
 
 export const SupportFormSchema = z.object({
   name: z.string().min(2, { message: "Name must be at least 2 characters." }),

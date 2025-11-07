@@ -2,7 +2,7 @@
 
 import { z } from 'zod';
 import { goldValuation } from '@/ai/flows/gold-valuation';
-import { ValuationFormSchema, type ValuationFormState, SupportFormSchema, type SupportFormState } from '@/lib/types';
+import { ValuationFormSchema, type ValuationFormState, SupportFormSchema, type SupportFormState, ProceedToSellSchema } from '@/lib/types';
 
 const GoldValuationActionSchema = ValuationFormSchema.extend({
     // Server-side will have no location for now, but we add it to the schema
@@ -29,11 +29,6 @@ export async function getGoldValuation(
     }
 
     const { weight, karat, phone } = validatedFields.data;
-    
-    // In a real application, you would handle this data, e.g., send an SMS to +91 96204 33303.
-    // For now, we'll just log it.
-    console.log("New Valuation Inquiry:", { phone, weight, karat });
-
 
     try {
         // Mock current market price - in a real app, this would be fetched from an API
@@ -49,6 +44,7 @@ export async function getGoldValuation(
             return {
                 message: "Valuation successful!",
                 estimatedValue: result.estimatedValue,
+                phone: phone, // Pass phone number in state
             };
         } else {
             return {
@@ -61,9 +57,41 @@ export async function getGoldValuation(
         const errorMessage = e instanceof Error ? e.message : 'An unknown error occurred.';
         return {
             message: "An unexpected error occurred.",
-error: `Server error: ${errorMessage}`
+            error: `Server error: ${errorMessage}`
         };
     }
+}
+
+export async function proceedToSell(
+    prevState: { message: string, error?: string },
+    formData: FormData
+): Promise<{ message: string, error?: string, success?: boolean }> {
+    const validatedFields = ProceedToSellSchema.safeParse({
+        phone: formData.get('phone'),
+        estimatedValue: formData.get('estimatedValue'),
+    });
+
+    if (!validatedFields.success) {
+        return {
+            message: "Invalid data for proceeding to sell.",
+            error: validatedFields.error.flatten().fieldErrors.phone?.[0] ||
+                   validatedFields.error.flatten().fieldErrors.estimatedValue?.[0]
+        };
+    }
+    
+    const { phone, estimatedValue } = validatedFields.data;
+
+    // In a real application, this would trigger an SMS to +91 96204 33303.
+    // For now, we'll just log it to the console.
+    console.log("Proceed to Sell inquiry:", { 
+        phone, 
+        estimatedValue: `INR ${estimatedValue}`
+    });
+
+    return {
+        message: "Thank you! Our team will call you shortly to assist with the next steps.",
+        success: true,
+    };
 }
 
 export async function submitSupportRequest(

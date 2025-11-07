@@ -7,7 +7,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import type { z } from 'zod';
 import Image from 'next/image';
 
-import { getGoldValuation } from '@/app/actions';
+import { getGoldValuation, proceedToSell } from '@/app/actions';
 import { ValuationFormSchema, type ValuationFormState } from '@/lib/types';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
@@ -15,14 +15,18 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Slider } from '@/components/ui/slider';
 import { useToast } from '@/hooks/use-toast';
-import { Sparkles, Loader2, Gem } from 'lucide-react';
+import { Sparkles, Loader2, Gem, ArrowRight } from 'lucide-react';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 
 const initialFormState: ValuationFormState = {
     message: '',
 };
 
-function SubmitButton() {
+const initialProceedState = {
+    message: '',
+};
+
+function ValuationSubmitButton() {
     const { pending } = useFormStatus();
     return (
         <Button type="submit" disabled={pending} className="w-full" size="lg">
@@ -41,9 +45,31 @@ function SubmitButton() {
     );
 }
 
+function ProceedToSellButton() {
+    const { pending } = useFormStatus();
+    return (
+        <Button type="submit" className="w-full bg-white text-primary hover:bg-yellow-50" disabled={pending}>
+             {pending ? (
+                <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Submitting...
+                </>
+            ) : (
+                <>
+                    Proceed to Sell <ArrowRight className="ml-2"/>
+                </>
+            )}
+        </Button>
+    );
+}
+
+
 export default function ValuationForm() {
     const [formState, formAction] = useFormState(getGoldValuation, initialFormState);
-    const formRef = useRef<HTMLFormElement>(null);
+    const [proceedState, proceedAction] = useFormState(proceedToSell, initialProceedState);
+
+    const valuationFormRef = useRef<HTMLFormElement>(null);
+    const proceedFormRef = useRef<HTMLFormElement>(null);
     const { toast } = useToast();
     const [karatValue, setKaratValue] = useState(22);
     
@@ -57,30 +83,58 @@ export default function ValuationForm() {
             phone: '',
         },
     });
+    
+    const [currentValuation, setCurrentValuation] = useState<ValuationFormState | null>(null);
 
     useEffect(() => {
-        if (formState.message && !formState.estimatedValue) {
-            toast({
-                variant: 'destructive',
-                title: 'Valuation Error',
-                description: formState.error || formState.message,
-            });
+        if (formState.message) {
+             if (formState.error) {
+                toast({
+                    variant: 'destructive',
+                    title: 'Valuation Error',
+                    description: formState.error,
+                });
+            } else if (formState.estimatedValue) {
+                toast({
+                    title: 'Valuation Complete!',
+                    description: `We've estimated the value of your gold item.`,
+                });
+                setCurrentValuation(formState);
+                valuationFormRef.current?.reset();
+                form.reset();
+            }
         }
-         if (formState.message && formState.estimatedValue) {
-            toast({
-                title: 'Valuation Complete!',
-                description: `We've estimated the value of your gold item.`,
-            });
-            form.reset();
-            if (formRef.current) formRef.current.reset();
-        }
-
     }, [formState, toast, form]);
+
+    useEffect(() => {
+        if (proceedState.message) {
+            if (proceedState.success) {
+                toast({
+                    title: 'Request Received!',
+                    description: proceedState.message,
+                });
+                setCurrentValuation(null); // Clear valuation after proceeding
+            } else if (proceedState.error) {
+                 toast({
+                    variant: 'destructive',
+                    title: 'An Error Occurred',
+                    description: proceedState.error,
+                });
+            }
+        }
+    }, [proceedState, toast]);
+    
+    const handleNewValuation = () => {
+        setCurrentValuation(null);
+        form.reset();
+        if (valuationFormRef.current) valuationFormRef.current.reset();
+    };
+
 
     return (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
             <Card className="shadow-lg border-2 border-primary/20">
-                <form ref={formRef} action={formAction} className="space-y-6">
+                <form ref={valuationFormRef} action={formAction} className="space-y-6">
                     <CardHeader>
                         <CardTitle className="font-headline text-2xl flex items-center gap-2"><Gem className="text-primary"/> Valuation Details</CardTitle>
                         <CardDescription>All fields are required for an accurate estimation.</CardDescription>
@@ -135,7 +189,7 @@ export default function ValuationForm() {
 
                     </CardContent>
                     <CardFooter>
-                         <SubmitButton />
+                         <ValuationSubmitButton />
                     </CardFooter>
                 </form>
             </Card>
@@ -150,11 +204,11 @@ export default function ValuationForm() {
                     </CardDescription>
                 </CardHeader>
                 <CardContent className="text-center">
-                    {formState.estimatedValue ? (
+                    {currentValuation?.estimatedValue ? (
                         <div>
                             <p className="text-sm text-yellow-200">Estimated Market Value</p>
                             <p className="text-5xl font-bold font-headline tracking-tight my-2">
-                                INR {formState.estimatedValue.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                                INR {currentValuation.estimatedValue.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                             </p>
                             <p className="text-xs text-yellow-300 mt-4">*This is an estimate. Final value subject to physical verification by our partners.</p>
                         </div>
@@ -173,8 +227,14 @@ export default function ValuationForm() {
                     )}
                 </CardContent>
                 <CardFooter className="flex-col gap-2">
-                    <Button disabled={!formState.estimatedValue} className="w-full bg-white text-primary hover:bg-yellow-50">Proceed to Sell</Button>
-                    <Button variant="link" className="text-white" onClick={() => form.reset()}>Start New Valuation</Button>
+                    {currentValuation?.estimatedValue && (
+                        <form action={proceedAction} ref={proceedFormRef} className="w-full">
+                            <input type="hidden" name="phone" value={currentValuation.phone} />
+                            <input type="hidden" name="estimatedValue" value={currentValuation.estimatedValue} />
+                            <ProceedToSellButton />
+                        </form>
+                    )}
+                    <Button variant="link" className="text-white" onClick={handleNewValuation}>Start New Valuation</Button>
                 </CardFooter>
             </Card>
         </div>

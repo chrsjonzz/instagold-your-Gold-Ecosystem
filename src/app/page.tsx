@@ -3,8 +3,8 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ArrowRight, BarChart, Gem, GitCompareArrows, Search, ShieldCheck, Sparkles, University, Workflow } from 'lucide-react';
-import GoldRateTicker from '@/components/GoldRateTicker';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
+import GoldHistoryChart from '@/components/GoldHistoryChart';
 
 const features = [
   {
@@ -107,6 +107,24 @@ export default function Home() {
           </div>
         </div>
       </section>
+      
+      {/* Gold History Chart Section */}
+      <section className="py-16 md:py-24 bg-background">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-12">
+            <h2 className="font-headline text-3xl md:text-4xl font-bold">Historical Gold Prices</h2>
+            <p className="mt-2 text-muted-foreground max-w-xl mx-auto">
+              Explore historical gold price trends to make informed decisions. The chart below shows the price of 24K gold per gram over the last year.
+            </p>
+          </div>
+          <Card className="shadow-lg border-2 border-primary/20">
+            <CardContent className="p-2 sm:p-4 md:p-6">
+               <GoldHistoryChart />
+            </CardContent>
+          </Card>
+        </div>
+      </section>
+
 
       {/* Features Section */}
       <section className="py-16 md:py-24 bg-gradient-to-b from-yellow-50 to-background">

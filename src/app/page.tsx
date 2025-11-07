@@ -61,7 +61,7 @@ export default function Home() {
   return (
     <div className="flex flex-col">
       {/* Hero Section */}
-      <section className="relative w-full pt-24 pb-12 md:pt-32 md:pb-20 bg-gradient-to-br from-background via-yellow-50 to-background">
+      <section className="relative w-full pt-40 pb-12 md:pt-48 md:pb-20 bg-gradient-to-br from-background via-yellow-50 to-background">
         <div className="absolute inset-0 opacity-10">
           {heroImage && <Image
             src={heroImage.imageUrl}
@@ -90,9 +90,6 @@ export default function Home() {
               <Link href="#">Track Prices</Link>
             </Button>
           </div>
-        </div>
-        <div className="relative mt-12 md:mt-20">
-          <GoldRateTicker />
         </div>
       </section>
 

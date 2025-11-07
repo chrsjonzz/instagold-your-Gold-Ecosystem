@@ -77,7 +77,7 @@ export default function Header() {
           </div>
         </div>
       </div>
-      <div className="hidden md:block">
+      <div className="block">
         <GoldRateTicker />
       </div>
     </header>

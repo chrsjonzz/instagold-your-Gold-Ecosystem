@@ -1,0 +1,94 @@
+/**
+ * @fileoverview Firestore Security Rules for InstaGold.
+ *
+ * Core Philosophy:
+ * This ruleset enforces a strict user-ownership model. Users can only
+ * access their own data and create/manage ratings associated with their accounts.
+ *
+ * Data Structure:
+ * - /users/{userId}: Stores user profiles.  Only the authenticated user can
+ *   read or write their own profile.
+ * - /users/{userId}/ratings/{ratingId}: Stores ratings and reviews created by
+ *   a specific user.  Only the creating user can modify or delete these ratings.
+ *
+ * Key Security Decisions:
+ * - User listing is disabled to prevent information harvesting.
+ * - All write operations require an authenticated user.
+ * - Data consistency between the path and document data is enforced for user IDs.
+ *
+ * Denormalization for Authorization:
+ * The 'Rating' documents under `/users/{userId}/ratings/{ratingId}` contain a 'userId'
+ * field that is redundant with the path. This denormalization is intentional
+ * to allow for potential future rule changes or data migrations without breaking
+ * existing security constraints.  Currently, the path is still the primary
+ * source of truth for ownership.
+ */
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    /**
+     * @description Controls access to user profile documents.
+     * @path /users/{userId}
+     * @allow (create) User with ID 'user123' can create their own profile.
+     * @allow (get) User with ID 'user123' can read their own profile.
+     * @allow (update) User with ID 'user123' can update their own profile.
+     * @allow (delete) User with ID 'user123' can delete their own profile.
+     * @deny (get) User with ID 'user456' cannot read user 'user123' profile.
+     * @principle Enforces document ownership for user profiles.
+     */
+    match /users/{userId} {
+      allow get: if isOwner(userId);
+      allow list: if false; // User listing is not allowed.
+      allow create: if isOwner(userId) && request.resource.data.id == userId;
+      allow update: if isOwner(userId) && resource.data.id == request.resource.data.id; // Enforce immutability of userId
+      allow delete: if isExistingOwner(userId);
+    }
+
+    /**
+     * @description Controls access to rating documents within a user's profile.
+     * @path /users/{userId}/ratings/{ratingId}
+     * @allow (create) User with ID 'user123' can create a rating under their profile.
+     * @allow (get) User with ID 'user123' can read a rating under their profile.
+     * @allow (update) User with ID 'user123' can update a rating under their profile.
+     * @allow (delete) User with ID 'user123' can delete a rating under their profile.
+     * @deny (create) User with ID 'user456' cannot create a rating under user 'user123' profile.
+     * @principle Enforces document ownership for ratings within user profiles.
+     */
+    match /users/{userId}/ratings/{ratingId} {
+      allow get: if isOwner(userId);
+      allow list: if isOwner(userId);
+      allow create: if isOwner(userId) && request.resource.data.userId == userId;
+      allow update: if isExistingOwner(userId) && resource.data.userId == request.resource.data.userId; // Enforce immutability of userId
+      allow delete: if isExistingOwner(userId);
+    }
+
+    // --- Helper functions ---
+
+    /**
+     * @description Checks if the request is made by an authenticated user.
+     * @return {boolean} True if the user is signed in, false otherwise.
+     */
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    /**
+     * @description Checks if the request is made by the owner of the resource.
+     * @param {string} userId The user ID from the path.
+     * @return {boolean} True if the user ID matches the authenticated user's ID.
+     */
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    /**
+     * @description Checks if the request is made by the owner of an existing resource.
+     * @param {string} userId The user ID from the path.
+     * @return {boolean} True if the user ID matches the authenticated user's ID and the resource exists.
+     */
+    function isExistingOwner(userId) {
+      return isOwner(userId) && resource != null;
+    }
+  }
+}

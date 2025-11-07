@@ -1,19 +1,8 @@
-import type { FirebaseOptions } from 'firebase/app';
-
-const firebaseConfigString = process.env.NEXT_PUBLIC_FIREBASE_CONFIG;
-
-let parsedConfig: FirebaseOptions = {};
-
-try {
-  if (firebaseConfigString) {
-    parsedConfig = JSON.parse(firebaseConfigString);
-  } else {
-    console.warn("NEXT_PUBLIC_FIREBASE_CONFIG is not set. Using empty config.");
-  }
-} catch (error) {
-  console.error("Failed to parse NEXT_PUBLIC_FIREBASE_CONFIG:", error);
-  // Fallback to an empty object in case of parsing error
-  parsedConfig = {};
-}
-
-export const firebaseConfig: FirebaseOptions = parsedConfig;
+export const firebaseConfig = {
+  "projectId": "studio-1753021223-7c028",
+  "appId": "1:872506834773:web:ff87e432ee1e21206af9dc",
+  "apiKey": "AIzaSyAnPKMBaVovAauMn8i4qYQbICHzsT55PlY",
+  "authDomain": "studio-1753021223-7c028.firebaseapp.com",
+  "measurementId": "",
+  "messagingSenderId": "872506834773"
+};

@@ -1,0 +1,120 @@
+{
+  "entities": {
+    "Rating": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Rating",
+      "type": "object",
+      "description": "Represents a user's rating and review of InstaGold.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the Rating entity."
+        },
+        "userId": {
+          "type": "string",
+          "description": "Reference to User. (Relationship: User 1:N Rating)"
+        },
+        "ratingValue": {
+          "type": "number",
+          "description": "The rating given by the user (e.g., 1 to 5 stars).",
+          "format": "integer"
+        },
+        "comment": {
+          "type": "string",
+          "description": "The user's comment or review."
+        },
+        "dateCreated": {
+          "type": "string",
+          "description": "The date and time the rating was created.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "userId",
+        "ratingValue",
+        "comment",
+        "dateCreated"
+      ]
+    },
+    "User": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "User",
+      "type": "object",
+      "description": "Represents a user of the InstaGold platform.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the User entity."
+        },
+        "username": {
+          "type": "string",
+          "description": "The username of the user."
+        },
+        "email": {
+          "type": "string",
+          "description": "The email address of the user.",
+          "format": "email"
+        },
+        "dateJoined": {
+          "type": "string",
+          "description": "The date and time the user joined the platform.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "username",
+        "email",
+        "dateJoined"
+      ]
+    }
+  },
+  "auth": {
+    "providers": [
+      "password",
+      "anonymous"
+    ]
+  },
+  "firestore": {
+    "structure": [
+      {
+        "path": "/users/{userId}",
+        "definition": {
+          "entityName": "User",
+          "schema": {
+            "$ref": "#/backend/entities/User"
+          },
+          "description": "Stores user data.  Path-based ownership ensures only the authenticated user (or admin, if implemented) can access their own document.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The unique identifier for the user."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/users/{userId}/ratings/{ratingId}",
+        "definition": {
+          "entityName": "Rating",
+          "schema": {
+            "$ref": "#/backend/entities/Rating"
+          },
+          "description": "Stores ratings associated with a user. Path-based ownership: only the user who created the rating can modify/delete it. This structure enables secure list operations because all documents in the `ratings` subcollection share the same security rules. Includes denormalized 'userId' for authorization independence.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The unique identifier for the user."
+            },
+            {
+              "name": "ratingId",
+              "description": "The unique identifier for the rating."
+            }
+          ]
+        }
+      }
+    ],
+    "reasoning": "The Firestore structure prioritizes authorization independence and QAPs (Rules are not Filters). Ratings are stored as subcollections of users, enabling path-based ownership, simplifying security rules, and enabling secure listing. This approach ensures that each rating is associated with a specific user, preventing unauthorized access and maintaining data integrity.\n\n*   **Authorization Independence:**  Ratings are located at `/users/{userId}/ratings/{ratingId}`.  Access control depends solely on `request.auth.uid == userId`, eliminating `get()` calls and allowing atomic operations.\n*   **QAPs (Rules are not Filters):** Secure `list` operations are enabled because all ratings under a user's document share the same security requirements."
+  }
+}

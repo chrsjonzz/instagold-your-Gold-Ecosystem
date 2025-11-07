@@ -1,6 +1,6 @@
 'use client';
 import { useMemo } from 'react';
-import { useCollection } from '@/firebase';
+import { useCollection, useMemoFirebase } from '@/firebase';
 import { collection, query, orderBy } from 'firebase/firestore';
 import { useFirestore } from '@/firebase/provider';
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
@@ -32,7 +32,7 @@ const StarRating = ({ rating }: { rating: number }) => (
 export default function ReviewList() {
     const firestore = useFirestore();
 
-    const reviewsQuery = useMemo(() => {
+    const reviewsQuery = useMemoFirebase(() => {
         if (!firestore) return null;
         return query(collection(firestore, 'reviews'), orderBy('createdAt', 'desc'));
     }, [firestore]);

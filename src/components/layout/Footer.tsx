@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { Gem, Facebook, Twitter, Linkedin, Instagram } from 'lucide-react';
+import { Gem, Facebook, Twitter, Linkedin, Instagram, Phone } from 'lucide-react';
 
 const socialLinks = [
   { icon: <Facebook className="h-5 w-5" />, href: '#' },
@@ -15,9 +15,9 @@ const footerLinks = {
     { label: 'Partner With Us', href: '#' },
   ],
   'Support': [
-    { label: 'Contact Us', href: '#' },
+    { label: 'Contact Us', href: '/support' },
     { label: 'FAQ', href: '/faq' },
-    { label: 'Support Center', href: '#' },
+    { label: 'Support Center', href: '/support' },
   ],
   'Legal': [
     { label: 'Privacy Policy', href: '#' },
@@ -39,6 +39,10 @@ export default function Footer() {
             <p className="text-muted-foreground max-w-sm">
               The complete gold ecosystem to unify India’s gold market. Buy, sell, pledge, and track with confidence.
             </p>
+             <div className="mt-4 flex items-center gap-2 text-muted-foreground">
+                <Phone className="h-4 w-4" />
+                <span>+91 96204 33303</span>
+            </div>
             <div className="flex gap-4 mt-6">
               {socialLinks.map((link, index) => (
                 <Link key={index} href={link.href} className="text-muted-foreground hover:text-primary transition-colors">

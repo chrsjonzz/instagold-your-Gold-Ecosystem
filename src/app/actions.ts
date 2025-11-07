@@ -2,7 +2,7 @@
 
 import { z } from 'zod';
 import { aiPoweredGoldValuation } from '@/ai/flows/ai-powered-gold-valuation';
-import { ValuationFormSchema, type ValuationFormState } from '@/lib/types';
+import { ValuationFormSchema, type ValuationFormState, SupportFormSchema, type SupportFormState } from '@/lib/types';
 
 const GoldValuationActionSchema = ValuationFormSchema.extend({
     // Server-side will have no location for now, but we add it to the schema
@@ -54,7 +54,36 @@ export async function getGoldValuation(
         const errorMessage = e instanceof Error ? e.message : 'An unknown error occurred.';
         return {
             message: "An unexpected error occurred.",
-            error: `Server error: ${errorMessage}`
+error: `Server error: ${errorMessage}`
         };
     }
+}
+
+export async function submitSupportRequest(
+    prevState: SupportFormState,
+    formData: FormData
+): Promise<SupportFormState> {
+    const validatedFields = SupportFormSchema.safeParse({
+        name: formData.get('name'),
+        email: formData.get('email'),
+        message: formData.get('message'),
+    });
+
+    if (!validatedFields.success) {
+        return {
+            message: "Invalid form data. Please check your inputs.",
+            error: validatedFields.error.flatten().fieldErrors.name?.[0] ||
+                     validatedFields.error.flatten().fieldErrors.email?.[0] ||
+                     validatedFields.error.flatten().fieldErrors.message?.[0]
+        };
+    }
+    
+    // In a real application, you would handle this data, e.g., send an email, save to a database.
+    // For now, we'll just log it and return a success message.
+    console.log("Support Request Received:", validatedFields.data);
+
+    return {
+        message: "Thank you for your message! We will get back to you shortly.",
+        success: true,
+    };
 }

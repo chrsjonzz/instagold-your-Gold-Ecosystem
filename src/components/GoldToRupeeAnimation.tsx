@@ -26,7 +26,7 @@ const RupeeNote = ({ style, delay }: { style: React.CSSProperties, delay: string
 
 export default function GoldToRupeeAnimation() {
     return (
-        <div className="fixed inset-0 w-full h-full pointer-events-none z-[200]">
+        <div className="fixed inset-0 w-full h-full pointer-events-none z-[9999]">
             {[...Array(15)].map((_, i) => {
                 const coinDelay = `${i * 0.15}s`;
                 const coinStyle = { left: `${Math.random() * 95}%` };

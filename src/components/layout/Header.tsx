@@ -8,10 +8,10 @@ import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import GoldRateTicker from '../GoldRateTicker';
 
 const navLinks = [
+  { href: '/live-price', label: 'Live Prices' },
+  { href: '/about-gold', label: 'About Gold' },
+  { href: '/purity', label: 'Gold Purity' },
   { href: '/sell', label: 'Sell Gold' },
-  { href: '#', label: 'Manage Pledge' },
-  { href: '#', label: 'Buyback Network' },
-  { href: '#', label: 'Price Insights' },
 ];
 
 export default function Header() {
@@ -36,8 +36,8 @@ export default function Header() {
           </nav>
 
           {/* Mobile Navigation Trigger */}
-          <div className="md:hidden">
-            <Sheet open={isMenuOpen} onOpenChange={setIsMenuOpen}>
+          <div className="md:hidden ml-auto">
+             <Sheet open={isMenuOpen} onOpenChange={setIsMenuOpen}>
               <SheetTrigger asChild>
                 <Button variant="ghost" size="icon">
                   <Menu className="h-6 w-6" />
@@ -74,6 +74,10 @@ export default function Header() {
                 </div>
               </SheetContent>
             </Sheet>
+          </div>
+
+          <div className="hidden md:flex items-center">
+            {/* Placeholder for potential buttons */}
           </div>
         </div>
       </div>

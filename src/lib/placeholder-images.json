@@ -35,6 +35,42 @@
       "description": "A placeholder image for gold item valuation.",
       "imageUrl": "https://images.unsplash.com/photo-1601821765780-754fa98637c1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8Z29sZCUyMGpld2Vscnl8ZW58MHx8fHwxNzYyNDk5NDQ0fDA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "gold jewelry"
+    },
+    {
+      "id": "history-of-gold",
+      "description": "Molten gold being poured.",
+      "imageUrl": "https://images.unsplash.com/photo-1591563688833-ca87a406253e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxtb2x0ZW4lMjBnb2xkfGVufDB8fHx8MTc2MjQ4NzAxMXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "molten gold"
+    },
+    {
+      "id": "gold-bars-stacked",
+      "description": "A stack of gold bars.",
+      "imageUrl": "https://images.unsplash.com/photo-1624365168785-c65be9114821?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxnb2xkJTIwYmFyc3xlbnwwfHx8fDE3NjI0MTU2NTF8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "gold bars"
+    },
+    {
+      "id": "lbma-phone",
+      "description": "A phone displaying information about an independent authority, with the LBMA logo.",
+      "imageUrl": "https://images.unsplash.com/photo-1645226880663-81561dcab0ae?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxmaW5hbmNlJTIwYXBwfGVufDB8fHx8MTc2MjQ3NjgxMnww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "finance app"
+    },
+    {
+      "id": "gold-purity-evaluation",
+      "description": "A gloved hand holding small gold bars.",
+      "imageUrl": "https://images.unsplash.com/photo-1632499354595-91768e9d0028?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxnb2xkJTIwaW5zcGVjdGlvbnxlbnwwfHx8fDE3NjI1MTgxNDl8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "gold inspection"
+    },
+    {
+      "id": "gold-markings",
+      "description": "A close-up of a gold ring on a sandy surface.",
+      "imageUrl": "https://images.unsplash.com/photo-1614606140245-2c33ece9e2cf?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxnb2xkJTIwcmluZ3xlbnwwfHx8fDE3NjI1MDcyOTV8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "gold ring"
+    },
+    {
+      "id": "gold-tola-evolution",
+      "description": "Gold coins with an Indian flag overlay, representing the 'tola' weight.",
+      "imageUrl": "https://images.unsplash.com/photo-1586974710160-55f48f417990?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxnb2xkJTIwY29pbnN8ZW58MHx8fHwxNzYyNDIyNTIwfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "gold coins"
     }
   ]
 }

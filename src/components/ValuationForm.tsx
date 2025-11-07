@@ -54,6 +54,7 @@ export default function ValuationForm() {
         defaultValues: {
             weight: 0,
             karat: 22,
+            phone: '',
         },
     });
 
@@ -118,6 +119,20 @@ export default function ValuationForm() {
                             />
                             <input type="hidden" {...form.register('karat')} value={karatValue} />
                         </div>
+
+                        {/* Phone Number */}
+                        <div>
+                            <Label htmlFor="phone">Phone Number</Label>
+                            <Input
+                                id="phone"
+                                type="tel"
+                                placeholder="e.g., 9876543210"
+                                {...form.register('phone')}
+                                className="mt-1"
+                            />
+                            {form.formState.errors.phone && <p className="text-sm text-destructive mt-1">{form.formState.errors.phone.message}</p>}
+                        </div>
+
                     </CardContent>
                     <CardFooter>
                          <SubmitButton />

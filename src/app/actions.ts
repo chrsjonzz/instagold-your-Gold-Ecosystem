@@ -15,18 +15,25 @@ export async function getGoldValuation(
     const validatedFields = GoldValuationActionSchema.safeParse({
         weight: formData.get('weight'),
         karat: formData.get('karat'),
+        phone: formData.get('phone'),
     });
 
     if (!validatedFields.success) {
         return {
             message: "Invalid form data.",
             error: validatedFields.error.flatten().fieldErrors.weight?.[0] || 
-                   validatedFields.error.flatten().fieldErrors.karat?.[0] || 
+                   validatedFields.error.flatten().fieldErrors.karat?.[0] ||
+                   validatedFields.error.flatten().fieldErrors.phone?.[0] ||
                    "Please check your inputs.",
         };
     }
 
-    const { weight, karat } = validatedFields.data;
+    const { weight, karat, phone } = validatedFields.data;
+    
+    // In a real application, you would handle this data, e.g., send an SMS to +91 96204 33303.
+    // For now, we'll just log it.
+    console.log("New Valuation Inquiry:", { phone, weight, karat });
+
 
     try {
         // Mock current market price - in a real app, this would be fetched from an API

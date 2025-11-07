@@ -64,6 +64,8 @@ function ProceedToSellButton() {
     );
 }
 
+type ValuationResult = ValuationFormState & { weight?: number; karat?: number };
+
 
 export default function ValuationForm() {
     const [formState, formAction] = useFormState(getGoldValuation, initialFormState);
@@ -85,7 +87,7 @@ export default function ValuationForm() {
         },
     });
     
-    const [currentValuation, setCurrentValuation] = useState<ValuationFormState & { weight?: number } | null>(null);
+    const [currentValuation, setCurrentValuation] = useState<ValuationResult | null>(null);
 
     useEffect(() => {
         if (formState.message) {
@@ -96,13 +98,15 @@ export default function ValuationForm() {
                     description: formState.error,
                 });
                 setCurrentValuation(null);
-            } else if (formState.estimatedValue) {
+            } else if (formState.estimatedValue && valuationFormRef.current) {
                 toast({
                     title: 'Valuation Complete!',
                     description: `We've estimated the value of your gold item.`,
                 });
-                const weight = valuationFormRef.current ? parseFloat(new FormData(valuationFormRef.current).get('weight') as string) : undefined;
-                setCurrentValuation({...formState, weight});
+                const formData = new FormData(valuationFormRef.current);
+                const weight = parseFloat(formData.get('weight') as string);
+                const karat = parseInt(formData.get('karat') as string);
+                setCurrentValuation({...formState, weight, karat});
                 valuationFormRef.current?.reset();
                 form.reset();
             }
@@ -209,14 +213,16 @@ export default function ValuationForm() {
                 <CardContent className="text-center flex items-center justify-center">
                     {currentValuation?.estimatedValue ? (
                         <div className="w-full">
-                            <p className="text-sm text-yellow-200">Estimated Market Value</p>
-                            <p className="text-5xl font-bold font-headline tracking-tight my-2">
-                                INR {currentValuation.estimatedValue.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                            </p>
+                             <div className="p-4 rounded-lg bg-black/10">
+                                <p className="text-sm text-yellow-200">Estimated Market Value</p>
+                                <p className="text-5xl font-bold font-headline tracking-tight my-2">
+                                    INR {currentValuation.estimatedValue.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                                </p>
+                            </div>
                             <p className="text-xs text-yellow-300 mt-4">*This is an estimate. Final value subject to physical verification by our partners.</p>
                         </div>
                     ) : (
-                        <div className="flex flex-col items-center justify-center min-h-[224px]">
+                        <div className="flex flex-col items-center justify-center min-h-[160px]">
                             {placeholderImage && <Image
                                 src={placeholderImage.imageUrl}
                                 alt={placeholderImage.description}

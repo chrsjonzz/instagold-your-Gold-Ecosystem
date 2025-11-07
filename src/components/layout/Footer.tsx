@@ -12,7 +12,7 @@ const socialLinks = [
 const footerLinks = {
   'Company': [
     { label: 'About Us', href: '/about-us' },
-    { label: 'Partner With Us', href: '#' },
+    { label: 'Partner With Us', href: '/partner' },
   ],
   'Learn': [
     { label: 'About Gold', href: '/about-gold'},

@@ -101,6 +101,18 @@
       "description": "A conceptual image showing a house and gold bars on a weighing scale.",
       "imageUrl": "https://images.unsplash.com/photo-1644361594918-4731a2c98d6c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxnb2xkJTIwY29pbnMlMjBjaGFydHxlbnwwfHx8fDE3NjMxOTk2MDV8MA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "gold house"
+    },
+    {
+      "id": "partner-background",
+      "description": "Two people shaking hands in a professional setting.",
+      "imageUrl": "https://images.unsplash.com/photo-1560264453-6ada535e9316?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxwYXJ0bmVyc2hpcCUyMGJ1c2luZXNzfGVufDB8fHx8MTc2MzIxNjM5OXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "partnership business"
+    },
+    {
+      "id": "partner-benefits",
+      "description": "A group of diverse professionals collaborating in a modern office.",
+      "imageUrl": "https://images.unsplash.com/photo-1522071820081-009f0129c71c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxwcm9mZXNzaW9uYWwlMjB0ZWFtfGVufDB8fHx8MTc2MzIxNjQzN3ww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "professional team"
     }
   ]
 }

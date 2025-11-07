@@ -2,7 +2,7 @@
 
 import { z } from 'zod';
 import { goldValuation } from '@/ai/flows/gold-valuation';
-import { ValuationFormSchema, type ValuationFormState, SupportFormSchema, type SupportFormState, ProceedToSellSchema } from '@/lib/types';
+import { ValuationFormSchema, type ValuationFormState, SupportFormSchema, type SupportFormState, ProceedToSellSchema, PartnerFormSchema, type PartnerFormState } from '@/lib/types';
 
 const GoldValuationActionSchema = ValuationFormSchema.extend({
     // Server-side will have no location for now, but we add it to the schema
@@ -126,6 +126,38 @@ export async function submitSupportRequest(
 
     return {
         message: "Thank you for your message! We will get back to you shortly.",
+        success: true,
+    };
+}
+
+export async function submitPartnerRequest(
+    prevState: PartnerFormState,
+    formData: FormData
+): Promise<PartnerFormState> {
+    const validatedFields = PartnerFormSchema.safeParse({
+        businessName: formData.get('businessName'),
+        contactName: formData.get('contactName'),
+        email: formData.get('email'),
+        phone: formData.get('phone'),
+        message: formData.get('message'),
+    });
+
+    if (!validatedFields.success) {
+        return {
+            message: "Invalid form data. Please check your inputs.",
+            error: validatedFields.error.flatten().fieldErrors.businessName?.[0] ||
+                     validatedFields.error.flatten().fieldErrors.contactName?.[0] ||
+                     validatedFields.error.flatten().fieldErrors.email?.[0] ||
+                     validatedFields.error.flatten().fieldErrors.phone?.[0]
+        };
+    }
+    
+    // In a real application, this would be sent to a business development email or CRM.
+    // For now, we'll just log it and return a success message.
+    console.log("Partnership Request Received:", validatedFields.data);
+
+    return {
+        message: "Thank you for your interest! Our partnership team will review your application and be in touch soon.",
         success: true,
     };
 }

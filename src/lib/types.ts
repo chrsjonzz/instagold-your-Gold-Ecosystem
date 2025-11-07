@@ -32,3 +32,17 @@ export type SupportFormState = {
     error?: string;
     success?: boolean;
 };
+
+export const PartnerFormSchema = z.object({
+  businessName: z.string().min(2, { message: "Business name must be at least 2 characters." }),
+  contactName: z.string().min(2, { message: "Contact name must be at least 2 characters." }),
+  email: z.string().email({ message: "Please enter a valid email address." }),
+  phone: z.string().min(10, { message: 'Please enter a valid 10-digit phone number.' }),
+  message: z.string().optional(),
+});
+
+export type PartnerFormState = {
+    message: string;
+    error?: string;
+    success?: boolean;
+};

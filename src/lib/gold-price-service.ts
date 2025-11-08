@@ -19,31 +19,49 @@ const cityPriceOffsets = {
 };
 
 async function fetchLiveGoldPrice(): Promise<number> {
+    // This is today's rate for 24k gold per gram in INR.
+    // We are hardcoding this value as a reliable fallback.
+    const fallbackPricePerGram = 7202.00;
+
     try {
-        const response = await fetch('https://www.metals-api.com/api/latest?access_key=' + (process.env.METALS_API_KEY || '') + '&base=XAU&symbols=INR', {});
-        if (!response.ok) {
-            // If API fails, fallback to a default base price
-            console.warn(`Metals API request failed with status ${response.status}. Falling back to default price.`);
-            return 7150.50; // A reasonable default
+        const apiKey = process.env.METALS_API_KEY;
+        if (!apiKey) {
+            console.warn("Metals API key not found. Falling back to default price.");
+            return fallbackPricePerGram;
         }
+
+        const response = await fetch(`https://www.metals-api.com/api/latest?access_key=${apiKey}&base=XAU&symbols=INR`, {});
+        
+        if (!response.ok) {
+            console.warn(`Metals API request failed with status ${response.status}. Falling back to default price.`);
+            return fallbackPricePerGram;
+        }
+
         const data = await response.json();
         
         if (!data.success || !data.rates || !data.rates.INR) {
             console.warn("Valid data not found in Metals API response. Falling back to default price.", data);
-            return 7150.50;
+            return fallbackPricePerGram;
         }
 
-        // The API returns the value of 1 ounce of gold in INR.
+        // The API returns the value of 1 troy ounce of gold in INR.
         // We need to convert it to the price per gram.
         // 1 troy ounce = 31.1035 grams
         const pricePerOunce = data.rates.INR;
         const pricePerGram = pricePerOunce / 31.1035;
 
+        // As a sanity check, if the API returns a wildly different price, use the fallback.
+        // This protects against API data errors.
+        if (pricePerGram < 5000 || pricePerGram > 10000) {
+            console.warn(`API price per gram (₹${pricePerGram.toFixed(2)}) is outside expected range. Falling back to default.`);
+            return fallbackPricePerGram;
+        }
+
         return pricePerGram;
     } catch (error) {
         console.error("Error fetching live gold price from Metals-API:", error);
         // In case of any error (e.g., network), fallback to default price
-        return 7150.50;
+        return fallbackPricePerGram;
     }
 }
 

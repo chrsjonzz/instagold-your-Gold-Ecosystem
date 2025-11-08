@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Loader2 } from 'lucide-react';
+import { getCityGoldPrices } from '@/lib/gold-price-service';
 
 type Price = {
   city: string;
@@ -18,11 +19,7 @@ export default function TodaysRate() {
   useEffect(() => {
     const fetchPrice = async () => {
       try {
-        const response = await fetch('/api/gold-rate');
-        if (!response.ok) {
-          throw new Error('Failed to fetch price');
-        }
-        const prices: Price[] = await response.json();
+        const prices: Price[] = await getCityGoldPrices();
         // Display Bangalore's price as the feature price
         const bangalorePrice = prices.find(p => p.city === 'Bangalore');
         setPrice(bangalorePrice || prices[0]);

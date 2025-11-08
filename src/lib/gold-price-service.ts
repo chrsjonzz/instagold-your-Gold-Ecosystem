@@ -34,6 +34,7 @@ async function fetchLiveGoldPrice(): Promise<number> {
         const pricePerGram = pricePerOunce / 31.1035;
 
         // As a sanity check, if the API returns a wildly different price, use the fallback.
+        // Today's spot price is ~6650, so we check a reasonable range around that.
         if (pricePerGram < 6000 || pricePerGram > 8000) {
             console.warn(`API spot price per gram (₹${pricePerGram.toFixed(2)}) is outside expected range. Falling back to default.`);
             return fallbackSpotPricePerGram;

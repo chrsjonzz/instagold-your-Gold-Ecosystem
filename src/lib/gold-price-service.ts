@@ -9,13 +9,13 @@ const cityToCurrency = {
     'vijayawada': 'INR',
 };
 
-// Base prices per gram for 24K gold in INR.
-const basePrices = {
-    bangalore: 7150.50,
-    chennai: 7185.20,
-    hyderabad: 7170.80,
-    coimbatore: 7190.00,
-    vijayawada: 7165.40,
+// Base price differences from Bangalore. These are illustrative.
+const cityPriceOffsets = {
+    bangalore: 0,
+    chennai: 35.70,
+    hyderabad: 20.30,
+    coimbatore: 40.50,
+    vijayawada: 15.90,
 };
 
 async function fetchLiveGoldPrice(): Promise<number> {
@@ -26,29 +26,23 @@ async function fetchLiveGoldPrice(): Promise<number> {
             }
         });
         if (!response.ok) {
-            // If API fails, fallback to base price
-            console.warn(`Gold API request failed with status ${response.status}. Falling back to base price.`);
-            return basePrices.bangalore;
+            // If API fails, fallback to a default base price
+            console.warn(`Gold API request failed with status ${response.status}. Falling back to default price.`);
+            return 7150.50; // A reasonable default
         }
         const data = await response.json();
         // Use the price_gram_24k field directly for accuracy.
         const pricePerGram = data.price_gram_24k;
         if (!pricePerGram) {
-            console.warn("price_gram_24k not found in API response. Falling back to base price.");
-            return basePrices.bangalore;
+            console.warn("price_gram_24k not found in API response. Falling back to default price.");
+            return 7150.50;
         }
         return pricePerGram;
     } catch (error) {
         console.error("Error fetching live gold price:", error);
-        // In case of any error (e.g., network), fallback to base price
-        return basePrices.bangalore;
+        // In case of any error (e.g., network), fallback to default price
+        return 7150.50;
     }
-}
-
-
-function getFluctuatedPrice(base: number): number {
-    const fluctuation = (Math.random() - 0.5) * 50; // Fluctuate by +/- 25 INR
-    return parseFloat((base + fluctuation).toFixed(2));
 }
 
 export async function getBangaloreGoldPrice(karat: 24 | 22 | 18 | 14): Promise<number> {
@@ -59,13 +53,10 @@ export async function getBangaloreGoldPrice(karat: 24 | 22 | 18 | 14): Promise<n
 
 export async function getCityGoldPrices() {
     const trends: ('up' | 'down')[] = ['up', 'down'];
-    const livePrice24k = await fetchLiveGoldPrice();
+    const livePrice24k_Bangalore = await fetchLiveGoldPrice();
     
-    // Use the live price for Bangalore and simulate for others based on it
-    basePrices.bangalore = livePrice24k;
-
-    return Object.entries(basePrices).map(([city, baseRate]) => {
-        const rate24k = (city === 'bangalore') ? livePrice24k : getFluctuatedPrice(baseRate);
+    return Object.entries(cityPriceOffsets).map(([city, offset]) => {
+        const rate24k = livePrice24k_Bangalore + offset;
         return {
             city: city.charAt(0).toUpperCase() + city.slice(1),
             rate24k: parseFloat(rate24k.toFixed(2)),
@@ -80,7 +71,7 @@ export async function getTickerGoldPrices() {
     const prices = await getCityGoldPrices();
     return prices.map(p => ({
         city: p.city,
-        rate: p.rate24k.toLocaleString('en-IN'),
+        rate: p.rate24k.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
         change: `${p.trend === 'up' ? '+' : '-'}${(Math.random() * 0.5).toFixed(2)}%`,
         trend: p.trend,
     }));

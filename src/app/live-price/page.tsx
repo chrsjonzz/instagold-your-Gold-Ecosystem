@@ -59,8 +59,8 @@ export default function LivePricePage() {
                         {item.city}
                         {item.trend === 'up' ? <TrendingUp className="h-4 w-4 text-green-600" /> : <TrendingDown className="h-4 w-4 text-red-600" />}
                       </TableCell>
-                      <TableCell className="text-right font-mono">₹{item.rate24k.toLocaleString('en-IN')}</TableCell>
-                      <TableCell className="text-right font-mono">₹{item.rate22k.toLocaleString('en-IN')}</TableCell>
+                      <TableCell className="text-right font-mono">₹{item.rate24k.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</TableCell>
+                      <TableCell className="text-right font-mono">₹{item.rate22k.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</TableCell>
                     </TableRow>
                   ))}
                 </TableBody>

@@ -82,7 +82,7 @@ export async function getCityGoldPrices() {
     
     return Object.entries(cityPriceOffsets).map(([city, offset]) => {
         const rate24k = livePrice24k_Base + offset;
-        const rate22k = rate24k * (22/24); // Correctly calculate 22k price from 24k
+        const rate22k = rate24k * (22/24);
         return {
             city: city.charAt(0).toUpperCase() + city.slice(1),
             rate24k: parseFloat(rate24k.toFixed(2)),

@@ -2,10 +2,10 @@
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { TrendingUp, TrendingDown, Download, Phone } from 'lucide-react';
+import { TrendingUp, TrendingDown, Download, Phone, Loader2 } from 'lucide-react';
 import Link from 'next/link';
-import { getCityGoldPrices } from '@/lib/gold-price-service';
 import { useEffect, useState } from 'react';
+import { getCityGoldPrices } from '@/lib/gold-price-service';
 
 type Price = {
   city: string;
@@ -16,11 +16,18 @@ type Price = {
 
 export default function LivePricePage() {
   const [prices, setPrices] = useState<Price[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchPrices = async () => {
-      const fetchedPrices = await getCityGoldPrices();
-      setPrices(fetchedPrices);
+      try {
+        const fetchedPrices = await getCityGoldPrices();
+        setPrices(fetchedPrices);
+      } catch (error) {
+        console.error("Failed to fetch city prices:", error);
+      } finally {
+        setLoading(false);
+      }
     };
     fetchPrices();
   }, []);
@@ -44,27 +51,33 @@ export default function LivePricePage() {
                 <CardDescription>All rates are for selling gold online.</CardDescription>
             </CardHeader>
             <CardContent>
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead className="font-bold">City</TableHead>
-                    <TableHead className="text-right font-bold">24K Rate (INR)</TableHead>
-                    <TableHead className="text-right font-bold">22K Rate (INR)</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {prices.map((item) => (
-                    <TableRow key={item.city}>
-                      <TableCell className="font-medium flex items-center gap-2">
-                        {item.city}
-                        {item.trend === 'up' ? <TrendingUp className="h-4 w-4 text-green-600" /> : <TrendingDown className="h-4 w-4 text-red-600" />}
-                      </TableCell>
-                      <TableCell className="text-right font-mono">₹{item.rate24k.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</TableCell>
-                      <TableCell className="text-right font-mono">₹{item.rate22k.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</TableCell>
+              {loading ? (
+                <div className="flex justify-center items-center h-40">
+                  <Loader2 className="h-8 w-8 text-primary animate-spin" />
+                </div>
+              ) : (
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead className="font-bold">City</TableHead>
+                      <TableHead className="text-right font-bold">24K Rate (INR)</TableHead>
+                      <TableHead className="text-right font-bold">22K Rate (INR)</TableHead>
                     </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
+                  </TableHeader>
+                  <TableBody>
+                    {prices.map((item) => (
+                      <TableRow key={item.city}>
+                        <TableCell className="font-medium flex items-center gap-2">
+                          {item.city}
+                          {item.trend === 'up' ? <TrendingUp className="h-4 w-4 text-green-600" /> : <TrendingDown className="h-4 w-4 text-red-600" />}
+                        </TableCell>
+                        <TableCell className="text-right font-mono">₹{item.rate24k.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</TableCell>
+                        <TableCell className="text-right font-mono">₹{item.rate22k.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              )}
             </CardContent>
             <CardFooter className="flex-col gap-4 pt-6">
                 <Button asChild className="w-full sm:w-auto">

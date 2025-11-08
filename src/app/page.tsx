@@ -2,7 +2,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { ArrowRight, BarChart, Gem, GitCompareArrows, Search, ShieldCheck, Sparkles, University, Workflow } from 'lucide-react';
+import { ArrowRight, BarChart, Gem, University, Search, ShieldCheck, Sparkles, Workflow } from 'lucide-react';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import GoldHistoryChart from '@/components/GoldHistoryChart';
 
@@ -15,11 +15,11 @@ const features = [
     image: PlaceHolderImages.find(p => p.id === 'sell-feature'),
   },
   {
-    icon: <ShieldCheck className="w-8 h-8 text-primary" />,
-    title: 'Verified Buyback Network',
-    description: 'Connect with a network of trusted jewelers and refiners offering guaranteed buyback at competitive rates.',
-    link: '#',
-    image: PlaceHolderImages.find(p => p.id === 'buyback-partner'),
+    icon: <University className="w-8 h-8 text-primary" />,
+    title: 'Gold Pledge Takeover',
+    description: 'Release your pledged gold from pawnshops or banks. We help you get better value for your assets.',
+    link: '/pledge-takeover',
+    image: PlaceHolderImages.find(p => p.id === 'pledge-feature'),
   },
   {
     icon: <BarChart className="w-8 h-8 text-primary" />,

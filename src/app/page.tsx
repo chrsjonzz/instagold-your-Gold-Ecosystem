@@ -181,7 +181,7 @@ export default function Home() {
           </div>
           <div className="mt-8 flex justify-center">
             <div className="w-full md:w-1/2">
-                <Card key={priceIntelligenceFeature.title} className="overflow-hidden group transition-all duration-300 hover:shadow-2xl hover:-translate-y-1">
+                <Card key={priceIntelligenceFeature.title} className="overflow-hidden group transition-all duration-300 hover:shadow-2xl hover-translate-y-1">
                     <div className="md:flex">
                     <div className="md:w-1/2 relative">
                         {priceIntelligenceFeature.image && (

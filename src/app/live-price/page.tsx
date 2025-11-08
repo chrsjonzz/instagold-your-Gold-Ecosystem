@@ -5,7 +5,6 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { TrendingUp, TrendingDown, Download, Phone, Loader2 } from 'lucide-react';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import { getCityGoldPrices } from '@/lib/gold-price-service';
 
 type Price = {
   city: string;
@@ -21,7 +20,11 @@ export default function LivePricePage() {
   useEffect(() => {
     const fetchPrices = async () => {
       try {
-        const fetchedPrices = await getCityGoldPrices();
+        const response = await fetch('/api/gold-rate');
+        if (!response.ok) {
+          throw new Error('Failed to fetch prices');
+        }
+        const fetchedPrices = await response.json();
         setPrices(fetchedPrices);
       } catch (error) {
         console.error("Failed to fetch city prices:", error);

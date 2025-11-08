@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { TrendingUp, TrendingDown, Loader2 } from 'lucide-react';
+import { Loader2 } from 'lucide-react';
 
 type Price = {
   city: string;
@@ -36,7 +36,7 @@ export default function TodaysRate() {
   }, []);
 
   return (
-    <section className="py-16 md:py-24 bg-background">
+    <section className="py-16 md:py-24 bg-gradient-to-b from-yellow-50 to-background">
         <div className="container mx-auto px-4">
              <div className="text-center mb-12">
                 <h2 className="font-headline text-3xl md:text-4xl font-bold">Today's Live Gold Rate</h2>

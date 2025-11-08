@@ -20,26 +20,28 @@ const cityPriceOffsets = {
 
 async function fetchLiveGoldPrice(): Promise<number> {
     try {
-        const response = await fetch('https://www.goldapi.io/api/XAU/INR', {
-            headers: {
-                'x-access-token': process.env.GOLD_API_KEY || ''
-            }
-        });
+        const response = await fetch('https://www.metals-api.com/api/latest?access_key=' + (process.env.METALS_API_KEY || '') + '&base=XAU&symbols=INR', {});
         if (!response.ok) {
             // If API fails, fallback to a default base price
-            console.warn(`Gold API request failed with status ${response.status}. Falling back to default price.`);
+            console.warn(`Metals API request failed with status ${response.status}. Falling back to default price.`);
             return 7150.50; // A reasonable default
         }
         const data = await response.json();
-        // Use the price_gram_24k field directly for accuracy.
-        const pricePerGram = data.price_gram_24k;
-        if (!pricePerGram) {
-            console.warn("price_gram_24k not found in API response. Falling back to default price.");
+        
+        if (!data.success || !data.rates || !data.rates.INR) {
+            console.warn("Valid data not found in Metals API response. Falling back to default price.", data);
             return 7150.50;
         }
+
+        // The API returns the value of 1 ounce of gold in INR.
+        // We need to convert it to the price per gram.
+        // 1 troy ounce = 31.1035 grams
+        const pricePerOunce = data.rates.INR;
+        const pricePerGram = pricePerOunce / 31.1035;
+
         return pricePerGram;
     } catch (error) {
-        console.error("Error fetching live gold price:", error);
+        console.error("Error fetching live gold price from Metals-API:", error);
         // In case of any error (e.g., network), fallback to default price
         return 7150.50;
     }
@@ -53,10 +55,10 @@ export async function getBangaloreGoldPrice(karat: 24 | 22 | 18 | 14): Promise<n
 
 export async function getCityGoldPrices() {
     const trends: ('up' | 'down')[] = ['up', 'down'];
-    const livePrice24k_Bangalore = await fetchLiveGoldPrice();
+    const livePrice24k_Base = await fetchLiveGoldPrice();
     
     return Object.entries(cityPriceOffsets).map(([city, offset]) => {
-        const rate24k = livePrice24k_Bangalore + offset;
+        const rate24k = livePrice24k_Base + offset;
         return {
             city: city.charAt(0).toUpperCase() + city.slice(1),
             rate24k: parseFloat(rate24k.toFixed(2)),

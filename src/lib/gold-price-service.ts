@@ -67,6 +67,11 @@ async function fetchLiveGoldPrice(): Promise<number> {
 
 export async function getBangaloreGoldPrice(karat: 24 | 22 | 18 | 14): Promise<number> {
     const price24k = await fetchLiveGoldPrice();
+    // Use the accurate 24k price as the base for all calculations.
+    if (karat === 24) {
+        return parseFloat(price24k.toFixed(2));
+    }
+    // For other karats, calculate from the 24k price.
     const purity = karat / 24;
     return parseFloat((price24k * purity).toFixed(2));
 }
@@ -77,10 +82,11 @@ export async function getCityGoldPrices() {
     
     return Object.entries(cityPriceOffsets).map(([city, offset]) => {
         const rate24k = livePrice24k_Base + offset;
+        const rate22k = rate24k * (22/24); // Correctly calculate 22k price from 24k
         return {
             city: city.charAt(0).toUpperCase() + city.slice(1),
             rate24k: parseFloat(rate24k.toFixed(2)),
-            rate22k: parseFloat((rate24k * (22/24)).toFixed(2)),
+            rate22k: parseFloat(rate22k.toFixed(2)),
             trend: trends[Math.floor(Math.random() * trends.length)] as 'up' | 'down',
         }
     });

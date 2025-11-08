@@ -30,14 +30,17 @@ async function fetchLiveGoldPrice(): Promise<{ price24k: number, price22k: numbe
     try {
         const apiKey = process.env.GOLD_API_KEY;
         if (!apiKey) {
-            throw new Error("GOLD_API_KEY is not set in environment variables.");
+            console.warn("GOLD_API_KEY is not set. Falling back to default price.");
+            return { price24k: FALLBACK_24K_PRICE, price22k: FALLBACK_24K_PRICE * (22/24) };
         }
 
         const response = await fetch('https://www.goldapi.io/api/XAU/INR', {
             headers: {
                 'x-access-token': apiKey,
                 'Content-Type': 'application/json'
-            }
+            },
+             // Revalidate every hour
+            next: { revalidate: 3600 }
         });
 
         if (!response.ok) {

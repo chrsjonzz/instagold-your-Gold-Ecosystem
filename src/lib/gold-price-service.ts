@@ -1,6 +1,5 @@
 // This service fetches live gold prices from GoldAPI.io
 
-// The base price for 1 gram of 24k gold in INR, used as a fallback.
 const FALLBACK_24K_PRICE = 7150.50;
 
 type GoldApiResponse = {
@@ -26,6 +25,16 @@ type GoldApiResponse = {
     price_gram_18k: number;
 };
 
+// Helper function to get the date in YYYYMMDD format
+const getFormattedDate = () => {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, '0');
+    const day = String(today.getDate()).padStart(2, '0');
+    return `${year}${month}${day}`;
+};
+
+
 async function fetchLiveGoldPrice(): Promise<{ price24k: number, price22k: number }> {
     try {
         const apiKey = process.env.GOLD_API_KEY;
@@ -33,13 +42,16 @@ async function fetchLiveGoldPrice(): Promise<{ price24k: number, price22k: numbe
             console.warn("GOLD_API_KEY is not set. Falling back to default price.");
             return { price24k: FALLBACK_24K_PRICE, price22k: FALLBACK_24K_PRICE * (22/24) };
         }
+        
+        const date = getFormattedDate();
+        const url = `https://www.goldapi.io/api/XAU/INR/${date}`;
 
-        const response = await fetch('https://www.goldapi.io/api/XAU/INR', {
+        const response = await fetch(url, {
             headers: {
                 'x-access-token': apiKey,
                 'Content-Type': 'application/json'
             },
-             // Revalidate every hour
+            // Revalidate every hour
             next: { revalidate: 3600 }
         });
 

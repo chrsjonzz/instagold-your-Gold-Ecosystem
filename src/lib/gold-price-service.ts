@@ -1,4 +1,5 @@
 
+
 // This service fetches live gold prices from GoldPricez.com
 
 const FALLBACK_24K_PRICE = 7150.50;

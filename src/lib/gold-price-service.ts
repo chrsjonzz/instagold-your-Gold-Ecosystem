@@ -65,7 +65,7 @@ function calculateRetailPrice(spotPrice: number): number {
 
 
 export async function getBangaloreGoldPrice(karat: 24 | 22 | 18 | 14): Promise<number> {
-    const retailPrice24k = 7204.00;
+    const retailPrice24k = 12202.00;
 
     if (karat === 24) {
         return parseFloat(retailPrice24k.toFixed(2));
@@ -78,8 +78,8 @@ export async function getBangaloreGoldPrice(karat: 24 | 22 | 18 | 14): Promise<n
 export async function getCityGoldPrices() {
     const trends: ('up' | 'down')[] = ['up', 'down'];
     
-    const retailPrice24k_Base = 7204.00;
-    const retailPrice22k_Base = 6603.67; // (22/24) * 7204
+    const retailPrice24k_Base = 12202.00;
+    const retailPrice22k_Base = 11185.00;
     
     // For now, we are showing the same live national price for all cities
     return Object.keys(cityToCurrency).map((city) => {

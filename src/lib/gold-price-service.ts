@@ -80,8 +80,9 @@ export async function getCityGoldPrices() {
     const trends: ('up' | 'down')[] = ['up', 'down'];
     const livePrice24k_Base = await fetchLiveGoldPrice();
     
-    return Object.entries(cityPriceOffsets).map(([city, offset]) => {
-        const rate24k = livePrice24k_Base + offset;
+    return Object.keys(cityPriceOffsets).map((city) => {
+        // Use the same live price for all cities to ensure accuracy and remove simulation
+        const rate24k = livePrice24k_Base;
         const rate22k = rate24k * (22/24);
         return {
             city: city.charAt(0).toUpperCase() + city.slice(1),
@@ -95,9 +96,11 @@ export async function getCityGoldPrices() {
 
 export async function getTickerGoldPrices() {
     const prices = await getCityGoldPrices();
+    // Ticker will show the same price for all cities, reflecting the live national rate.
+    const liveRate = prices[0];
     return prices.map(p => ({
         city: p.city,
-        rate: p.rate24k.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+        rate: liveRate.rate24k.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
         change: `${p.trend === 'up' ? '+' : '-'}${(Math.random() * 0.5).toFixed(2)}%`,
         trend: p.trend,
     }));

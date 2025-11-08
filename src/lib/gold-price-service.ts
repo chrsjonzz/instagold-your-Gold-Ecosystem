@@ -9,57 +9,45 @@ const cityToCurrency = {
     'vijayawada': 'INR',
 };
 
-// Base price differences from Bangalore. These are illustrative.
-const cityPriceOffsets = {
-    bangalore: 0,
-    chennai: 35.70,
-    hyderabad: 20.30,
-    coimbatore: 40.50,
-    vijayawada: 15.90,
-};
-
 async function fetchLiveGoldPrice(): Promise<number> {
-    // This is today's rate for 24k gold per gram in INR, based on user-provided reliable sources.
-    // We are hardcoding this value as a reliable fallback.
+    // Fallback price for 1 gram of 24k gold in INR, in case the API fails.
     const fallbackPricePerGram = 7150.50;
 
     try {
-        const apiKey = process.env.METALS_API_KEY;
-        if (!apiKey) {
-            // console.warn("Metals API key not found. Falling back to default price.");
-            return fallbackPricePerGram;
-        }
+        // Fetch data from goldprice.org API for INR
+        const response = await fetch('https://data-asg.goldprice.org/dbXRates/INR', {
+            headers: {
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+            }
+        });
 
-        const response = await fetch(`https://www.metals-api.com/api/latest?access_key=${apiKey}&base=XAU&symbols=INR`, {});
-        
         if (!response.ok) {
-            // console.warn(`Metals API request failed with status ${response.status}. Falling back to default price.`);
+            console.warn(`Goldprice.org API request failed with status ${response.status}. Falling back to default price.`);
             return fallbackPricePerGram;
         }
 
         const data = await response.json();
         
-        if (!data.success || !data.rates || !data.rates.INR) {
-            // console.warn("Valid data not found in Metals API response. Falling back to default price.", data);
+        if (!data || !data.items || !data.items.length || !data.items[0].xauPrice) {
+            console.warn("Valid data not found in Goldprice.org API response. Falling back to default price.", data);
             return fallbackPricePerGram;
         }
 
         // The API returns the value of 1 troy ounce of gold in INR.
         // We need to convert it to the price per gram.
         // 1 troy ounce = 31.1035 grams
-        const pricePerOunce = data.rates.INR;
+        const pricePerOunce = data.items[0].xauPrice;
         const pricePerGram = pricePerOunce / 31.1035;
 
         // As a sanity check, if the API returns a wildly different price, use the fallback.
-        // This protects against API data errors or different pricing models (e.g. spot vs retail).
         if (pricePerGram < 6500 || pricePerGram > 8500) {
-            // console.warn(`API price per gram (₹${pricePerGram.toFixed(2)}) is outside expected range. Falling back to default.`);
+            console.warn(`API price per gram (₹${pricePerGram.toFixed(2)}) is outside expected range. Falling back to default.`);
             return fallbackPricePerGram;
         }
 
         return pricePerGram;
     } catch (error) {
-        console.error("Error fetching live gold price from Metals-API:", error);
+        console.error("Error fetching live gold price from Goldprice.org:", error);
         // In case of any error (e.g., network), fallback to default price
         return fallbackPricePerGram;
     }
@@ -78,21 +66,20 @@ export async function getBangaloreGoldPrice(karat: 24 | 22 | 18 | 14): Promise<n
 
 export async function getCityGoldPrices() {
     const trends: ('up' | 'down')[] = ['up', 'down'];
-    const livePrice24k_Base = 7150.50; // Hardcoded accurate rate
-    const livePrice22k_Base = 6560.10; // Hardcoded accurate rate
+    const livePrice24k_Base = await fetchLiveGoldPrice();
+    const livePrice22k_Base = livePrice24k_Base * (22/24);
     
-    return Object.keys(cityPriceOffsets).map((city) => {
-        const rate24k = livePrice24k_Base;
-        const rate22k = livePrice22k_Base;
+    // For now, we are showing the same live national price for all cities
+    // as the API provides a single rate for INR.
+    return Object.keys(cityToCurrency).map((city) => {
         return {
             city: city.charAt(0).toUpperCase() + city.slice(1),
-            rate24k: parseFloat(rate24k.toFixed(2)),
-            rate22k: parseFloat(rate22k.toFixed(2)),
+            rate24k: parseFloat(livePrice24k_Base.toFixed(2)),
+            rate22k: parseFloat(livePrice22k_Base.toFixed(2)),
             trend: trends[Math.floor(Math.random() * trends.length)] as 'up' | 'down',
         }
     });
 }
-
 
 export async function getTickerGoldPrices() {
     const prices = await getCityGoldPrices();

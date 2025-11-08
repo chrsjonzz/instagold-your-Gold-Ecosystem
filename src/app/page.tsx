@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ArrowRight, BarChart, Gem, University, Search, ShieldCheck, Sparkles, Workflow } from 'lucide-react';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import GoldHistoryChart from '@/components/GoldHistoryChart';
+import CityPriceComparisonChart from '@/components/CityPriceComparisonChart';
 
 const features = [
   {
@@ -108,20 +109,26 @@ export default function Home() {
         </div>
       </section>
       
-      {/* Gold History Chart Section */}
+      {/* Gold Price Charts Section */}
       <section className="py-16 md:py-24 bg-background">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
-            <h2 className="font-headline text-3xl md:text-4xl font-bold">Historical Gold Prices</h2>
-            <p className="mt-2 text-muted-foreground max-w-xl mx-auto">
-              Explore historical gold price trends to make informed decisions. The chart below shows the price of 24K gold per gram over the last year.
-            </p>
+        <div className="container mx-auto px-4 space-y-16">
+          <div>
+            <div className="text-center mb-12">
+              <h2 className="font-headline text-3xl md:text-4xl font-bold">Historical Gold Prices</h2>
+              <p className="mt-2 text-muted-foreground max-w-xl mx-auto">
+                Explore historical gold price trends to make informed decisions. The chart below shows the price of 24K gold per gram over the last year.
+              </p>
+            </div>
+            <Card className="shadow-lg border-2 border-primary/20">
+              <CardContent className="p-2 sm:p-4 md:p-6">
+                <GoldHistoryChart />
+              </CardContent>
+            </Card>
           </div>
-          <Card className="shadow-lg border-2 border-primary/20">
-            <CardContent className="p-2 sm:p-4 md:p-6">
-               <GoldHistoryChart />
-            </CardContent>
-          </Card>
+
+          <div>
+             <CityPriceComparisonChart />
+          </div>
         </div>
       </section>
 

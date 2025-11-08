@@ -1,39 +1,15 @@
-// This service fetches live gold prices from GoldAPI.io
+
+// This service fetches live gold prices from GoldPricez.com
 
 const FALLBACK_24K_PRICE = 7150.50;
 
 type GoldApiResponse = {
-    timestamp: number;
-    metal: string;
-    currency: string;
-    exchange: string;
-    symbol: string;
-    prev_close_price: number;
-    open_price: number;
-    low_price: number;
-    high_price: number;
-    open_time: number;
-    price: number;
-    ch: number;
-    chp: number;
-    ask: number;
-    bid: number;
-    price_gram_24k: number;
-    price_gram_22k: number;
-    price_gram_21k: number;
-    price_gram_20k: number;
-    price_gram_18k: number;
+    gram_24k: number;
+    gram_22k: number;
+    gram_21k: number;
+    gram_20k: number;
+    gram_18k: number;
 };
-
-// Helper function to get the date in YYYYMMDD format
-const getFormattedDate = () => {
-    const today = new Date();
-    const year = today.getFullYear();
-    const month = String(today.getMonth() + 1).padStart(2, '0');
-    const day = String(today.getDate()).padStart(2, '0');
-    return `${year}${month}${day}`;
-};
-
 
 async function fetchLiveGoldPrice(): Promise<{ price24k: number, price22k: number }> {
     try {
@@ -43,12 +19,11 @@ async function fetchLiveGoldPrice(): Promise<{ price24k: number, price22k: numbe
             return { price24k: FALLBACK_24K_PRICE, price22k: FALLBACK_24K_PRICE * (22/24) };
         }
         
-        const date = getFormattedDate();
-        const url = `https://www.goldapi.io/api/XAU/INR/${date}`;
+        const url = `https://goldpricez.com/api/rates/currency/inr/measure/all`;
 
         const response = await fetch(url, {
             headers: {
-                'x-access-token': apiKey,
+                'X-API-KEY': apiKey,
                 'Content-Type': 'application/json'
             },
             // Revalidate every hour
@@ -56,27 +31,30 @@ async function fetchLiveGoldPrice(): Promise<{ price24k: number, price22k: numbe
         });
 
         if (!response.ok) {
-            console.warn(`GoldAPI.io request failed with status ${response.status}. Falling back to default price.`);
+            console.warn(`GoldPricez.com request failed with status ${response.status}. Falling back to default price.`);
             return { price24k: FALLBACK_24K_PRICE, price22k: FALLBACK_24K_PRICE * (22/24) };
         }
 
         const data: GoldApiResponse = await response.json();
+        
+        const price_gram_24k = data.gram_24k;
+        const price_gram_22k = data.gram_22k;
 
-        if (!data || !data.price_gram_24k || !data.price_gram_22k) {
-            console.warn("Valid data not found in GoldAPI.io response. Falling back to default price.", data);
+        if (!price_gram_24k || !price_gram_22k) {
+            console.warn("Valid data not found in GoldPricez.com response. Falling back to default price.", data);
             return { price24k: FALLBACK_24K_PRICE, price22k: FALLBACK_24K_PRICE * (22/24) };
         }
         
         // As a sanity check, if the API returns a wildly different price, use the fallback.
-        if (data.price_gram_24k < 6000 || data.price_gram_24k > 9000) {
-            console.warn(`API spot price per gram (₹${data.price_gram_24k.toFixed(2)}) is outside expected range. Falling back to default.`);
+        if (price_gram_24k < 6000 || price_gram_24k > 9000) {
+            console.warn(`API spot price per gram (₹${price_gram_24k.toFixed(2)}) is outside expected range. Falling back to default.`);
             return { price24k: FALLBACK_24K_PRICE, price22k: FALLBACK_24K_PRICE * (22/24) };
         }
 
-        return { price24k: data.price_gram_24k, price22k: data.price_gram_22k };
+        return { price24k: price_gram_24k, price22k: price_gram_22k };
 
     } catch (error) {
-        console.error("Error fetching live gold price from GoldAPI.io:", error);
+        console.error("Error fetching live gold price from GoldPricez.com:", error);
         return { price24k: FALLBACK_24K_PRICE, price22k: FALLBACK_24K_PRICE * (22/24) };
     }
 }

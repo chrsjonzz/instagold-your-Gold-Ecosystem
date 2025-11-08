@@ -19,7 +19,7 @@ const cityPriceOffsets = {
 };
 
 async function fetchLiveGoldPrice(): Promise<number> {
-    // This is today's rate for 24k gold per gram in INR.
+    // This is today's rate for 24k gold per gram in INR, based on user-provided reliable sources.
     // We are hardcoding this value as a reliable fallback.
     const fallbackPricePerGram = 7202.00;
 
@@ -51,7 +51,7 @@ async function fetchLiveGoldPrice(): Promise<number> {
         const pricePerGram = pricePerOunce / 31.1035;
 
         // As a sanity check, if the API returns a wildly different price, use the fallback.
-        // This protects against API data errors.
+        // This protects against API data errors or different pricing models (e.g. spot vs retail).
         if (pricePerGram < 5000 || pricePerGram > 10000) {
             console.warn(`API price per gram (₹${pricePerGram.toFixed(2)}) is outside expected range. Falling back to default.`);
             return fallbackPricePerGram;

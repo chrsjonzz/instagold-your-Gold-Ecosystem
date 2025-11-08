@@ -1,101 +1,96 @@
-// This service simulates fetching gold prices.
-// In a real application, this would fetch data from a live API.
+// This service fetches live gold prices from GoldAPI.io
 
-const cityToCurrency = {
-    'bangalore': 'INR',
-    'chennai': 'INR',
-    'hyderabad': 'INR',
-    'coimbatore': 'INR',
-    'vijayawada': 'INR',
+// The base price for 1 gram of 24k gold in INR, used as a fallback.
+const FALLBACK_24K_PRICE = 7150.50;
+
+type GoldApiResponse = {
+    timestamp: number;
+    metal: string;
+    currency: string;
+    exchange: string;
+    symbol: string;
+    prev_close_price: number;
+    open_price: number;
+    low_price: number;
+    high_price: number;
+    open_time: number;
+    price: number;
+    ch: number;
+    chp: number;
+    ask: number;
+    bid: number;
+    price_gram_24k: number;
+    price_gram_22k: number;
+    price_gram_21k: number;
+    price_gram_20k: number;
+    price_gram_18k: number;
 };
 
-async function fetchLiveGoldPrice(): Promise<number> {
-    // Fallback price for 1 gram of 24k gold (spot price) in INR, in case the API fails.
-    const fallbackSpotPricePerGram = 7204.00;
-
+async function fetchLiveGoldPrice(): Promise<{ price24k: number, price22k: number }> {
     try {
-        const response = await fetch('https://data-asg.goldprice.org/dbXRates/INR');
+        const apiKey = process.env.GOLD_API_KEY;
+        if (!apiKey) {
+            throw new Error("GOLD_API_KEY is not set in environment variables.");
+        }
+
+        const response = await fetch('https://www.goldapi.io/api/XAU/INR', {
+            headers: {
+                'x-access-token': apiKey,
+                'Content-Type': 'application/json'
+            }
+        });
 
         if (!response.ok) {
-            console.warn(`Goldprice.org API request failed with status ${response.status}. Falling back to default spot price.`);
-            return fallbackSpotPricePerGram;
+            console.warn(`GoldAPI.io request failed with status ${response.status}. Falling back to default price.`);
+            return { price24k: FALLBACK_24K_PRICE, price22k: FALLBACK_24K_PRICE * (22/24) };
         }
 
-        const data = await response.json();
+        const data: GoldApiResponse = await response.json();
+
+        if (!data || !data.price_gram_24k || !data.price_gram_22k) {
+            console.warn("Valid data not found in GoldAPI.io response. Falling back to default price.", data);
+            return { price24k: FALLBACK_24K_PRICE, price22k: FALLBACK_24K_PRICE * (22/24) };
+        }
         
-        if (!data || !data.items || !data.items.length || !data.items[0].xauPrice) {
-            console.warn("Valid data not found in Goldprice.org API response. Falling back to default spot price.", data);
-            return fallbackSpotPricePerGram;
-        }
-
-        // The API returns the value of 1 troy ounce of gold in INR.
-        // 1 troy ounce = 31.1035 grams
-        const pricePerOunce = data.items[0].xauPrice;
-        const pricePerGram = pricePerOunce / 31.1035;
-
         // As a sanity check, if the API returns a wildly different price, use the fallback.
-        // Today's spot price is ~7204, so we check a reasonable range around that.
-        if (pricePerGram < 6500 || pricePerGram > 8000) {
-            console.warn(`API spot price per gram (₹${pricePerGram.toFixed(2)}) is outside expected range. Falling back to default.`);
-            return fallbackSpotPricePerGram;
+        if (data.price_gram_24k < 6000 || data.price_gram_24k > 9000) {
+            console.warn(`API spot price per gram (₹${data.price_gram_24k.toFixed(2)}) is outside expected range. Falling back to default.`);
+            return { price24k: FALLBACK_24K_PRICE, price22k: FALLBACK_24K_PRICE * (22/24) };
         }
 
-        return pricePerGram;
+        return { price24k: data.price_gram_24k, price22k: data.price_gram_22k };
+
     } catch (error) {
-        console.error("Error fetching live gold price from Goldprice.org:", error);
-        return fallbackSpotPricePerGram; // In case of any error (e.g., network), fallback to default price
+        console.error("Error fetching live gold price from GoldAPI.io:", error);
+        return { price24k: FALLBACK_24K_PRICE, price22k: FALLBACK_24K_PRICE * (22/24) };
     }
-}
-
-function calculateRetailPrice(spotPrice: number): number {
-    // This function calculates an estimated final retail price from the spot price.
-    // In India, this includes import duties, GST, and jeweler margins.
-    // These percentages are estimates and can vary.
-    
-    const importDuty = 0.15; // Approx. 15%
-    const gst = 0.03; // 3% GST on gold
-    const margin = 0.03; // Approx. 3-5% margin for jeweler
-
-    const priceAfterDuty = spotPrice * (1 + importDuty);
-    const priceAfterGST = priceAfterDuty * (1 + gst);
-    const finalPrice = priceAfterGST * (1 + margin);
-    
-    return finalPrice;
 }
 
 
 export async function getBangaloreGoldPrice(karat: 24 | 22 | 18 | 14): Promise<number> {
-    const retailPrice24k = 12202.00;
-
-    if (karat === 24) {
-        return parseFloat(retailPrice24k.toFixed(2));
-    }
-    
+    const { price24k } = await fetchLiveGoldPrice();
     const purity = karat / 24;
-    return parseFloat((retailPrice24k * purity).toFixed(2));
+    return parseFloat((price24k * purity).toFixed(2));
 }
 
 export async function getCityGoldPrices() {
+    const { price24k, price22k } = await fetchLiveGoldPrice();
     const trends: ('up' | 'down')[] = ['up', 'down'];
     
-    const retailPrice24k_Base = 12202.00;
-    const retailPrice22k_Base = 11185.00;
-    
-    // For now, we are showing the same live national price for all cities
-    return Object.keys(cityToCurrency).map((city) => {
-        return {
-            city: city.charAt(0).toUpperCase() + city.slice(1),
-            rate24k: parseFloat(retailPrice24k_Base.toFixed(2)),
-            rate22k: parseFloat(retailPrice22k_Base.toFixed(2)),
-            trend: trends[Math.floor(Math.random() * trends.length)] as 'up' | 'down',
-        }
-    });
+    const cities = ['Bangalore', 'Chennai', 'Hyderabad', 'Coimbatore', 'Vijayawada'];
+
+    return cities.map((city) => ({
+        city: city,
+        rate24k: parseFloat(price24k.toFixed(2)),
+        rate22k: parseFloat(price22k.toFixed(2)),
+        trend: trends[Math.floor(Math.random() * trends.length)],
+    }));
 }
 
 export async function getTickerGoldPrices() {
     const prices = await getCityGoldPrices();
     // Ticker will show the same price for all cities, reflecting the live national rate.
-    const liveRate = prices[0]; // All cities have the same rate now
+    const liveRate = prices[0]; 
     return prices.map(p => ({
         city: p.city,
         rate: liveRate.rate24k.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),

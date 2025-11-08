@@ -1,18 +1,13 @@
 'use client';
 
-import { Suspense } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Logo } from "@/components/Logo";
 import { cn } from '@/lib/utils';
-
-const rates = [
-  { purity: "24", rate: "12,202.00" },
-  { purity: "22", rate: "11,185.00" },
-  { purity: "18", rate: "9,151.50" },
-  { purity: "14", rate: "7,117.83" },
-];
+import { getCityGoldPrices } from '@/lib/gold-price-service';
+import { Loader2 } from 'lucide-react';
 
 const purityMap: { [key: string]: string } = {
     "24": "24K (99.9%)",
@@ -21,12 +16,39 @@ const purityMap: { [key: string]: string } = {
     "14": "14K (58.5%)"
 }
 
+type Rate = { purity: string; rate: string };
 
 function RateCardContent() {
   const searchParams = useSearchParams();
   const weight = searchParams.get('weight');
   const karat = searchParams.get('karat');
   const estimatedValue = searchParams.get('estimatedValue');
+
+  const [rates, setRates] = useState<Rate[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchRates() {
+      try {
+        const cityPrices = await getCityGoldPrices();
+        if (cityPrices.length > 0) {
+          const firstCity = cityPrices[0];
+          const newRates = [
+            { purity: "24", rate: firstCity.rate24k.toFixed(2) },
+            { purity: "22", rate: firstCity.rate22k.toFixed(2) },
+            { purity: "18", rate: (firstCity.rate24k * (18/24)).toFixed(2) },
+            { purity: "14", rate: (firstCity.rate24k * (14/24)).toFixed(2) },
+          ];
+          setRates(newRates);
+        }
+      } catch (error) {
+        console.error("Failed to fetch gold rates for rate card", error);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchRates();
+  }, []);
 
   return (
     <div className="bg-gradient-to-b from-background via-yellow-50 to-background min-h-screen py-12 print:bg-white">
@@ -72,25 +94,31 @@ function RateCardContent() {
                 <CardDescription>All rates are per gram (gm) in Indian Rupees (INR).</CardDescription>
               </CardHeader>
               <CardContent>
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead className="font-bold text-lg">Purity (Karat)</TableHead>
-                      <TableHead className="text-right font-bold text-lg">Rate (per gram)</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {rates.map((item) => (
-                      <TableRow key={item.purity} className={cn(
-                        "text-base",
-                        karat === item.purity && "bg-primary/10 font-bold"
-                      )}>
-                        <TableCell className="font-medium">{purityMap[item.purity]}</TableCell>
-                        <TableCell className="text-right font-mono">INR {item.rate}</TableCell>
+                {loading ? (
+                  <div className="flex justify-center items-center h-40">
+                    <Loader2 className="h-8 w-8 text-primary animate-spin" />
+                  </div>
+                ) : (
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead className="font-bold text-lg">Purity (Karat)</TableHead>
+                        <TableHead className="text-right font-bold text-lg">Rate (per gram)</TableHead>
                       </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
+                    </TableHeader>
+                    <TableBody>
+                      {rates.map((item) => (
+                        <TableRow key={item.purity} className={cn(
+                          "text-base",
+                          karat === item.purity && "bg-primary/10 font-bold"
+                        )}>
+                          <TableCell className="font-medium">{purityMap[item.purity]}</TableCell>
+                          <TableCell className="text-right font-mono">INR {parseFloat(item.rate).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                )}
               </CardContent>
             </Card>
           </main>

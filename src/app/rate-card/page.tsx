@@ -8,10 +8,10 @@ import { Logo } from "@/components/Logo";
 import { cn } from '@/lib/utils';
 
 const rates = [
-  { purity: "24", rate: "7,150.50" },
-  { purity: "22", rate: "6,560.10" },
-  { purity: "18", rate: "5,362.88" },
-  { purity: "14", rate: "4,182.04" },
+  { purity: "24", rate: "7,204.00" },
+  { purity: "22", rate: "6,603.67" },
+  { purity: "18", rate: "5,403.00" },
+  { purity: "14", rate: "4,202.33" },
 ];
 
 const purityMap: { [key: string]: string } = {

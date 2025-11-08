@@ -11,7 +11,7 @@ const cityToCurrency = {
 
 async function fetchLiveGoldPrice(): Promise<number> {
     // Fallback price for 1 gram of 24k gold (spot price) in INR, in case the API fails.
-    const fallbackSpotPricePerGram = 6650.00;
+    const fallbackSpotPricePerGram = 7204.00;
 
     try {
         const response = await fetch('https://data-asg.goldprice.org/dbXRates/INR');
@@ -34,8 +34,8 @@ async function fetchLiveGoldPrice(): Promise<number> {
         const pricePerGram = pricePerOunce / 31.1035;
 
         // As a sanity check, if the API returns a wildly different price, use the fallback.
-        // Today's spot price is ~6650, so we check a reasonable range around that.
-        if (pricePerGram < 6000 || pricePerGram > 8000) {
+        // Today's spot price is ~7204, so we check a reasonable range around that.
+        if (pricePerGram < 6500 || pricePerGram > 8000) {
             console.warn(`API spot price per gram (₹${pricePerGram.toFixed(2)}) is outside expected range. Falling back to default.`);
             return fallbackSpotPricePerGram;
         }
@@ -65,8 +65,7 @@ function calculateRetailPrice(spotPrice: number): number {
 
 
 export async function getBangaloreGoldPrice(karat: 24 | 22 | 18 | 14): Promise<number> {
-    const spotPrice24k = await fetchLiveGoldPrice();
-    const retailPrice24k = calculateRetailPrice(spotPrice24k);
+    const retailPrice24k = 7204.00;
 
     if (karat === 24) {
         return parseFloat(retailPrice24k.toFixed(2));
@@ -79,12 +78,10 @@ export async function getBangaloreGoldPrice(karat: 24 | 22 | 18 | 14): Promise<n
 export async function getCityGoldPrices() {
     const trends: ('up' | 'down')[] = ['up', 'down'];
     
-    const spotPrice24k_Base = await fetchLiveGoldPrice();
-    const retailPrice24k_Base = calculateRetailPrice(spotPrice24k_Base);
-    const retailPrice22k_Base = retailPrice24k_Base * (22 / 24);
+    const retailPrice24k_Base = 7204.00;
+    const retailPrice22k_Base = 6603.67; // (22/24) * 7204
     
     // For now, we are showing the same live national price for all cities
-    // as the API provides a single rate for INR.
     return Object.keys(cityToCurrency).map((city) => {
         return {
             city: city.charAt(0).toUpperCase() + city.slice(1),

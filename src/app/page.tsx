@@ -6,6 +6,7 @@ import { ArrowRight, BarChart, Gem, University, Search, ShieldCheck, Sparkles, W
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import GoldHistoryChart from '@/components/GoldHistoryChart';
 import CityPriceComparisonChart from '@/components/CityPriceComparisonChart';
+import TodaysRate from '@/components/TodaysRate';
 
 const features = [
   {
@@ -109,6 +110,9 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* Today's Rate Section */}
+      <TodaysRate />
       
       {/* Gold Price Charts Section */}
       <section className="py-16 md:py-24 bg-background">

@@ -22,14 +22,15 @@ const features = [
     link: '/pledge-takeover',
     image: PlaceHolderImages.find(p => p.id === 'pledge-feature'),
   },
-  {
+];
+
+const priceIntelligenceFeature = {
     icon: <BarChart className="w-8 h-8 text-primary" />,
     title: 'Price Intelligence',
     description: 'Access real-time price charts, market heatmaps, and set up custom alerts to track gold prices.',
     link: '/live-price',
     image: PlaceHolderImages.find(p => p.id === 'track-feature'),
-  },
-];
+};
 
 const howItWorks = [
   {
@@ -173,6 +174,40 @@ export default function Home() {
                 </div>
               </Card>
             ))}
+          </div>
+          <div className="mt-8 flex justify-center">
+            <div className="w-full md:w-1/2">
+                <Card key={priceIntelligenceFeature.title} className="overflow-hidden group transition-all duration-300 hover:shadow-2xl hover:-translate-y-1">
+                    <div className="md:flex">
+                    <div className="md:w-1/2 relative">
+                        {priceIntelligenceFeature.image && (
+                        <Image
+                            src={priceIntelligenceFeature.image.imageUrl}
+                            alt={priceIntelligenceFeature.image.description}
+                            data-ai-hint={priceIntelligenceFeature.image.imageHint}
+                            width={400}
+                            height={300}
+                            className="object-cover w-full h-48 md:h-full group-hover:scale-105 transition-transform duration-300"
+                        />
+                        )}
+                    </div>
+                    <div className="md:w-1/2">
+                        <CardHeader>
+                        <div className="flex items-center gap-4">
+                            {priceIntelligenceFeature.icon}
+                            <CardTitle className="font-headline text-2xl">{priceIntelligenceFeature.title}</CardTitle>
+                        </div>
+                        </CardHeader>
+                        <CardContent>
+                        <p className="text-muted-foreground mb-4">{priceIntelligenceFeature.description}</p>
+                        <Button asChild variant="link" className="p-0 h-auto">
+                            <Link href={priceIntelligenceFeature.link}>Learn More <ArrowRight className="ml-2 w-4 h-4" /></Link>
+                        </Button>
+                        </CardContent>
+                    </div>
+                    </div>
+                </Card>
+            </div>
           </div>
         </div>
       </section>

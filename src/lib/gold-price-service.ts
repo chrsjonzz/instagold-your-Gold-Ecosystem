@@ -14,7 +14,6 @@ async function fetchLiveGoldPrice(): Promise<{ price24k: number; price22k: numbe
     const apiKey = process.env.GOLD_API_KEY;
     
     console.log('🔄 Fetching live gold price at:', new Date().toISOString());
-    console.log('🔑 API Key present:', !!apiKey);
     
     if (!apiKey) {
       console.warn("⚠️ GOLD_API_KEY is not set. Falling back to default price.");
@@ -57,12 +56,6 @@ async function fetchLiveGoldPrice(): Promise<{ price24k: number; price22k: numbe
 
     const data: GoldApiResponse = await response.json();
     
-    console.log('✅ API Response received:', {
-      gram_24k: data.gram_24k,
-      gram_22k: data.gram_22k,
-      timestamp: new Date().toISOString()
-    });
-
     const price_gram_24k = data.gram_24k;
     const price_gram_22k = data.gram_22k;
 
@@ -79,7 +72,7 @@ async function fetchLiveGoldPrice(): Promise<{ price24k: number; price22k: numbe
       };
     }
 
-    console.log('💰 Successfully fetched prices - 24K:', price_gram_24k, '22K:', price_gram_22k);
+    console.log('✅ Successfully fetched prices - 24K:', price_gram_24k, '22K:', price_gram_22k);
 
     return { 
       price24k: price_gram_24k, 

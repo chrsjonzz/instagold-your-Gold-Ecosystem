@@ -1,21 +1,17 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { Banknote } from 'lucide-react';
 
 const COIN_COUNT = 15;
 
-const RupeeIcon = () => (
-  <span className="text-2xl font-bold text-primary/80">₹</span>
-);
-
 const GoldCoin = () => (
-  <div className="relative w-7 h-7 flex items-center justify-center bg-gradient-to-br from-yellow-400 to-amber-600 rounded-full shadow-lg border-2 border-yellow-600/80 animate-coin-spin">
+  <div className="relative w-7 h-7 flex items-center justify-center bg-gradient-to-br from-yellow-400 to-amber-600 rounded-full shadow-lg border-2 border-yellow-600/80" style={{ animation: `coin-spin 2s linear infinite` }}>
     <div className="absolute inset-0.5 rounded-full bg-gradient-to-br from-amber-400 to-yellow-500 flex items-center justify-center">
         <span className="text-sm font-bold text-amber-900/70">₹</span>
     </div>
   </div>
 );
-
 
 type CoinState = {
   id: number;
@@ -94,7 +90,7 @@ export default function FallingCoinsAnimation() {
           style={coin.style}
           onAnimationEnd={() => handleAnimationEnd(coin.id)}
         >
-          {coin.landed ? <RupeeIcon /> : <GoldCoin />}
+          {coin.landed ? <Banknote className="w-8 h-8 text-primary/80" /> : <GoldCoin />}
         </div>
       ))}
     </div>

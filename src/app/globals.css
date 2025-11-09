@@ -5,7 +5,7 @@
 @layer base {
   :root {
     --background: 222.2 84% 4.9%; /* New Dark Background */
-    --foreground: 210 40% 98%;
+    --foreground: 49 20% 90%; /* Soft, gold-tinted white for main text */
     --card: 222.2 84% 4.9%;
     --card-foreground: 210 40% 98%;
     --popover: 222.2 84% 4.9%;
@@ -15,7 +15,7 @@
     --secondary: 217.2 32.6% 17.5%;
     --secondary-foreground: 210 40% 98%;
     --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
+    --muted-foreground: 215 20.2% 75.1%; /* Brighter muted text for better contrast */
     --accent: 180 100% 25%; /* Teal */
     --accent-foreground: 210 40% 98%;
     --destructive: 0 62.8% 30.6%;
@@ -28,7 +28,7 @@
 
   .dark {
     --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
+    --foreground: 49 20% 90%;
     --card: 222.2 84% 4.9%;
     --card-foreground: 210 40% 98%;
     --popover: 222.2 84% 4.9%;
@@ -38,7 +38,7 @@
     --secondary: 217.2 32.6% 17.5%;
     --secondary-foreground: 210 40% 98%;
     --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
+    --muted-foreground: 215 20.2% 75.1%;
     --accent: 180 80% 35%;
     --accent-foreground: 210 40% 98%;
     --destructive: 0 62.8% 30.6%;

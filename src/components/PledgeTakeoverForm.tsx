@@ -1,7 +1,7 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
-import { useFormState, useFormStatus } from 'react-dom';
+import { useActionState, useEffect, useRef } from 'react';
+import { useFormStatus } from 'react-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import type { z } from 'zod';
@@ -48,7 +48,7 @@ function SubmitButton() {
 }
 
 export default function PledgeTakeoverForm() {
-    const [formState, formAction] = useFormState(submitPledgeTakeoverRequest, initialFormState);
+    const [formState, formAction] = useActionState(submitPledgeTakeoverRequest, initialFormState);
     const formRef = useRef<HTMLFormElement>(null);
     
     const form = useForm<z.infer<typeof PledgeTakeoverFormSchema>>({

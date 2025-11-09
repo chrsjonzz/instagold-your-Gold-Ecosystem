@@ -1,6 +1,7 @@
 import ValuationForm from "@/components/ValuationForm";
 import { ShieldCheck, GitCompareArrows, FileText } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import FallingCoinsAnimation from "@/components/FallingCoinsAnimation";
 
 export default function SellPage() {
     const features = [
@@ -21,8 +22,9 @@ export default function SellPage() {
         }
     ]
   return (
-    <div className="bg-gradient-to-b from-background via-amber-50 to-background min-h-full">
-      <div className="container mx-auto px-4 py-24 md:py-32">
+    <div className="bg-gradient-to-b from-background via-amber-50 to-background min-h-full relative">
+      <FallingCoinsAnimation />
+      <div className="container mx-auto px-4 py-24 md:py-32 relative z-10">
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-12">
             <h1 className="font-headline text-4xl md:text-5xl font-bold tracking-tight bg-gradient-to-r from-primary via-amber-600 to-primary text-transparent bg-clip-text">

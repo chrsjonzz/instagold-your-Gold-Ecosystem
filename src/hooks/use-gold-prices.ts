@@ -2,12 +2,12 @@
 
 import { useState, useEffect } from 'react';
 
-// --- Primary Public API (No Auth Required) ---
-const PUBLIC_API_URL = "https://www.goldpricez.com/api/rates/currency/inr/metal/xau";
-
 // --- Fallback Prices ---
 const FALLBACK_24K_PRICE_INR = 7150.50;
 const FALLBACK_22K_PRICE_INR = FALLBACK_24K_PRICE_INR * (22 / 24);
+
+// --- Stable Conversion Rate ---
+const USD_TO_INR_RATE = 83.50; 
 
 export type Price = {
   city: string;
@@ -16,35 +16,54 @@ export type Price = {
   trend: 'up' | 'down';
 };
 
-// --- API Response Type Definition ---
-type GoldPricezApiResponse = {
-    "24k_in_inr"?: number;
-    "22k_in_inr"?: number;
+// --- API Response Type Definitions ---
+type GoldApiResponse = {
+  price_gram_24k: number;
+  price_gram_22k: number;
 };
 
-
 /**
- * Fetches from the primary public API (goldpricez.com).
- * This API provides direct INR prices.
+ * Fetches from goldapi.io and converts from USD to INR.
+ * This is now the primary and only API source.
  */
-async function fetchFromPublicApi(): Promise<{ price24k: number; price22k: number } | null> {
+async function fetchFromGoldApi(): Promise<{ price24k: number; price22k: number } | null> {
     try {
-        const response = await fetch(PUBLIC_API_URL, { cache: 'no-store' });
-        if (!response.ok) {
-            throw new Error(`Public API failed with status ${response.status}`);
+        const apiKey = process.env.NEXT_PUBLIC_GOLD_API_KEY;
+        if (!apiKey) {
+            console.warn("⚠️ NEXT_PUBLIC_GOLD_API_KEY is not set. Using fallback prices.");
+            return null;
         }
-        const data: GoldPricezApiResponse = await response.json();
 
-        if (data["24k_in_inr"] && data["22k_in_inr"]) {
-            console.log("✅ Successfully fetched from Primary Public API.");
+        const response = await fetch("https://www.goldapi.io/api/XAU/USD", {
+            method: 'GET',
+            headers: { "x-access-token": apiKey },
+            cache: 'no-store',
+        });
+
+        if (!response.ok) {
+            throw new Error(`GoldAPI.io failed with status ${response.status}`);
+        }
+        
+        const data: GoldApiResponse = await response.json();
+
+        const price_gram_24k_usd = data.price_gram_24k;
+        const price_gram_22k_usd = data.price_gram_22k;
+
+        if (price_gram_24k_usd && price_gram_22k_usd) {
+            console.log("✅ Successfully fetched from GoldAPI.io.");
+            // Convert USD to INR
+            const price24k_inr = price_gram_24k_usd * USD_TO_INR_RATE;
+            const price22k_inr = price_gram_22k_usd * USD_TO_INR_RATE;
             return {
-                price24k: data["24k_in_inr"],
-                price22k: data["22k_in_inr"],
+                price24k: price24k_inr,
+                price22k: price22k_inr,
             };
         }
-        throw new Error("Invalid data structure from Public API.");
+        
+        throw new Error("Invalid data structure from GoldAPI.io.");
+
     } catch (error) {
-        console.warn(`⚠️ Primary Public API failed: ${error instanceof Error ? error.message : String(error)}. Using fallback prices.`);
+        console.error(`❌ GoldAPI.io fetch failed: ${error instanceof Error ? error.message : String(error)}.`);
         return null;
     }
 }
@@ -59,12 +78,10 @@ export function useGoldPrices() {
     const getPrices = async () => {
       setLoading(true);
 
-      // 1. Try public API
-      let livePrices = await fetchFromPublicApi();
+      let livePrices = await fetchFromGoldApi();
 
-      // 2. If public API fails, use hardcoded fallback
       if (!livePrices) {
-        console.error("❌ API source failed. Using hardcoded fallback prices.");
+        console.warn("API source failed. Using hardcoded fallback prices.");
         livePrices = {
             price24k: FALLBACK_24K_PRICE_INR,
             price22k: FALLBACK_22K_PRICE_INR,

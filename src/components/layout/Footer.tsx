@@ -16,7 +16,6 @@ const footerLinks = {
   ],
   'Services': [
     { label: 'Sell Gold', href: '/sell' },
-    { label: 'My Pledges', href: '/pledges' },
     { label: 'Pledge Takeover', href: '/pledge-takeover' },
   ],
   'Learn': [

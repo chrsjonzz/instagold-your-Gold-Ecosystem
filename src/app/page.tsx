@@ -57,7 +57,7 @@ export default function Home() {
   return (
     <div className="flex flex-col">
       {/* Hero Section */}
-      <section className="relative w-full pt-40 pb-12 md:pt-48 md:pb-20 bg-gradient-to-br from-background via-yellow-50 to-background">
+      <section className="relative w-full pt-40 pb-12 md:pt-48 md:pb-20 bg-gradient-to-br from-background via-amber-50 to-background">
         <div className="absolute inset-0 opacity-10">
           {heroImage && <Image
             src={heroImage.imageUrl}
@@ -69,7 +69,7 @@ export default function Home() {
           />}
         </div>
         <div className="container mx-auto px-4 text-center relative">
-          <h1 className="font-headline text-4xl md:text-6xl font-bold tracking-tight leading-tight bg-gradient-to-r from-yellow-800 via-amber-600 to-yellow-800 text-transparent bg-clip-text">
+          <h1 className="font-headline text-4xl md:text-6xl font-bold tracking-tight leading-tight bg-gradient-to-r from-primary via-amber-600 to-primary text-transparent bg-clip-text">
             The Smart Way to Sell Your Gold.
           </h1>
           <p className="mt-4 max-w-2xl mx-auto text-lg md:text-xl text-muted-foreground">
@@ -95,7 +95,7 @@ export default function Home() {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {howItWorks.map((step, index) => (
-              <Card key={index} className="text-center bg-card border-none shadow-md hover:shadow-xl transition-shadow duration-300">
+              <Card key={index} className="text-center bg-card/50 border-none shadow-md hover:shadow-xl transition-shadow duration-300">
                 <CardHeader>
                   <div className="mx-auto bg-primary/10 rounded-full p-4 w-fit mb-4">
                     {step.icon}
@@ -124,7 +124,7 @@ export default function Home() {
                 Explore historical gold price trends to make informed decisions. The chart below shows the price of 24K gold per gram over the last year.
               </p>
             </div>
-            <Card className="shadow-lg border-2 border-primary/20">
+            <Card className="shadow-lg border-2 border-primary/20 bg-card/50">
               <CardContent className="p-2 sm:p-4 md:p-6">
                 <GoldHistoryChart />
               </CardContent>
@@ -139,7 +139,7 @@ export default function Home() {
 
 
       {/* Features Section */}
-      <section className="py-16 md:py-24 bg-gradient-to-b from-yellow-50 to-background">
+      <section className="py-16 md:py-24 bg-gradient-to-b from-amber-50 to-background">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
             <h2 className="font-headline text-3xl md:text-4xl font-bold">A Complete Gold Ecosystem</h2>
@@ -147,7 +147,7 @@ export default function Home() {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {features.map((feature) => (
-              <Card key={feature.title} className="overflow-hidden group transition-all duration-300 hover:shadow-2xl hover:-translate-y-1">
+              <Card key={feature.title} className="overflow-hidden group transition-all duration-300 hover:shadow-2xl hover:-translate-y-1 bg-card/50">
                 <div className="md:flex">
                   <div className="md:w-1/2 relative">
                     {feature.image && (
@@ -181,7 +181,7 @@ export default function Home() {
           </div>
           <div className="mt-8 flex justify-center">
             <div className="w-full md:w-1/2">
-                <Card key={priceIntelligenceFeature.title} className="overflow-hidden group transition-all duration-300 hover:shadow-2xl hover-translate-y-1">
+                <Card key={priceIntelligenceFeature.title} className="overflow-hidden group transition-all duration-300 hover:shadow-2xl hover-translate-y-1 bg-card/50">
                     <div className="md:flex">
                     <div className="md:w-1/2 relative">
                         {priceIntelligenceFeature.image && (

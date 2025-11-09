@@ -5,59 +5,17 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { TrendingUp, TrendingDown, Download, Phone, Loader2 } from 'lucide-react';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-
-type Price = {
-  city: string;
-  rate24k: number;
-  rate22k: number;
-  trend: 'up' | 'down';
-};
+import { useGoldPrices } from '@/hooks/use-gold-prices';
 
 export default function LivePricePage() {
-  const [prices, setPrices] = useState<Price[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchPrices = async () => {
-      try {
-        // Add cache-busting timestamp to ensure fresh data
-        const timestamp = Date.now();
-        const response = await fetch(`/api/gold-rate?t=${timestamp}`, {
-          cache: 'no-store',
-          headers: {
-            'Cache-Control': 'no-cache, no-store, must-revalidate',
-            'Pragma': 'no-cache',
-            'Expires': '0',
-          },
-        });
-        if (!response.ok) {
-          throw new Error('Failed to fetch prices');
-        }
-        const fetchedPrices = await response.json();
-        setPrices(fetchedPrices);
-      } catch (error) {
-        console.error("Failed to fetch city prices:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    
-    // Fetch immediately
-    fetchPrices();
-    
-    // Set up polling every 30 seconds for real-time updates
-    const intervalId = setInterval(fetchPrices, 30000);
-    
-    // Cleanup interval on unmount
-    return () => clearInterval(intervalId);
-  }, []);
+  const { prices, loading } = useGoldPrices();
   
   return (
-    <div className="bg-gradient-to-b from-background via-yellow-50 to-background min-h-full">
+    <div className="bg-gradient-to-b from-background via-amber-50 to-background min-h-full">
       <div className="container mx-auto px-4 py-24 md:py-32">
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-12">
-            <h1 className="font-headline text-4xl md:text-5xl font-bold tracking-tight bg-gradient-to-r from-yellow-800 via-amber-600 to-yellow-800 text-transparent bg-clip-text">
+            <h1 className="font-headline text-4xl md:text-5xl font-bold tracking-tight bg-gradient-to-r from-primary via-amber-600 to-primary text-transparent bg-clip-text">
               Today's Gold Sell Prices
             </h1>
             <p className="mt-4 max-w-2xl mx-auto text-lg text-muted-foreground">
@@ -65,7 +23,7 @@ export default function LivePricePage() {
             </p>
           </div>
 
-          <Card className="shadow-lg border-2 border-primary/20">
+          <Card className="shadow-lg border-2 border-primary/20 bg-card/50">
             <CardHeader>
                 <CardTitle>Live Online Sell Rates (per gram)</CardTitle>
                 <CardDescription>All rates are for selling gold online.</CardDescription>

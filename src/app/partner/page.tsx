@@ -32,7 +32,7 @@ export default function PartnerPage() {
     const benefitsImage = PlaceHolderImages.find(p => p.id === 'partner-benefits');
 
   return (
-    <div className="bg-gradient-to-b from-background via-yellow-50 to-background min-h-full">
+    <div className="bg-gradient-to-b from-background via-amber-50 to-background min-h-full">
       
       {/* Hero Section */}
       <section className="relative w-full pt-40 pb-20 md:pt-48 md:pb-28">
@@ -51,7 +51,7 @@ export default function PartnerPage() {
          <div className="absolute inset-0 bg-gradient-to-t from-background via-background/80 to-transparent" />
 
         <div className="container mx-auto px-4 text-center relative">
-          <h1 className="font-headline text-4xl md:text-6xl font-bold tracking-tight leading-tight bg-gradient-to-r from-yellow-800 via-amber-600 to-yellow-800 text-transparent bg-clip-text">
+          <h1 className="font-headline text-4xl md:text-6xl font-bold tracking-tight leading-tight bg-gradient-to-r from-primary via-amber-600 to-primary text-transparent bg-clip-text">
             Partner With InstaGold
           </h1>
           <p className="mt-4 max-w-3xl mx-auto text-lg md:text-xl text-muted-foreground">
@@ -95,7 +95,7 @@ export default function PartnerPage() {
 
 
       {/* Form Section */}
-      <section className="py-16 md:py-24 bg-gradient-to-b from-yellow-50 to-background">
+      <section className="py-16 md:py-24 bg-gradient-to-b from-amber-50 to-background">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto">
             <div className="text-center mb-12">

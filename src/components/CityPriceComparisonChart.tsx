@@ -22,7 +22,7 @@ type PriceData = {
 const CustomTooltip = ({ active, payload, label }: any) => {
   if (active && payload && payload.length) {
     return (
-      <div className="p-4 bg-background border border-border rounded-lg shadow-lg">
+      <div className="p-4 bg-background/80 backdrop-blur-sm border border-border rounded-lg shadow-lg">
         <p className="label font-bold text-primary">{label}</p>
         <p className="text-sm text-muted-foreground">{`24K Rate: ₹${payload[0].value.toLocaleString('en-IN')}`}</p>
         <p className="text-sm text-muted-foreground">{`22K Rate: ₹${payload[1].value.toLocaleString('en-IN')}`}</p>
@@ -43,7 +43,7 @@ export default function CityPriceComparisonChart() {
 
   if (loading) {
       return (
-          <Card className="shadow-lg border-2 border-primary/20">
+          <Card className="shadow-lg border-2 border-primary/20 bg-card/50">
             <CardHeader>
                 <CardTitle className="font-headline text-3xl md:text-4xl font-bold">City Price Comparison</CardTitle>
                 <CardDescription>Comparing 24K and 22K rates per gram across key cities.</CardDescription>
@@ -58,7 +58,7 @@ export default function CityPriceComparisonChart() {
   }
 
   return (
-    <Card className="shadow-lg border-2 border-primary/20">
+    <Card className="shadow-lg border-2 border-primary/20 bg-card/50">
         <CardHeader>
             <CardTitle className="font-headline text-3xl md:text-4xl font-bold">City Price Comparison</CardTitle>
             <CardDescription>Comparing 24K and 22K rates per gram across key cities.</CardDescription>
@@ -84,7 +84,7 @@ export default function CityPriceComparisonChart() {
                     <Tooltip content={<CustomTooltip />} cursor={{ fill: 'hsl(var(--primary) / 0.1)' }} />
                     <Legend wrapperStyle={{fontSize: "14px"}} />
                     <Bar dataKey="24K Rate" fill="hsl(var(--primary))" radius={[4, 4, 0, 0]} />
-                    <Bar dataKey="22K Rate" fill="hsl(var(--secondary))" radius={[4, 4, 0, 0]} />
+                    <Bar dataKey="22K Rate" fill="hsl(var(--accent) / 0.5)" radius={[4, 4, 0, 0]} />
                 </BarChart>
                 </ResponsiveContainer>
             </div>

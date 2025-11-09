@@ -155,7 +155,7 @@ export default function ValuationForm() {
 
     return (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
-            <Card className="shadow-lg border-2 border-primary/20">
+            <Card className="shadow-lg border-2 border-primary/20 bg-card/50">
                 <form ref={valuationFormRef} className="space-y-6">
                     <CardHeader>
                         <CardTitle className="font-headline text-2xl flex items-center gap-2"><Gem className="text-primary"/> Valuation Details</CardTitle>

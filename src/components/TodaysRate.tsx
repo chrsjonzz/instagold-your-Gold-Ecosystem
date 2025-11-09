@@ -9,13 +9,13 @@ export default function TodaysRate() {
   const price = prices.find(p => p.city === 'Bangalore') || prices[0];
 
   return (
-    <section className="py-16 md:py-24 bg-gradient-to-b from-yellow-50 to-background">
+    <section className="py-16 md:py-24 bg-gradient-to-b from-amber-50 to-background">
         <div className="container mx-auto px-4">
              <div className="text-center mb-12">
                 <h2 className="font-headline text-3xl md:text-4xl font-bold">Today's Live Gold Rate</h2>
                 <p className="mt-2 text-muted-foreground max-w-xl mx-auto">Live market prices for selling your gold in India.</p>
             </div>
-            <Card className="max-w-2xl mx-auto shadow-xl border-2 border-primary/20 bg-gradient-to-br from-card to-background">
+            <Card className="max-w-2xl mx-auto shadow-xl border-2 border-primary/20 bg-card/80 backdrop-blur-sm">
                 <CardHeader>
                     <CardTitle className="font-headline text-2xl md:text-3xl text-primary">
                         {price ? `Gold Price in ${price.city}` : 'Live Gold Price'}
@@ -38,7 +38,7 @@ export default function TodaysRate() {
                                 </p>
                                 <p className="text-sm text-muted-foreground">per gram</p>
                             </div>
-                             <div className="p-4 rounded-lg bg-secondary/50 text-center">
+                             <div className="p-4 rounded-lg bg-secondary/80 text-center">
                                 <p className="font-semibold text-lg text-primary">22K Gold</p>
                                 <p className="font-mono text-3xl font-bold text-foreground mt-1">
                                      ₹{price.rate22k.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}

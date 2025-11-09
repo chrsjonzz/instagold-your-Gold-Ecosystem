@@ -25,11 +25,11 @@ const benefits = [
 function PledgeTakeoverPage() {
   return (
      
-        <div className="bg-gradient-to-b from-background via-yellow-50 to-background min-h-full">
+        <div className="bg-gradient-to-b from-background via-amber-50 to-background min-h-full">
         <div className="container mx-auto px-4 py-24 md:py-32">
             <div className="max-w-6xl mx-auto">
             <div className="text-center mb-16">
-                <h1 className="font-headline text-4xl md:text-5xl font-bold tracking-tight bg-gradient-to-r from-yellow-800 via-amber-600 to-yellow-800 text-transparent bg-clip-text">
+                <h1 className="font-headline text-4xl md:text-5xl font-bold tracking-tight bg-gradient-to-r from-primary via-amber-600 to-primary text-transparent bg-clip-text">
                 Gold Pledge Takeover
                 </h1>
                 <p className="mt-4 max-w-3xl mx-auto text-lg text-muted-foreground">
@@ -55,7 +55,7 @@ function PledgeTakeoverPage() {
 
 
                 {/* Right Column: Form */}
-                 <Card className="shadow-lg border-2 border-primary/20 sticky top-24">
+                 <Card className="shadow-lg border-2 border-primary/20 sticky top-24 bg-card/50">
                     <CardHeader>
                         <CardTitle className="font-headline text-2xl">Start Your Pledge Takeover</CardTitle>
                         <CardDescription>Provide the details below, and our team will get in touch to guide you through the next steps.</CardDescription>

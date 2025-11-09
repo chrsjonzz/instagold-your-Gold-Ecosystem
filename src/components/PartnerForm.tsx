@@ -75,7 +75,7 @@ export default function PartnerForm() {
     }, [formState, toast, form]);
 
     return (
-        <Card className="shadow-lg border-2 border-primary/20">
+        <Card className="shadow-lg border-2 border-primary/20 bg-card/50">
             <form ref={formRef} action={formAction} className="space-y-6">
                 <CardHeader>
                     <CardTitle className="font-headline text-2xl">Partnership Application</CardTitle>

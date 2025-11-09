@@ -55,6 +55,13 @@
   }
   body {
     @apply bg-background text-foreground;
+    background-image: repeating-linear-gradient(
+      45deg,
+      hsl(var(--background)),
+      hsl(var(--background)) 5px,
+      hsl(var(--secondary) / 0.5) 5px,
+      hsl(var(--secondary) / 0.5) 6px
+    );
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }

@@ -19,7 +19,6 @@ const footerLinks = {
     { label: 'Pledge Takeover', href: '/pledge-takeover' },
   ],
   'Learn': [
-    { label: 'About Gold', href: '/about-gold'},
     { label: 'Gold Purity', href: '/purity'},
     { label: 'Blog', href: '/blog' },
     { label: 'FAQ', href: '/faq' },

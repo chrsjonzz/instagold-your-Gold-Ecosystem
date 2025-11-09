@@ -10,7 +10,6 @@ import { Logo } from '../Logo';
 
 const navLinks = [
   { href: '/live-price', label: 'Live Prices' },
-  { href: '/about-gold', label: 'About Gold' },
   { href: '/purity', label: 'Gold Purity' },
   { href: '/sell', label: 'Sell Gold' },
   { href: '/pledge-takeover', label: 'Pledge Takeover' },

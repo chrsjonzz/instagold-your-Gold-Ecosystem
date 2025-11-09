@@ -26,8 +26,8 @@ async function fetchLiveGoldPrice(): Promise<{ price24k: number; price22k: numbe
       headers: {
         "X-API-KEY": apiKey,
       },
-      // Revalidate every hour
-      next: { revalidate: 3600 },
+      // Do not cache the result, always fetch fresh data.
+      cache: 'no-store',
     });
 
     if (!response.ok) {

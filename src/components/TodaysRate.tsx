@@ -13,11 +13,11 @@ export default function TodaysRate() {
         <div className="container mx-auto px-4">
              <div className="text-center mb-12">
                 <h2 className="font-headline text-3xl md:text-4xl font-bold">Today's Live Gold Rate</h2>
-                <p className="mt-2 text-muted-foreground max-w-xl mx-auto">Live market prices for selling your gold in India.</p>
+                <p className="mt-2 text-muted-foreground max-w-xl mx-auto text-sm md:text-base">Live market prices for selling your gold in India.</p>
             </div>
             <Card className="max-w-2xl mx-auto shadow-xl border-2 border-primary/20 bg-card/80 backdrop-blur-sm">
                 <CardHeader>
-                    <CardTitle className="font-headline text-2xl md:text-3xl text-primary">
+                    <CardTitle className="font-headline text-xl md:text-3xl text-primary">
                         {price ? `Gold Price in ${price.city}` : 'Live Gold Price'}
                     </CardTitle>
                     <CardDescription>
@@ -30,17 +30,17 @@ export default function TodaysRate() {
                             <Loader2 className="h-8 w-8 text-primary animate-spin" />
                         </div>
                     ) : price ? (
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
                             <div className="p-4 rounded-lg bg-primary/10 text-center">
-                                <p className="font-semibold text-lg text-primary">24K Gold</p>
-                                <p className="font-mono text-3xl font-bold text-foreground mt-1">
+                                <p className="font-semibold text-base md:text-lg text-primary">24K Gold</p>
+                                <p className="font-mono text-2xl md:text-3xl font-bold text-foreground mt-1">
                                     ₹{price.rate24k.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                                 </p>
                                 <p className="text-sm text-muted-foreground">per gram</p>
                             </div>
                              <div className="p-4 rounded-lg bg-secondary/80 text-center">
-                                <p className="font-semibold text-lg text-primary">22K Gold</p>
-                                <p className="font-mono text-3xl font-bold text-foreground mt-1">
+                                <p className="font-semibold text-base md:text-lg text-primary">22K Gold</p>
+                                <p className="font-mono text-2xl md:text-3xl font-bold text-foreground mt-1">
                                      ₹{price.rate22k.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                                 </p>
                                 <p className="text-sm text-muted-foreground">per gram</p>

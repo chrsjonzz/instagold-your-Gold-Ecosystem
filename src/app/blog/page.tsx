@@ -43,13 +43,13 @@ const blogPosts = [
 export default function BlogPage() {
   return (
     <div className="bg-gradient-to-b from-background via-amber-50 to-background min-h-full">
-      <div className="container mx-auto px-4 py-24 md:py-32">
+      <div className="container mx-auto px-4 py-16 md:py-32">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12 md:mb-16">
-            <h1 className="font-headline text-4xl md:text-5xl font-bold tracking-tight bg-gradient-to-r from-primary via-amber-600 to-primary text-transparent bg-clip-text">
+            <h1 className="font-headline text-4xl sm:text-5xl font-bold tracking-tight bg-gradient-to-r from-primary via-amber-600 to-primary text-transparent bg-clip-text">
               InstaGold Insights
             </h1>
-            <p className="mt-4 max-w-2xl mx-auto text-lg text-muted-foreground">
+            <p className="mt-4 max-w-2xl mx-auto text-base md:text-lg text-muted-foreground">
               Your source for news, tips, and stories from the world of gold.
             </p>
           </div>
@@ -71,10 +71,10 @@ export default function BlogPage() {
                     </div>
                   )}
                   <CardHeader>
-                    <CardTitle className="font-headline text-2xl text-primary leading-tight">{post.title}</CardTitle>
+                    <CardTitle className="font-headline text-xl md:text-2xl text-primary leading-tight">{post.title}</CardTitle>
                   </CardHeader>
                   <CardContent className="flex-grow">
-                    <p className="text-muted-foreground">{post.excerpt}</p>
+                    <p className="text-muted-foreground text-sm md:text-base">{post.excerpt}</p>
                   </CardContent>
                   <CardFooter>
                     <Button asChild variant="link" className="p-0 h-auto font-bold">

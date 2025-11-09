@@ -26,13 +26,13 @@ function PledgeTakeoverPage() {
   return (
      
         <div className="bg-gradient-to-b from-background via-amber-50 to-background min-h-full">
-        <div className="container mx-auto px-4 py-24 md:py-32">
+        <div className="container mx-auto px-4 py-16 md:py-32">
             <div className="max-w-6xl mx-auto">
             <div className="text-center mb-16">
-                <h1 className="font-headline text-4xl md:text-5xl font-bold tracking-tight bg-gradient-to-r from-primary via-amber-600 to-primary text-transparent bg-clip-text">
+                <h1 className="font-headline text-4xl sm:text-5xl font-bold tracking-tight bg-gradient-to-r from-primary via-amber-600 to-primary text-transparent bg-clip-text">
                 Gold Pledge Takeover
                 </h1>
-                <p className="mt-4 max-w-3xl mx-auto text-lg text-muted-foreground">
+                <p className="mt-4 max-w-3xl mx-auto text-base md:text-lg text-muted-foreground">
                 Release your pledged gold from local pawnshops and sell it at the best market price with InstaGold.
                 </p>
             </div>
@@ -46,8 +46,8 @@ function PledgeTakeoverPage() {
                                 {feature.icon}
                             </div>
                             <div>
-                                <h3 className="font-headline text-xl font-semibold mb-2">{feature.title}</h3>
-                                <p className="text-muted-foreground">{feature.description}</p>
+                                <h3 className="font-headline text-lg md:text-xl font-semibold mb-2">{feature.title}</h3>
+                                <p className="text-muted-foreground text-sm md:text-base">{feature.description}</p>
                             </div>
                         </div>
                     ))}
@@ -57,7 +57,7 @@ function PledgeTakeoverPage() {
                 {/* Right Column: Form */}
                  <Card className="shadow-lg border-2 border-primary/20 sticky top-24 bg-card/50">
                     <CardHeader>
-                        <CardTitle className="font-headline text-2xl">Start Your Pledge Takeover</CardTitle>
+                        <CardTitle className="font-headline text-xl md:text-2xl">Start Your Pledge Takeover</CardTitle>
                         <CardDescription>Provide the details below, and our team will get in touch to guide you through the next steps.</CardDescription>
                     </CardHeader>
                     <PledgeTakeoverForm />

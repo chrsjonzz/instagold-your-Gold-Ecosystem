@@ -45,11 +45,11 @@ export default function CityPriceComparisonChart() {
       return (
           <Card className="shadow-lg border-2 border-primary/20 bg-card/50">
             <CardHeader>
-                <CardTitle className="font-headline text-3xl md:text-4xl font-bold">City Price Comparison</CardTitle>
-                <CardDescription>Comparing 24K and 22K rates per gram across key cities.</CardDescription>
+                <CardTitle className="font-headline text-2xl md:text-3xl">City Price Comparison</CardTitle>
+                <CardDescription className="text-sm md:text-base">Comparing 24K and 22K rates per gram across key cities.</CardDescription>
             </CardHeader>
             <CardContent>
-                <div className="w-full h-[300px] md:h-[400px] flex items-center justify-center">
+                <div className="w-full h-[250px] md:h-[400px] flex items-center justify-center">
                     <p>Loading chart data...</p>
                 </div>
             </CardContent>
@@ -60,29 +60,29 @@ export default function CityPriceComparisonChart() {
   return (
     <Card className="shadow-lg border-2 border-primary/20 bg-card/50">
         <CardHeader>
-            <CardTitle className="font-headline text-3xl md:text-4xl font-bold">City Price Comparison</CardTitle>
-            <CardDescription>Comparing 24K and 22K rates per gram across key cities.</CardDescription>
+            <CardTitle className="font-headline text-2xl md:text-3xl">City Price Comparison</CardTitle>
+            <CardDescription className="text-sm md:text-base">Comparing 24K and 22K rates per gram across key cities.</CardDescription>
         </CardHeader>
         <CardContent className="p-2 sm:p-4 md:p-6">
-            <div className="w-full h-[300px] md:h-[400px]">
+            <div className="w-full h-[250px] md:h-[400px]">
                 <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={chartData} margin={{ top: 5, right: 20, left: 0, bottom: 5 }}>
+                <BarChart data={chartData} margin={{ top: 5, right: 20, left: -10, bottom: 5 }}>
                     <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border) / 0.5)" />
                     <XAxis
                     dataKey="city"
-                    tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 12 }}
+                    tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 10 }}
                     tickLine={{ stroke: 'hsl(var(--muted-foreground))' }}
                     axisLine={{ stroke: 'hsl(var(--border))' }}
                     />
                     <YAxis
                     tickFormatter={(value) => `₹${value}`}
-                    tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 12 }}
+                    tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 10 }}
                     tickLine={{ stroke: 'hsl(var(--muted-foreground))' }}
                     axisLine={{ stroke: 'hsl(var(--border))' }}
                     domain={['dataMin - 200', 'dataMax + 100']}
                     />
                     <Tooltip content={<CustomTooltip />} cursor={{ fill: 'hsl(var(--primary) / 0.1)' }} />
-                    <Legend wrapperStyle={{fontSize: "14px"}} />
+                    <Legend wrapperStyle={{fontSize: "12px"}} />
                     <Bar dataKey="24K Rate" fill="hsl(var(--primary))" radius={[4, 4, 0, 0]} />
                     <Bar dataKey="22K Rate" fill="hsl(var(--accent) / 0.5)" radius={[4, 4, 0, 0]} />
                 </BarChart>

@@ -24,13 +24,13 @@ export default function SellPage() {
   return (
     <div className="bg-gradient-to-b from-background via-amber-50 to-background min-h-full relative">
       <FallingCoinsAnimation />
-      <div className="container mx-auto px-4 py-24 md:py-32 relative z-10">
+      <div className="container mx-auto px-4 py-16 md:py-32 relative z-10">
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-12">
-            <h1 className="font-headline text-4xl md:text-5xl font-bold tracking-tight bg-gradient-to-r from-primary via-amber-600 to-primary text-transparent bg-clip-text">
+            <h1 className="font-headline text-4xl sm:text-5xl font-bold tracking-tight bg-gradient-to-r from-primary via-amber-600 to-primary text-transparent bg-clip-text">
               Instant Gold Sell &amp; Online Valuation
             </h1>
-            <p className="mt-4 max-w-2xl mx-auto text-lg text-muted-foreground">
+            <p className="mt-4 max-w-2xl mx-auto text-base md:text-lg text-muted-foreground">
               Enter your gold&apos;s details to receive an instant online valuation and compare the best offers on the market.
             </p>
           </div>
@@ -40,7 +40,7 @@ export default function SellPage() {
           <div className="mt-16 md:mt-24">
             <div className="text-center mb-12">
                 <h2 className="font-headline text-3xl md:text-4xl font-bold">Secure and Advantageous</h2>
-                <p className="mt-2 text-muted-foreground max-w-xl mx-auto">Sell your gold with features designed to maximize your returns.</p>
+                <p className="mt-2 text-muted-foreground max-w-xl mx-auto text-sm md:text-base">Sell your gold with features designed to maximize your returns.</p>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                 {features.map((feature) => (
@@ -49,7 +49,7 @@ export default function SellPage() {
                             <div className="mx-auto bg-primary/10 rounded-full p-3 w-fit mb-3">
                                 {feature.icon}
                             </div>
-                            <CardTitle className="font-headline text-xl">{feature.title}</CardTitle>
+                            <CardTitle className="font-headline text-lg md:text-xl">{feature.title}</CardTitle>
                         </CardHeader>
                         <CardContent>
                             <p className="text-muted-foreground text-sm">{feature.description}</p>

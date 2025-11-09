@@ -86,11 +86,11 @@ export default function GoldHistoryChart() {
           </SelectContent>
         </Select>
       </div>
-      <div className="w-full h-[300px] md:h-[400px]">
+      <div className="w-full h-[250px] md:h-[400px]">
         <ResponsiveContainer width="100%" height="100%">
           <AreaChart
             data={data}
-            margin={{ top: 5, right: 20, left: 0, bottom: 5 }}
+            margin={{ top: 5, right: 20, left: -10, bottom: 5 }}
           >
             <defs>
               <linearGradient id="colorPrice" x1="0" y1="0" x2="0" y2="1">
@@ -101,13 +101,13 @@ export default function GoldHistoryChart() {
             <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border) / 0.5)" />
             <XAxis 
               dataKey="month" 
-              tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 12 }} 
+              tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 10 }} 
               tickLine={{ stroke: 'hsl(var(--muted-foreground))' }}
               axisLine={{ stroke: 'hsl(var(--border))' }}
             />
             <YAxis 
               tickFormatter={(value) => `₹${value}`}
-              tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 12 }} 
+              tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 10 }} 
               tickLine={{ stroke: 'hsl(var(--muted-foreground))' }}
               axisLine={{ stroke: 'hsl(var(--border))' }}
               domain={['dataMin - 100', 'dataMax + 100']}

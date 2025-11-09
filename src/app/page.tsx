@@ -2,7 +2,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { ArrowRight, BarChart, Gem, University, Search, ShieldCheck, Sparkles, Workflow } from 'lucide-react';
+import { ArrowRight, BarChart, Gem, University, Search, Sparkles, Workflow } from 'lucide-react';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import GoldHistoryChart from '@/components/GoldHistoryChart';
 import CityPriceComparisonChart from '@/components/CityPriceComparisonChart';
@@ -57,7 +57,7 @@ export default function Home() {
   return (
     <div className="flex flex-col">
       {/* Hero Section */}
-      <section className="relative w-full pt-40 pb-12 md:pt-48 md:pb-20 bg-gradient-to-br from-background via-card to-background">
+      <section className="relative w-full pt-32 pb-12 md:pt-48 md:pb-20 bg-gradient-to-br from-background via-card to-background">
         <div className="absolute inset-0 opacity-10">
           {heroImage && <Image
             src={heroImage.imageUrl}
@@ -69,14 +69,14 @@ export default function Home() {
           />}
         </div>
         <div className="container mx-auto px-4 text-center relative">
-          <h1 className="font-headline text-4xl md:text-6xl font-bold tracking-tight leading-tight bg-gradient-to-r from-primary via-amber-400 to-primary text-transparent bg-clip-text text-glow">
+          <h1 className="font-headline text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight leading-tight bg-gradient-to-r from-primary via-amber-400 to-primary text-transparent bg-clip-text text-glow">
             The Smart Way to Sell Your Gold.
           </h1>
-          <p className="mt-4 max-w-2xl mx-auto text-lg md:text-xl text-muted-foreground">
+          <p className="mt-4 max-w-2xl mx-auto text-base md:text-xl text-muted-foreground">
             Unify India’s gold ecosystem — Sell, Compare, and Track — on one trusted, intelligent platform.
           </p>
           <div className="mt-8 flex flex-col sm:flex-row justify-center items-center gap-4">
-            <Button asChild size="lg" className="shadow-lg shadow-primary/20 hover:shadow-primary/40 transition-shadow">
+            <Button asChild size="lg" className="shadow-lg shadow-primary/20 hover:shadow-primary/40 transition-shadow w-full sm:w-auto">
               <Link href="/sell">Sell Instantly <ArrowRight className="ml-2" /></Link>
             </Button>
             <Button asChild size="lg" variant="outline" className="w-full sm:w-auto">
@@ -91,7 +91,7 @@ export default function Home() {
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
             <h2 className="font-headline text-3xl md:text-4xl font-bold">Simple, Fast, and Secure</h2>
-            <p className="mt-2 text-muted-foreground max-w-xl mx-auto">Three easy steps to unlock the full potential of your gold assets.</p>
+            <p className="mt-2 text-muted-foreground max-w-xl mx-auto text-sm md:text-base">Three easy steps to unlock the full potential of your gold assets.</p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {howItWorks.map((step, index) => (
@@ -100,10 +100,10 @@ export default function Home() {
                   <div className="mx-auto bg-primary/10 rounded-full p-4 w-fit mb-4">
                     {step.icon}
                   </div>
-                  <CardTitle className="font-headline text-2xl">{step.title}</CardTitle>
+                  <CardTitle className="font-headline text-xl md:text-2xl">{step.title}</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-muted-foreground">{step.description}</p>
+                  <p className="text-muted-foreground text-sm md:text-base">{step.description}</p>
                 </CardContent>
               </Card>
             ))}
@@ -120,7 +120,7 @@ export default function Home() {
           <div>
             <div className="text-center mb-12">
               <h2 className="font-headline text-3xl md:text-4xl font-bold">Historical Gold Prices</h2>
-              <p className="mt-2 text-muted-foreground max-w-xl mx-auto">
+              <p className="mt-2 text-muted-foreground max-w-xl mx-auto text-sm md:text-base">
                 Explore historical gold price trends to make informed decisions. The chart below shows the price of 24K gold per gram over the last year.
               </p>
             </div>
@@ -143,7 +143,7 @@ export default function Home() {
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
             <h2 className="font-headline text-3xl md:text-4xl font-bold">A Complete Gold Ecosystem</h2>
-            <p className="mt-2 text-muted-foreground max-w-xl mx-auto">Explore our full suite of services designed for every gold owner.</p>
+            <p className="mt-2 text-muted-foreground max-w-xl mx-auto text-sm md:text-base">Explore our full suite of services designed for every gold owner.</p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {features.map((feature) => (
@@ -165,11 +165,11 @@ export default function Home() {
                     <CardHeader>
                       <div className="flex items-center gap-4">
                          {feature.icon}
-                        <CardTitle className="font-headline text-2xl">{feature.title}</CardTitle>
+                        <CardTitle className="font-headline text-xl md:text-2xl">{feature.title}</CardTitle>
                       </div>
                     </CardHeader>
                     <CardContent>
-                      <p className="text-muted-foreground mb-4">{feature.description}</p>
+                      <p className="text-muted-foreground mb-4 text-sm md:text-base">{feature.description}</p>
                       <Button asChild variant="link" className="p-0 h-auto">
                         <Link href={feature.link}>Learn More <ArrowRight className="ml-2 w-4 h-4" /></Link>
                       </Button>
@@ -199,11 +199,11 @@ export default function Home() {
                         <CardHeader>
                         <div className="flex items-center gap-4">
                             {priceIntelligenceFeature.icon}
-                            <CardTitle className="font-headline text-2xl">{priceIntelligenceFeature.title}</CardTitle>
+                            <CardTitle className="font-headline text-xl md:text-2xl">{priceIntelligenceFeature.title}</CardTitle>
                         </div>
                         </CardHeader>
                         <CardContent>
-                        <p className="text-muted-foreground mb-4">{priceIntelligenceFeature.description}</p>
+                        <p className="text-muted-foreground mb-4 text-sm md:text-base">{priceIntelligenceFeature.description}</p>
                         <Button asChild variant="link" className="p-0 h-auto">
                             <Link href={priceIntelligenceFeature.link}>Learn More <ArrowRight className="ml-2 w-4 h-4" /></Link>
                         </Button>
@@ -221,7 +221,7 @@ export default function Home() {
         <div className="container mx-auto px-4">
           <div className="bg-gradient-to-r from-yellow-600 to-amber-500 rounded-lg shadow-xl p-8 md:p-12 text-center text-white">
             <h2 className="font-headline text-3xl md:text-4xl font-bold">Ready to Get Started?</h2>
-            <p className="mt-4 max-w-2xl mx-auto text-lg text-yellow-100">
+            <p className="mt-4 max-w-2xl mx-auto text-base md:text-lg text-yellow-100">
               Join thousands of satisfied customers and take control of your gold assets today.
             </p>
             <div className="mt-8">

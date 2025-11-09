@@ -18,7 +18,6 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -158,7 +157,7 @@ export default function ValuationForm() {
             <Card className="shadow-lg border-2 border-primary/20 bg-card/50">
                 <form ref={valuationFormRef} className="space-y-6">
                     <CardHeader>
-                        <CardTitle className="font-headline text-2xl flex items-center gap-2"><Gem className="text-primary"/> Valuation Details</CardTitle>
+                        <CardTitle className="font-headline text-xl md:text-2xl flex items-center gap-2"><Gem className="text-primary"/> Valuation Details</CardTitle>
                         <CardDescription>All fields are required for an accurate estimation.</CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-6">
@@ -240,7 +239,7 @@ export default function ValuationForm() {
 
             <Card className="sticky top-24 shadow-lg bg-gradient-to-br from-yellow-600 to-amber-500 text-white">
                 <CardHeader>
-                    <CardTitle className="font-headline text-2xl flex items-center justify-center gap-2 text-center w-full">
+                    <CardTitle className="font-headline text-xl md:text-2xl flex items-center justify-center gap-2 text-center w-full">
                         <Sparkles /> Estimated Value
                     </CardTitle>
                     <CardDescription className="text-yellow-100 text-center">
@@ -252,7 +251,7 @@ export default function ValuationForm() {
                          <div className="w-full">
                              <div className="p-4 rounded-lg bg-black/10">
                                 <p className="text-sm text-yellow-200">Estimated Market Value</p>
-                                <p className="text-5xl font-bold font-headline tracking-tight my-2">
+                                <p className="text-4xl md:text-5xl font-bold font-headline tracking-tight my-2">
                                     INR {currentValuation.estimatedValue.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                                 </p>
                             </div>

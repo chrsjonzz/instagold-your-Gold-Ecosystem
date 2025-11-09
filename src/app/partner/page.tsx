@@ -35,7 +35,7 @@ export default function PartnerPage() {
     <div className="bg-gradient-to-b from-background via-amber-50 to-background min-h-full">
       
       {/* Hero Section */}
-      <section className="relative w-full pt-40 pb-20 md:pt-48 md:pb-28">
+      <section className="relative w-full pt-32 pb-20 md:pt-48 md:pb-28">
          {heroImage && (
             <div className="absolute inset-0 opacity-15">
                 <Image
@@ -51,10 +51,10 @@ export default function PartnerPage() {
          <div className="absolute inset-0 bg-gradient-to-t from-background via-background/80 to-transparent" />
 
         <div className="container mx-auto px-4 text-center relative">
-          <h1 className="font-headline text-4xl md:text-6xl font-bold tracking-tight leading-tight bg-gradient-to-r from-primary via-amber-600 to-primary text-transparent bg-clip-text">
+          <h1 className="font-headline text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight leading-tight bg-gradient-to-r from-primary via-amber-600 to-primary text-transparent bg-clip-text">
             Partner With InstaGold
           </h1>
-          <p className="mt-4 max-w-3xl mx-auto text-lg md:text-xl text-muted-foreground">
+          <p className="mt-4 max-w-3xl mx-auto text-base md:text-xl text-muted-foreground">
             Join our trusted network of jewelers and refiners to help unify India's gold ecosystem and grow your business.
           </p>
         </div>
@@ -72,8 +72,8 @@ export default function PartnerPage() {
                                 {benefit.icon}
                             </div>
                             <div>
-                                <h3 className="text-xl font-semibold mb-1">{benefit.title}</h3>
-                                <p className="text-muted-foreground">{benefit.description}</p>
+                                <h3 className="text-lg md:text-xl font-semibold mb-1">{benefit.title}</h3>
+                                <p className="text-muted-foreground text-sm md:text-base">{benefit.description}</p>
                             </div>
                         </div>
                     ))}
@@ -100,7 +100,7 @@ export default function PartnerPage() {
           <div className="max-w-3xl mx-auto">
             <div className="text-center mb-12">
               <h2 className="font-headline text-3xl md:text-4xl font-bold">Become a Partner Today</h2>
-              <p className="mt-2 text-muted-foreground max-w-xl mx-auto">Fill out the form below to start your journey with InstaGold.</p>
+              <p className="mt-2 text-muted-foreground max-w-xl mx-auto text-sm md:text-base">Fill out the form below to start your journey with InstaGold.</p>
             </div>
             <PartnerForm />
           </div>

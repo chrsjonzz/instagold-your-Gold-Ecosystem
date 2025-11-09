@@ -3,10 +3,9 @@
 import { z } from 'zod';
 import { goldValuation } from '@/ai/flows/gold-valuation';
 import { ValuationFormSchema, type ValuationFormState, SupportFormSchema, type SupportFormState, ProceedToSellSchema, PartnerFormSchema, type PartnerFormState, PledgeTakeoverFormSchema, type PledgeTakeoverFormState } from '@/lib/types';
-// Note: getBangaloreGoldPrice is no longer available server-side.
-// The valuation flow might need to be adjusted if it depends on a live price.
-// For now, we will use a fallback price for server-side valuation.
-const FALLBACK_24K_PRICE = 7150.5;
+
+// Updated to match the new static benchmark price for Bangalore.
+const FALLBACK_24K_PRICE = 12202;
 
 
 const GoldValuationActionSchema = ValuationFormSchema.extend({
@@ -36,8 +35,6 @@ export async function getGoldValuation(
     const { weight, karat, phone } = validatedFields.data;
 
     try {
-        // Since fetching is client-side, we use a fallback for the server-side AI valuation.
-        // A more advanced implementation might involve passing the client-fetched price to the action.
         const currentMarketPrice = FALLBACK_24K_PRICE;
 
         const result = await goldValuation({

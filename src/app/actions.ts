@@ -2,7 +2,7 @@
 
 import { z } from 'zod';
 import { goldValuation } from '@/ai/flows/gold-valuation';
-import { ValuationFormSchema, type ValuationFormState, SupportFormSchema, type SupportFormState, ProceedToSellSchema, PartnerFormSchema, type PartnerFormState } from '@/lib/types';
+import { ValuationFormSchema, type ValuationFormState, SupportFormSchema, type SupportFormState, ProceedToSellSchema, PartnerFormSchema, type PartnerFormState, PledgeTakeoverFormSchema, type PledgeTakeoverFormState } from '@/lib/types';
 // Note: getBangaloreGoldPrice is no longer available server-side.
 // The valuation flow might need to be adjusted if it depends on a live price.
 // For now, we will use a fallback price for server-side valuation.
@@ -164,6 +164,59 @@ export async function submitPartnerRequest(
 
     return {
         message: "Thank you for your interest! Our partnership team will review your application and be in touch soon.",
+        success: true,
+    };
+}
+
+
+export async function submitPledgeTakeoverRequest(
+    prevState: PledgeTakeoverFormState,
+    formData: FormData
+): Promise<PledgeTakeoverFormState> {
+
+    // A check to reset the form state when the dialog is closed.
+    if (!formData.get('name')) {
+        return { message: '' };
+    }
+
+    const validatedFields = PledgeTakeoverFormSchema.safeParse({
+        name: formData.get('name'),
+        phone: formData.get('phone'),
+        pawnshopName: formData.get('pawnshopName'),
+        loanAmount: formData.get('loanAmount'),
+        goldDetails: formData.get('goldDetails'),
+    });
+
+    if (!validatedFields.success) {
+        // This won't be shown to the user with the current form setup,
+        // as client-side validation is used. But it's good practice.
+        return {
+            message: "Invalid form data.",
+            error: "Please check your inputs."
+        };
+    }
+
+    const { name, phone, pawnshopName, loanAmount, goldDetails } = validatedFields.data;
+
+    // In a real application, this would trigger a WhatsApp message or SMS.
+    // For now, we'll just log it to the console to simulate the notification.
+    const notificationMessage = `
+    New Pledge Takeover Request:
+    -------------------------------
+    Customer Name: ${name}
+    Phone: ${phone}
+    Pawnshop: ${pawnshopName}
+    Loan Amount: ${loanAmount}
+    Gold Details: ${goldDetails || 'N/A'}
+    -------------------------------
+    `;
+    console.log("--- WHATSAPP NOTIFICATION SIMULATION ---");
+    console.log(notificationMessage);
+    console.log("----------------------------------------");
+
+
+    return {
+        message: "Thank you for your request! Our pledge takeover specialists will contact you shortly to discuss the next steps.",
         success: true,
     };
 }

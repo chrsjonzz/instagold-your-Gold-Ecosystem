@@ -46,3 +46,17 @@ export type PartnerFormState = {
     error?: string;
     success?: boolean;
 };
+
+export const PledgeTakeoverFormSchema = z.object({
+  name: z.string().min(2, { message: "Please enter your name." }),
+  phone: z.string().min(10, { message: "Please enter a valid 10-digit phone number." }),
+  pawnshopName: z.string().min(3, { message: "Please enter the pawnshop name and address." }),
+  loanAmount: z.string().min(2, { message: "Please enter the approximate loan amount." }),
+  goldDetails: z.string().optional(),
+});
+
+export type PledgeTakeoverFormState = {
+    message: string;
+    error?: string;
+    success?: boolean;
+};

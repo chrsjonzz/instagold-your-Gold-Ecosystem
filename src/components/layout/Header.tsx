@@ -28,51 +28,53 @@ export default function Header() {
             <span className="sr-only">InstaGold Home</span>
           </Link>
 
-          {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center gap-6">
-            {navLinks.map((link) => (
-              <Link key={link.href} href={link.href} className="text-sm font-medium text-foreground/80 hover:text-primary transition-colors">
-                {link.label}
-              </Link>
-            ))}
-          </nav>
+          <div className="flex items-center gap-4 ml-auto">
+            {/* Desktop Navigation */}
+            <nav className="hidden md:flex items-center gap-6">
+              {navLinks.map((link) => (
+                <Link key={link.href} href={link.href} className="text-sm font-medium text-foreground/80 hover:text-primary transition-colors">
+                  {link.label}
+                </Link>
+              ))}
+            </nav>
 
-          {/* Mobile Navigation Trigger */}
-          <div className="md:hidden">
-             <Sheet open={isMenuOpen} onOpenChange={setIsMenuOpen}>
-              <SheetTrigger asChild>
-                <Button variant="ghost" size="icon">
-                  <Menu className="h-6 w-6" />
-                  <span className="sr-only">Open menu</span>
-                </Button>
-              </SheetTrigger>
-              <SheetContent side="left" className="w-full max-w-xs bg-background">
-                <div className="flex flex-col h-full p-4">
-                  <div className="flex items-center justify-between mb-8">
-                     <Link href="/" onClick={() => setIsMenuOpen(false)}>
-                        <Logo />
-                        <span className="sr-only">InstaGold Home</span>
-                      </Link>
-                      <Button variant="ghost" size="icon" onClick={() => setIsMenuOpen(false)}>
-                        <X className="h-6 w-6" />
-                        <span className="sr-only">Close menu</span>
-                      </Button>
+            {/* Mobile Navigation Trigger */}
+            <div className="md:hidden">
+              <Sheet open={isMenuOpen} onOpenChange={setIsMenuOpen}>
+                <SheetTrigger asChild>
+                  <Button variant="ghost" size="icon">
+                    <Menu className="h-6 w-6" />
+                    <span className="sr-only">Open menu</span>
+                  </Button>
+                </SheetTrigger>
+                <SheetContent side="left" className="w-full max-w-xs bg-background">
+                  <div className="flex flex-col h-full p-4">
+                    <div className="flex items-center justify-between mb-8">
+                      <Link href="/" onClick={() => setIsMenuOpen(false)}>
+                          <Logo />
+                          <span className="sr-only">InstaGold Home</span>
+                        </Link>
+                        <Button variant="ghost" size="icon" onClick={() => setIsMenuOpen(false)}>
+                          <X className="h-6 w-6" />
+                          <span className="sr-only">Close menu</span>
+                        </Button>
+                    </div>
+                    <nav className="flex flex-col gap-6">
+                      {navLinks.map((link) => (
+                        <Link
+                          key={link.href}
+                          href={link.href}
+                          onClick={() => setIsMenuOpen(false)}
+                          className="text-lg font-medium text-foreground hover:text-primary transition-colors"
+                        >
+                          {link.label}
+                        </Link>
+                      ))}
+                    </nav>
                   </div>
-                  <nav className="flex flex-col gap-6">
-                    {navLinks.map((link) => (
-                      <Link
-                        key={link.href}
-                        href={link.href}
-                        onClick={() => setIsMenuOpen(false)}
-                        className="text-lg font-medium text-foreground hover:text-primary transition-colors"
-                      >
-                        {link.label}
-                      </Link>
-                    ))}
-                  </nav>
-                </div>
-              </SheetContent>
-            </Sheet>
+                </SheetContent>
+              </Sheet>
+            </div>
           </div>
         </div>
       </div>

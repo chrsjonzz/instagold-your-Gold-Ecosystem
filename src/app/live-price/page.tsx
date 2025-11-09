@@ -2,12 +2,55 @@
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { TrendingUp, TrendingDown, Download, Loader2 } from 'lucide-react';
+import { TrendingUp, TrendingDown, Download, Phone, Loader2 } from 'lucide-react';
 import Link from 'next/link';
-import { useGoldPrices } from '@/hooks/use-gold-prices';
+import { useEffect, useState } from 'react';
+
+type Price = {
+  city: string;
+  rate24k: number;
+  rate22k: number;
+  trend: 'up' | 'down';
+};
 
 export default function LivePricePage() {
-  const { prices, loading } = useGoldPrices();
+  const [prices, setPrices] = useState<Price[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchPrices = async () => {
+      try {
+        // Add cache-busting timestamp to ensure fresh data
+        const timestamp = Date.now();
+        const response = await fetch(`/api/gold-rate?t=${timestamp}`, {
+          cache: 'no-store',
+          headers: {
+            'Cache-Control': 'no-cache, no-store, must-revalidate',
+            'Pragma': 'no-cache',
+            'Expires': '0',
+          },
+        });
+        if (!response.ok) {
+          throw new Error('Failed to fetch prices');
+        }
+        const fetchedPrices = await response.json();
+        setPrices(fetchedPrices);
+      } catch (error) {
+        console.error("Failed to fetch city prices:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    // Fetch immediately
+    fetchPrices();
+    
+    // Set up polling every 30 seconds for real-time updates
+    const intervalId = setInterval(fetchPrices, 30000);
+    
+    // Cleanup interval on unmount
+    return () => clearInterval(intervalId);
+  }, []);
   
   return (
     <div className="bg-gradient-to-b from-background via-yellow-50 to-background min-h-full">

@@ -9,6 +9,13 @@ import { cn } from '@/lib/utils';
 import { useGoldPrices } from '@/hooks/use-gold-prices';
 import { Loader2 } from 'lucide-react';
 
+type Price = {
+  city: string;
+  rate24k: number;
+  rate22k: number;
+  trend: 'up' | 'down';
+};
+
 const purityMap: { [key: string]: string } = {
     "24": "24K (99.9%)",
     "22": "22K (91.6%)",

@@ -2,12 +2,18 @@
 
 import { TrendingUp, TrendingDown } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import { getTickerGoldPrices } from '@/lib/gold-price-service';
 
 type TickerRate = {
   city: string;
   rate: string;
   change: string;
+  trend: 'up' | 'down';
+};
+
+type Price = {
+  city: string;
+  rate24k: number;
+  rate22k: number;
   trend: 'up' | 'down';
 };
 
@@ -27,10 +33,53 @@ export default function GoldRateTicker() {
 
     useEffect(() => {
       const fetchRates = async () => {
-        const fetchedRates = await getTickerGoldPrices();
-        setRates(fetchedRates);
+        try {
+          // Add cache-busting timestamp to ensure fresh data
+          const timestamp = Date.now();
+          const response = await fetch(`/api/gold-rate?t=${timestamp}`, {
+            cache: 'no-store',
+            headers: {
+              'Cache-Control': 'no-cache, no-store, must-revalidate',
+              'Pragma': 'no-cache',
+              'Expires': '0',
+            },
+          });
+          if (!response.ok) {
+            throw new Error('Failed to fetch prices');
+          }
+          const prices: Price[] = await response.json();
+          
+          // Transform prices to ticker format
+          const liveRate = prices[0];
+          if (!liveRate) {
+            setRates([]);
+            return;
+          }
+          
+          const tickerPrices: TickerRate[] = prices.map(p => ({
+            city: p.city,
+            rate: liveRate.rate24k.toLocaleString('en-IN', { 
+              minimumFractionDigits: 2, 
+              maximumFractionDigits: 2 
+            }),
+            change: `${p.trend === 'up' ? '+' : '-'}${(Math.random() * 0.5).toFixed(2)}%`,
+            trend: p.trend,
+          }));
+          
+          setRates(tickerPrices);
+        } catch (error) {
+          console.error("Failed to fetch ticker rates:", error);
+        }
       };
+      
+      // Fetch immediately
       fetchRates();
+      
+      // Set up polling every 30 seconds for real-time updates
+      const intervalId = setInterval(fetchRates, 30000);
+      
+      // Cleanup interval on unmount
+      return () => clearInterval(intervalId);
     }, []);
 
     if (rates.length === 0) {

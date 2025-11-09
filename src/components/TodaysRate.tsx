@@ -3,7 +3,6 @@
 import { useEffect, useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Loader2 } from 'lucide-react';
-import { getCityGoldPrices } from '@/lib/gold-price-service';
 
 type Price = {
   city: string;
@@ -19,7 +18,20 @@ export default function TodaysRate() {
   useEffect(() => {
     const fetchPrice = async () => {
       try {
-        const prices: Price[] = await getCityGoldPrices();
+        // Add cache-busting timestamp to ensure fresh data
+        const timestamp = Date.now();
+        const response = await fetch(`/api/gold-rate?t=${timestamp}`, {
+          cache: 'no-store',
+          headers: {
+            'Cache-Control': 'no-cache, no-store, must-revalidate',
+            'Pragma': 'no-cache',
+            'Expires': '0',
+          },
+        });
+        if (!response.ok) {
+          throw new Error('Failed to fetch prices');
+        }
+        const prices: Price[] = await response.json();
         // Display Bangalore's price as the feature price
         const bangalorePrice = prices.find(p => p.city === 'Bangalore');
         setPrice(bangalorePrice || prices[0]);
@@ -29,7 +41,15 @@ export default function TodaysRate() {
         setLoading(false);
       }
     };
+    
+    // Fetch immediately
     fetchPrice();
+    
+    // Set up polling every 30 seconds for real-time updates
+    const intervalId = setInterval(fetchPrice, 30000);
+    
+    // Cleanup interval on unmount
+    return () => clearInterval(intervalId);
   }, []);
 
   return (

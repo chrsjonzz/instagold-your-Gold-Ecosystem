@@ -20,7 +20,16 @@ export default function LivePricePage() {
   useEffect(() => {
     const fetchPrices = async () => {
       try {
-        const response = await fetch('/api/gold-rate');
+        // Add cache-busting timestamp to ensure fresh data
+        const timestamp = Date.now();
+        const response = await fetch(`/api/gold-rate?t=${timestamp}`, {
+          cache: 'no-store',
+          headers: {
+            'Cache-Control': 'no-cache, no-store, must-revalidate',
+            'Pragma': 'no-cache',
+            'Expires': '0',
+          },
+        });
         if (!response.ok) {
           throw new Error('Failed to fetch prices');
         }
@@ -32,7 +41,15 @@ export default function LivePricePage() {
         setLoading(false);
       }
     };
+    
+    // Fetch immediately
     fetchPrices();
+    
+    // Set up polling every 30 seconds for real-time updates
+    const intervalId = setInterval(fetchPrices, 30000);
+    
+    // Cleanup interval on unmount
+    return () => clearInterval(intervalId);
   }, []);
   
   return (

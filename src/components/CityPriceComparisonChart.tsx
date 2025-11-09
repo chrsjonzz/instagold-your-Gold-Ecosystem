@@ -11,13 +11,19 @@ import {
   XAxis,
   YAxis,
 } from 'recharts';
-import { getCityGoldPrices } from '@/lib/gold-price-service';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from './ui/card';
 
 type PriceData = {
   city: string;
   '24K Rate': number;
   '22K Rate': number;
+};
+
+type Price = {
+  city: string;
+  rate24k: number;
+  rate22k: number;
+  trend: 'up' | 'down';
 };
 
 const CustomTooltip = ({ active, payload, label }: any) => {
@@ -40,7 +46,20 @@ export default function CityPriceComparisonChart() {
   useEffect(() => {
     const fetchPrices = async () => {
       try {
-        const prices = await getCityGoldPrices();
+        // Add cache-busting timestamp to ensure fresh data
+        const timestamp = Date.now();
+        const response = await fetch(`/api/gold-rate?t=${timestamp}`, {
+          cache: 'no-store',
+          headers: {
+            'Cache-Control': 'no-cache, no-store, must-revalidate',
+            'Pragma': 'no-cache',
+            'Expires': '0',
+          },
+        });
+        if (!response.ok) {
+          throw new Error('Failed to fetch prices');
+        }
+        const prices: Price[] = await response.json();
         const chartData = prices.map(p => ({
           city: p.city,
           '24K Rate': p.rate24k,
@@ -53,7 +72,15 @@ export default function CityPriceComparisonChart() {
         setLoading(false);
       }
     };
+    
+    // Fetch immediately
     fetchPrices();
+    
+    // Set up polling every 30 seconds for real-time updates
+    const intervalId = setInterval(fetchPrices, 30000);
+    
+    // Cleanup interval on unmount
+    return () => clearInterval(intervalId);
   }, []);
 
   if (loading) {

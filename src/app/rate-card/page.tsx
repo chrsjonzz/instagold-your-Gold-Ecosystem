@@ -6,8 +6,14 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Logo } from "@/components/Logo";
 import { cn } from '@/lib/utils';
-import { getCityGoldPrices } from '@/lib/gold-price-service';
 import { Loader2 } from 'lucide-react';
+
+type Price = {
+  city: string;
+  rate24k: number;
+  rate22k: number;
+  trend: 'up' | 'down';
+};
 
 const purityMap: { [key: string]: string } = {
     "24": "24K (99.9%)",
@@ -30,7 +36,20 @@ function RateCardContent() {
   useEffect(() => {
     async function fetchRates() {
       try {
-        const cityPrices = await getCityGoldPrices();
+        // Add cache-busting timestamp to ensure fresh data
+        const timestamp = Date.now();
+        const response = await fetch(`/api/gold-rate?t=${timestamp}`, {
+          cache: 'no-store',
+          headers: {
+            'Cache-Control': 'no-cache, no-store, must-revalidate',
+            'Pragma': 'no-cache',
+            'Expires': '0',
+          },
+        });
+        if (!response.ok) {
+          throw new Error('Failed to fetch prices');
+        }
+        const cityPrices = await response.json();
         if (cityPrices.length > 0) {
           const firstCity = cityPrices[0];
           const newRates = [
@@ -47,7 +66,15 @@ function RateCardContent() {
         setLoading(false);
       }
     }
+    
+    // Fetch immediately
     fetchRates();
+    
+    // Set up polling every 30 seconds for real-time updates
+    const intervalId = setInterval(fetchRates, 30000);
+    
+    // Cleanup interval on unmount
+    return () => clearInterval(intervalId);
   }, []);
 
   return (

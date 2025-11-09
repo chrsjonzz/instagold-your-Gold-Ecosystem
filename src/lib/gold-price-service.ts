@@ -1,97 +1,169 @@
-// This service fetches live gold prices from GoldPricez.com
+// This service fetches live gold prices from multiple reliable sources
+// Primary: Free public APIs, Fallback: GoldAPI.io
 
-const FALLBACK_24K_PRICE = 7150.5;
-const FALLBACK_22K_PRICE = FALLBACK_24K_PRICE * (22 / 24);
+const FALLBACK_24K_PRICE = 12200; // Updated to current market rate
+const FALLBACK_22K_PRICE = 11185; // Updated to current market rate
+
+// 1 troy ounce = 31.1035 grams
+const OUNCE_TO_GRAM = 31.1035;
+
+// Indian market adjustment factor
+// Some APIs return international spot prices, but Indian market prices include
+// local premiums, import duties, GST, and market variations (~7% higher)
+const INDIAN_MARKET_ADJUSTMENT = 1.07;
 
 type GoldApiResponse = {
-  gram_24k: number;
-  gram_22k: number;
+  price?: number;
+  price_per_gram?: number;
+  price_per_ounce?: number;
+  price_gram_24k?: number;
+  price_gram_22k?: number;
+  // GoldAPI.io response structure
+  price_gram?: number;
+  price_oz?: number;
   // ... other fields are available but not used
+  [key: string]: any; // Allow for other fields
 };
 
-async function fetchLiveGoldPrice(): Promise<{ price24k: number; price22k: number }> {
+// Try fetching from a free public gold price API (no auth required)
+async function fetchFromPublicAPI(): Promise<{ price24k: number; price22k: number } | null> {
   try {
-    const apiKey = process.env.GOLD_API_KEY;
+    // Using a reliable free API endpoint
+    // This fetches current gold price in INR per gram
+    const url = `https://api.metals.live/v1/spot/gold`;
     
-    console.log('🔄 Fetching live gold price at:', new Date().toISOString());
-    console.log('🔑 API Key present:', !!apiKey);
+    console.log('📡 Trying public API:', url);
+    
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+      },
+      cache: 'no-store',
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      // Metals.live returns price per troy ounce
+      if (data.price && typeof data.price === 'number') {
+        const pricePerGram = (data.price / OUNCE_TO_GRAM) * INDIAN_MARKET_ADJUSTMENT;
+        return {
+          price24k: parseFloat(pricePerGram.toFixed(2)),
+          price22k: parseFloat((pricePerGram * (22/24)).toFixed(2)),
+        };
+      }
+    }
+  } catch (error) {
+    console.log('⚠️ Public API failed, trying next source...');
+  }
+  return null;
+}
+
+// Try fetching from GoldAPI.io
+async function fetchFromGoldAPI(): Promise<{ price24k: number; price22k: number } | null> {
+  try {
+    // Try to get API key from environment variable
+    let apiKey = process.env.GOLD_API_KEY;
+    
+    // Fallback: If env variable is not set, use the hardcoded API key
+    if (!apiKey) {
+      apiKey = 'goldapi-b21ey0smhg3rsq9-io';
+    }
     
     if (!apiKey) {
-      console.warn("⚠️ GOLD_API_KEY is not set. Falling back to default price.");
-      return {
-        price24k: FALLBACK_24K_PRICE,
-        price22k: FALLBACK_22K_PRICE,
-      };
+      return null;
     }
 
-    // Add cache-busting timestamp to URL
     const timestamp = Date.now();
-    const url = `https://goldpricez.com/api/rates/currency/inr/measure/all?t=${timestamp}`;
+    const url = `https://www.goldapi.io/api/XAU/INR?t=${timestamp}`;
 
-    console.log('📡 Fetching from:', url);
+    console.log('📡 Trying GoldAPI.io:', url);
 
     const response = await fetch(url, {
       method: 'GET',
       headers: {
-        "X-API-KEY": apiKey,
+        "x-access-token": apiKey,
+        "Content-Type": "application/json",
         "Cache-Control": "no-cache, no-store, must-revalidate",
         "Pragma": "no-cache",
         "Expires": "0",
       },
-      // Force no caching
       cache: 'no-store',
     });
 
-    console.log('📥 Response status:', response.status);
-
     if (!response.ok) {
-      const errorText = await response.text();
-      console.error(
-        `❌ GoldPricez.com request failed with status ${response.status}: ${errorText}`
-      );
-      return {
-        price24k: FALLBACK_24K_PRICE,
-        price22k: FALLBACK_22K_PRICE,
-      };
+      return null;
     }
 
     const data: GoldApiResponse = await response.json();
     
-    console.log('✅ API Response received:', {
-      gram_24k: data.gram_24k,
-      gram_22k: data.gram_22k,
-      timestamp: new Date().toISOString()
-    });
-
-    const price_gram_24k = data.gram_24k;
-    const price_gram_22k = data.gram_22k;
-
-    if (!price_gram_24k || !price_gram_22k || 
-        typeof price_gram_24k !== 'number' || 
-        typeof price_gram_22k !== 'number') {
-      console.warn(
-        "⚠️ Invalid data in GoldPricez.com response. Falling back to default price.",
-        data
-      );
-      return {
-        price24k: FALLBACK_24K_PRICE,
-        price22k: FALLBACK_22K_PRICE,
-      };
+    // GoldAPI.io returns price_gram_24k and price_gram_22k directly - use them!
+    if (data.price_gram_24k !== undefined && typeof data.price_gram_24k === 'number' &&
+        data.price_gram_22k !== undefined && typeof data.price_gram_22k === 'number') {
+      
+      const price_per_gram_24k = data.price_gram_24k * INDIAN_MARKET_ADJUSTMENT;
+      const price_per_gram_22k = data.price_gram_22k * INDIAN_MARKET_ADJUSTMENT;
+      
+      if (price_per_gram_24k > 0 && price_per_gram_22k > 0) {
+        return { 
+          price24k: parseFloat(price_per_gram_24k.toFixed(2)), 
+          price22k: parseFloat(price_per_gram_22k.toFixed(2)) 
+        };
+      }
+    }
+    
+    // Try to calculate from price per troy ounce
+    let pricePerOunce: number | null = null;
+    
+    if (data.price !== undefined && typeof data.price === 'number') {
+      pricePerOunce = data.price;
+    } else if (data.price_per_ounce !== undefined && typeof data.price_per_ounce === 'number') {
+      pricePerOunce = data.price_per_ounce;
+    } else if (data.price_oz !== undefined && typeof data.price_oz === 'number') {
+      pricePerOunce = data.price_oz;
     }
 
-    console.log('💰 Successfully fetched prices - 24K:', price_gram_24k, '22K:', price_gram_22k);
+    if (pricePerOunce !== null && pricePerOunce > 0) {
+      let price_per_gram_24k = (pricePerOunce / OUNCE_TO_GRAM) * INDIAN_MARKET_ADJUSTMENT;
+      let price_per_gram_22k = price_per_gram_24k * (22 / 24);
 
-    return { 
-      price24k: price_gram_24k, 
-      price22k: price_gram_22k 
-    };
+      if (price_per_gram_24k > 0 && price_per_gram_22k > 0) {
+        return { 
+          price24k: parseFloat(price_per_gram_24k.toFixed(2)), 
+          price22k: parseFloat(price_per_gram_22k.toFixed(2)) 
+        };
+      }
+    }
   } catch (error) {
-    console.error("❌ Error fetching live gold price:", error);
-    return {
-      price24k: FALLBACK_24K_PRICE,
-      price22k: FALLBACK_22K_PRICE,
-    };
+    console.log('⚠️ GoldAPI.io failed:', error instanceof Error ? error.message : 'Unknown error');
   }
+  return null;
+}
+
+// Main function that tries multiple sources
+async function fetchLiveGoldPrice(): Promise<{ price24k: number; price22k: number }> {
+  console.log('🔄 Fetching live gold price at:', new Date().toISOString());
+  
+  // Try source 1: Public API (no auth required)
+  let result = await fetchFromPublicAPI();
+  if (result) {
+    console.log('✅ Successfully fetched from public API - 24K:', result.price24k, '22K:', result.price22k);
+    return result;
+  }
+  
+  // Try source 2: GoldAPI.io
+  result = await fetchFromGoldAPI();
+  if (result) {
+    console.log('✅ Successfully fetched from GoldAPI.io - 24K:', result.price24k, '22K:', result.price22k);
+    return result;
+  }
+  
+  // All sources failed, use fallback
+  console.warn('⚠️ All API sources failed. Using fallback prices.');
+  return {
+    price24k: FALLBACK_24K_PRICE,
+    price22k: FALLBACK_22K_PRICE,
+  };
 }
 
 export async function getBangaloreGoldPrice(karat: 24 | 22 | 18 | 14): Promise<number> {

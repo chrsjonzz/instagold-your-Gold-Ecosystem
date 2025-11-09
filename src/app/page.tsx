@@ -57,7 +57,7 @@ export default function Home() {
   return (
     <div className="flex flex-col">
       {/* Hero Section */}
-      <section className="relative w-full pt-40 pb-12 md:pt-48 md:pb-20 bg-gradient-to-br from-background via-amber-50 to-background">
+      <section className="relative w-full pt-40 pb-12 md:pt-48 md:pb-20 bg-gradient-to-br from-background via-card to-background">
         <div className="absolute inset-0 opacity-10">
           {heroImage && <Image
             src={heroImage.imageUrl}
@@ -69,14 +69,14 @@ export default function Home() {
           />}
         </div>
         <div className="container mx-auto px-4 text-center relative">
-          <h1 className="font-headline text-4xl md:text-6xl font-bold tracking-tight leading-tight bg-gradient-to-r from-primary via-amber-600 to-primary text-transparent bg-clip-text">
+          <h1 className="font-headline text-4xl md:text-6xl font-bold tracking-tight leading-tight bg-gradient-to-r from-primary via-amber-400 to-primary text-transparent bg-clip-text text-glow">
             The Smart Way to Sell Your Gold.
           </h1>
           <p className="mt-4 max-w-2xl mx-auto text-lg md:text-xl text-muted-foreground">
             Unify India’s gold ecosystem — Sell, Compare, and Track — on one trusted, intelligent platform.
           </p>
           <div className="mt-8 flex flex-col sm:flex-row justify-center items-center gap-4">
-            <Button asChild size="lg" className="w-full sm:w-auto shadow-lg shadow-primary/20 hover:shadow-primary/40 transition-shadow">
+            <Button asChild size="lg" className="shadow-lg shadow-primary/20 hover:shadow-primary/40 transition-shadow">
               <Link href="/sell">Sell Instantly <ArrowRight className="ml-2" /></Link>
             </Button>
             <Button asChild size="lg" variant="outline" className="w-full sm:w-auto">
@@ -139,7 +139,7 @@ export default function Home() {
 
 
       {/* Features Section */}
-      <section className="py-16 md:py-24 bg-gradient-to-b from-amber-50 to-background">
+      <section className="py-16 md:py-24 bg-gradient-to-b from-card to-background">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
             <h2 className="font-headline text-3xl md:text-4xl font-bold">A Complete Gold Ecosystem</h2>

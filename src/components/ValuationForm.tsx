@@ -11,12 +11,21 @@ import Link from 'next/link';
 import { getGoldValuation, proceedToSell } from '@/app/actions';
 import { ValuationFormSchema, type ValuationFormState } from '@/lib/types';
 import { Button } from '@/components/ui/button';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Slider } from '@/components/ui/slider';
 import { useToast } from '@/hooks/use-toast';
-import { Sparkles, Loader2, Gem, ArrowRight, Download } from 'lucide-react';
+import { Sparkles, Loader2, Gem, ArrowRight, Download, Phone } from 'lucide-react';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 
 
@@ -35,12 +44,12 @@ function ValuationSubmitButton() {
             {pending ? (
                 <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Estimating...
+                    Submitting...
                 </>
             ) : (
                 <>
-                    <Sparkles className="mr-2 h-4 w-4" />
-                    Get Instant Valuation
+                    <Phone className="mr-2 h-4 w-4" />
+                    Submit & Get Value
                 </>
             )}
         </Button>
@@ -70,9 +79,12 @@ export default function ValuationForm() {
     const [proceedState, proceedAction] = useFormState(proceedToSell, initialProceedState);
 
     const valuationFormRef = useRef<HTMLFormElement>(null);
+    const phoneFormRef = useRef<HTMLFormElement>(null);
     const proceedFormRef = useRef<HTMLFormElement>(null);
     const { toast } = useToast();
+    
     const [karatValue, setKaratValue] = useState(22);
+    const [isPhoneDialogOpen, setPhoneDialogOpen] = useState(false);
     
     const placeholderImage = PlaceHolderImages.find(p => p.id === 'valuation-placeholder');
 
@@ -102,6 +114,7 @@ export default function ValuationForm() {
                     description: `We've estimated the value of your gold item.`,
                 });
                 setCurrentValuation(formState);
+                setPhoneDialogOpen(false); // Close dialog on success
                 valuationFormRef.current?.reset();
                 form.reset();
             }
@@ -132,11 +145,18 @@ export default function ValuationForm() {
         if (valuationFormRef.current) valuationFormRef.current.reset();
     };
 
+    const handleGetValuationClick = async () => {
+        const isValid = await form.trigger(['weight', 'karat']);
+        if (isValid) {
+            setPhoneDialogOpen(true);
+        }
+    }
+
 
     return (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
             <Card className="shadow-lg border-2 border-primary/20">
-                <form ref={valuationFormRef} action={formAction} className="space-y-6">
+                <form ref={valuationFormRef} className="space-y-6">
                     <CardHeader>
                         <CardTitle className="font-headline text-2xl flex items-center gap-2"><Gem className="text-primary"/> Valuation Details</CardTitle>
                         <CardDescription>All fields are required for an accurate estimation.</CardDescription>
@@ -173,25 +193,47 @@ export default function ValuationForm() {
                                     form.setValue('karat', value[0]);
                                 }}
                             />
-                            <input type="hidden" {...form.register('karat')} value={karatValue} />
                         </div>
-
-                        {/* Phone Number */}
-                        <div>
-                            <Label htmlFor="phone">Phone Number</Label>
-                            <Input
-                                id="phone"
-                                type="tel"
-                                placeholder="e.g., 9876543210"
-                                {...form.register('phone')}
-                                className="mt-1"
-                            />
-                            {form.formState.errors.phone && <p className="text-sm text-destructive mt-1">{form.formState.errors.phone.message}</p>}
-                        </div>
-
                     </CardContent>
                     <CardFooter>
-                        <ValuationSubmitButton />
+                       <Dialog open={isPhoneDialogOpen} onOpenChange={setPhoneDialogOpen}>
+                            <Button type="button" onClick={handleGetValuationClick} className="w-full" size="lg">
+                                <Sparkles className="mr-2 h-4 w-4" />
+                                Get Instant Valuation
+                            </Button>
+                            <DialogContent className="sm:max-w-[425px]">
+                                <form action={formAction} ref={phoneFormRef}>
+                                    <DialogHeader>
+                                        <DialogTitle>One Last Step</DialogTitle>
+                                        <DialogDescription>
+                                            Please provide your phone number to receive your gold valuation.
+                                        </DialogDescription>
+                                    </DialogHeader>
+                                    <div className="grid gap-4 py-4">
+                                        <div className="grid grid-cols-4 items-center gap-4">
+                                            <Label htmlFor="phone" className="text-right">
+                                                Phone
+                                            </Label>
+                                            <div className="col-span-3">
+                                                <Input
+                                                    id="phone"
+                                                    type="tel"
+                                                    placeholder="e.g., 9876543210"
+                                                    {...form.register('phone')}
+                                                    className="mt-1"
+                                                />
+                                                 {form.formState.errors.phone && <p className="text-sm text-destructive mt-1">{form.formState.errors.phone.message}</p>}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <input type="hidden" name="weight" value={form.getValues('weight')} />
+                                    <input type="hidden" name="karat" value={form.getValues('karat')} />
+                                    <DialogFooter>
+                                        <ValuationSubmitButton />
+                                    </DialogFooter>
+                                </form>
+                            </DialogContent>
+                        </Dialog>
                     </CardFooter>
                 </form>
             </Card>

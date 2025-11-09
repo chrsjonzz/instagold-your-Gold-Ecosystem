@@ -2,13 +2,17 @@
 
 import { useState, useEffect } from 'react';
 
-// Define a stable USD to INR conversion rate.
-// This can be updated if the currency market changes significantly.
+// Define a stable USD to INR conversion rate for the second fallback API.
 const USD_TO_INR_RATE = 83.50; 
 
-// Fallback price in INR, calculated from a fallback USD price.
-const FALLBACK_24K_PRICE_USD = 88.50; // A reasonable fallback price in USD per gram
-const FALLBACK_24K_PRICE_INR = FALLBACK_24K_PRICE_USD * USD_TO_INR_RATE;
+// --- Primary Public API (No Auth Required) ---
+const PUBLIC_API_URL = "https://www.goldpricez.com/api/rates/currency/inr/metal/xau";
+
+// --- Fallback Authenticated API ---
+const GOLDAPI_URL = "https://www.goldapi.io/api/XAU/USD";
+
+// --- Final Fallback Prices ---
+const FALLBACK_24K_PRICE_INR = 7150.50;
 const FALLBACK_22K_PRICE_INR = FALLBACK_24K_PRICE_INR * (22 / 24);
 
 export type Price = {
@@ -18,73 +22,84 @@ export type Price = {
   trend: 'up' | 'down';
 };
 
-// This matches the structure of the goldapi.io response for XAU/USD
-type GoldApiResponse = {
-  price_gram_24k: number;
-  price_gram_22k: number;
+// --- API Response Type Definitions ---
+type GoldPricezApiResponse = {
+    "24k_in_inr"?: number;
+    "22k_in_inr"?: number;
 };
 
-// This function fetches the live gold price in USD and converts it to INR.
-async function fetchLiveGoldPrice(): Promise<{ price24k: number; price22k: number }> {
+type GoldApiResponse = {
+  price_gram_24k?: number;
+  price_gram_22k?: number;
+};
+
+
+// --- Fetching Logic ---
+
+/**
+ * 1. Fetches from the primary public API (goldpricez.com).
+ * This API provides direct INR prices.
+ */
+async function fetchFromPublicApi(): Promise<{ price24k: number; price22k: number } | null> {
     try {
-        const apiKey = process.env.NEXT_PUBLIC_GOLD_API_KEY;
-        
-        if (!apiKey) {
-          console.warn("⚠️ NEXT_PUBLIC_GOLD_API_KEY is not set. Using fallback prices.");
-          return {
-            price24k: FALLBACK_24K_PRICE_INR,
-            price22k: FALLBACK_22K_PRICE_INR,
-          };
-        }
-        
-        // Use the goldapi.io endpoint that returns price in USD
-        const url = `https://www.goldapi.io/api/XAU/USD`;
-
-        const response = await fetch(url, {
-          method: 'GET',
-          headers: { "x-access-token": apiKey },
-          cache: 'no-store', // This is crucial to prevent caching and get real-time data
-        });
-
+        const response = await fetch(PUBLIC_API_URL, { cache: 'no-store' });
         if (!response.ok) {
-            console.error(`❌ GoldAPI.io request failed with status ${response.status}. Using fallback prices.`);
+            throw new Error(`Public API failed with status ${response.status}`);
+        }
+        const data: GoldPricezApiResponse = await response.json();
+
+        if (data["24k_in_inr"] && data["22k_in_inr"]) {
+            console.log("✅ Successfully fetched from Primary Public API.");
             return {
-                price24k: FALLBACK_24K_PRICE_INR,
-                price22k: FALLBACK_22K_PRICE_INR,
+                price24k: data["24k_in_inr"],
+                price22k: data["22k_in_inr"],
             };
         }
-
-        const data: GoldApiResponse = await response.json();
-        
-        // The API returns the price per gram in USD
-        const price_gram_24k_usd = data.price_gram_24k;
-        const price_gram_22k_usd = data.price_gram_22k;
-
-        if (!price_gram_24k_usd || !price_gram_22k_usd) {
-            console.warn("⚠️ Invalid data in GoldAPI.io response. Using fallback prices.");
-            return {
-                price24k: FALLBACK_24K_PRICE_INR,
-                price22k: FALLBACK_22K_PRICE_INR,
-            };
-        }
-
-        // Convert the USD prices to INR
-        const price24k_inr = price_gram_24k_usd * USD_TO_INR_RATE;
-        const price22k_inr = price_gram_22k_usd * USD_TO_INR_RATE;
-
-        return { 
-          price24k: parseFloat(price24k_inr.toFixed(2)), 
-          price22k: parseFloat(price22k_inr.toFixed(2)) 
-        };
-
+        throw new Error("Invalid data structure from Public API.");
     } catch (error) {
-        console.error("❌ Error fetching live gold price:", error);
-        return {
-            price24k: FALLBACK_24K_PRICE_INR,
-            price22k: FALLBACK_22K_PRICE_INR,
-        };
+        console.warn(`⚠️ Primary Public API failed: ${error instanceof Error ? error.message : String(error)}. Trying fallback...`);
+        return null;
     }
 }
+
+/**
+ * 2. Fetches from the authenticated fallback API (goldapi.io).
+ * This API provides USD prices which need conversion.
+ */
+async function fetchFromGoldApi(): Promise<{ price24k: number; price22k: number } | null> {
+    const apiKey = process.env.NEXT_PUBLIC_GOLD_API_KEY;
+    if (!apiKey) {
+        console.warn("⚠️ NEXT_PUBLIC_GOLD_API_KEY not set. Skipping GoldAPI.io fallback.");
+        return null;
+    }
+
+    try {
+        const response = await fetch(GOLDAPI_URL, {
+            headers: { "x-access-token": apiKey },
+            cache: 'no-store',
+        });
+        if (!response.ok) {
+            throw new Error(`GoldAPI.io failed with status ${response.status}`);
+        }
+        const data: GoldApiResponse = await response.json();
+
+        if (data.price_gram_24k && data.price_gram_22k) {
+            console.log("✅ Successfully fetched from Fallback GoldAPI.io.");
+            // Convert USD prices to INR
+            const price24k_inr = data.price_gram_24k * USD_TO_INR_RATE;
+            const price22k_inr = data.price_gram_22k * USD_TO_INR_RATE;
+            return {
+                price24k: parseFloat(price24k_inr.toFixed(2)),
+                price22k: parseFloat(price22k_inr.toFixed(2)),
+            };
+        }
+        throw new Error("Invalid data structure from GoldAPI.io.");
+    } catch (error) {
+        console.error(`❌ Fallback GoldAPI.io failed: ${error instanceof Error ? error.message : String(error)}.`);
+        return null;
+    }
+}
+
 
 export function useGoldPrices() {
   const [prices, setPrices] = useState<Price[]>([]);
@@ -93,43 +108,53 @@ export function useGoldPrices() {
 
   useEffect(() => {
     const getPrices = async () => {
-      try {
-        setLoading(true);
-        // This function now returns prices accurately converted to INR
-        const { price24k, price22k } = await fetchLiveGoldPrice();
-        const trends: ('up' | 'down')[] = ['up', 'down'];
-        const cities = ['Bangalore', 'Chennai', 'Hyderabad', 'Coimbatore', 'Vijayawada'];
+      setLoading(true);
 
-        const cityPrices = cities.map((city, index) => {
-            // Add a small, realistic variation for each city
-            const variation = (Math.random() * 50) - 25;
-            return {
-                city: city,
-                rate24k: parseFloat((price24k + variation).toFixed(2)),
-                rate22k: parseFloat((price22k + (variation * (22/24))).toFixed(2)),
-                trend: trends[Math.floor(Math.random() * trends.length)],
-            }
-        });
-        
-        setPrices(cityPrices);
-        setError(null);
-      } catch (err) {
-        const errorMessage = err instanceof Error ? err.message : 'An unknown error occurred';
-        setError(errorMessage);
-        console.error("Failed to process city prices:", err);
-      } finally {
-        setLoading(false);
+      // 1. Try public API
+      let livePrices = await fetchFromPublicApi();
+
+      // 2. If public fails, try authenticated API
+      if (!livePrices) {
+        livePrices = await fetchFromGoldApi();
       }
+
+      // 3. If all APIs fail, use hardcoded fallback
+      if (!livePrices) {
+        console.error("❌ All API sources failed. Using hardcoded fallback prices.");
+        livePrices = {
+            price24k: FALLBACK_24K_PRICE_INR,
+            price22k: FALLBACK_22K_PRICE_INR,
+        };
+        setError("Could not fetch live prices. Displaying fallback data.");
+      } else {
+        setError(null);
+      }
+
+      const { price24k, price22k } = livePrices;
+      const trends: ('up' | 'down')[] = ['up', 'down'];
+      const cities = ['Bangalore', 'Chennai', 'Hyderabad', 'Coimbatore', 'Vijayawada'];
+
+      const cityPrices = cities.map((city) => {
+          const variation = (Math.random() * 50) - 25; // Small, realistic variation per city
+          return {
+              city: city,
+              rate24k: parseFloat((price24k + variation).toFixed(2)),
+              rate22k: parseFloat((price22k + (variation * (22 / 24))).toFixed(2)),
+              trend: trends[Math.floor(Math.random() * trends.length)],
+          };
+      });
+
+      setPrices(cityPrices);
+      setLoading(false);
     };
 
     getPrices();
     
-    // Set up an interval to refetch the price every 60 seconds for real-time updates
+    // Refresh prices every 60 seconds
     const intervalId = setInterval(getPrices, 60000);
 
     // Cleanup interval on component unmount
     return () => clearInterval(intervalId);
-
   }, []);
 
   return { prices, loading, error };

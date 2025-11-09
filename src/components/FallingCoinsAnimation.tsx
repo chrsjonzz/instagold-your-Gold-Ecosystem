@@ -9,8 +9,13 @@ const RupeeIcon = () => (
 );
 
 const GoldCoin = () => (
-  <div className="w-6 h-6 bg-gradient-to-br from-yellow-400 to-amber-600 rounded-full shadow-md border-2 border-yellow-600 animate-coin-spin" />
+  <div className="relative w-7 h-7 flex items-center justify-center bg-gradient-to-br from-yellow-400 to-amber-600 rounded-full shadow-lg border-2 border-yellow-600/80 animate-coin-spin">
+    <div className="absolute inset-0.5 rounded-full bg-gradient-to-br from-amber-400 to-yellow-500 flex items-center justify-center">
+        <span className="text-sm font-bold text-amber-900/70">₹</span>
+    </div>
+  </div>
 );
+
 
 type CoinState = {
   id: number;

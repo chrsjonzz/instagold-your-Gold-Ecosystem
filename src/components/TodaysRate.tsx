@@ -1,36 +1,12 @@
 'use client';
 
-import { useEffect, useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Loader2 } from 'lucide-react';
-import { getCityGoldPrices } from '@/lib/gold-price-service';
-
-type Price = {
-  city: string;
-  rate24k: number;
-  rate22k: number;
-  trend: 'up' | 'down';
-};
+import { useGoldPrices } from '@/hooks/use-gold-prices';
 
 export default function TodaysRate() {
-  const [price, setPrice] = useState<Price | null>(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchPrice = async () => {
-      try {
-        const prices: Price[] = await getCityGoldPrices();
-        // Display Bangalore's price as the feature price
-        const bangalorePrice = prices.find(p => p.city === 'Bangalore');
-        setPrice(bangalorePrice || prices[0]);
-      } catch (error) {
-        console.error("Failed to fetch today's rate:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchPrice();
-  }, []);
+  const { prices, loading } = useGoldPrices();
+  const price = prices.find(p => p.city === 'Bangalore') || prices[0];
 
   return (
     <section className="py-16 md:py-24 bg-gradient-to-b from-yellow-50 to-background">

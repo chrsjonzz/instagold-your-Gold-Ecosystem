@@ -2,38 +2,12 @@
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { TrendingUp, TrendingDown, Download, Phone, Loader2 } from 'lucide-react';
+import { TrendingUp, TrendingDown, Download, Loader2 } from 'lucide-react';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
-
-type Price = {
-  city: string;
-  rate24k: number;
-  rate22k: number;
-  trend: 'up' | 'down';
-};
+import { useGoldPrices } from '@/hooks/use-gold-prices';
 
 export default function LivePricePage() {
-  const [prices, setPrices] = useState<Price[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchPrices = async () => {
-      try {
-        const response = await fetch('/api/gold-rate');
-        if (!response.ok) {
-          throw new Error('Failed to fetch prices');
-        }
-        const fetchedPrices = await response.json();
-        setPrices(fetchedPrices);
-      } catch (error) {
-        console.error("Failed to fetch city prices:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchPrices();
-  }, []);
+  const { prices, loading } = useGoldPrices();
   
   return (
     <div className="bg-gradient-to-b from-background via-yellow-50 to-background min-h-full">

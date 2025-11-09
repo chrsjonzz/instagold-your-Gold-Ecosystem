@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Logo } from "@/components/Logo";
 import { cn } from '@/lib/utils';
-import { getCityGoldPrices } from '@/lib/gold-price-service';
+import { useGoldPrices } from '@/hooks/use-gold-prices';
 import { Loader2 } from 'lucide-react';
 
 const purityMap: { [key: string]: string } = {
@@ -24,31 +24,22 @@ function RateCardContent() {
   const karat = searchParams.get('karat');
   const estimatedValue = searchParams.get('estimatedValue');
 
+  const { prices, loading } = useGoldPrices();
   const [rates, setRates] = useState<Rate[]>([]);
-  const [loading, setLoading] = useState(true);
-
+  
   useEffect(() => {
-    async function fetchRates() {
-      try {
-        const cityPrices = await getCityGoldPrices();
-        if (cityPrices.length > 0) {
-          const firstCity = cityPrices[0];
-          const newRates = [
-            { purity: "24", rate: firstCity.rate24k.toFixed(2) },
-            { purity: "22", rate: firstCity.rate22k.toFixed(2) },
-            { purity: "18", rate: (firstCity.rate24k * (18/24)).toFixed(2) },
-            { purity: "14", rate: (firstCity.rate24k * (14/24)).toFixed(2) },
-          ];
-          setRates(newRates);
-        }
-      } catch (error) {
-        console.error("Failed to fetch gold rates for rate card", error);
-      } finally {
-        setLoading(false);
-      }
+    if (prices.length > 0) {
+      const firstCity = prices[0];
+      const newRates = [
+        { purity: "24", rate: firstCity.rate24k.toFixed(2) },
+        { purity: "22", rate: firstCity.rate22k.toFixed(2) },
+        { purity: "18", rate: (firstCity.rate24k * (18/24)).toFixed(2) },
+        { purity: "14", rate: (firstCity.rate24k * (14/24)).toFixed(2) },
+      ];
+      setRates(newRates);
     }
-    fetchRates();
-  }, []);
+  }, [prices]);
+
 
   return (
     <div className="bg-gradient-to-b from-background via-yellow-50 to-background min-h-screen py-12 print:bg-white">

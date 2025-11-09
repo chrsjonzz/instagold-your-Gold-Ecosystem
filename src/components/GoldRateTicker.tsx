@@ -1,8 +1,7 @@
 'use client';
 
 import { TrendingUp, TrendingDown } from 'lucide-react';
-import { useEffect, useState } from 'react';
-import { getTickerGoldPrices } from '@/lib/gold-price-service';
+import { useGoldPrices } from '@/hooks/use-gold-prices';
 
 type TickerRate = {
   city: string;
@@ -23,21 +22,24 @@ const TickerItem = ({ city, rate, change, trend }: TickerRate) => (
 );
 
 export default function GoldRateTicker() {
-    const [rates, setRates] = useState<TickerRate[]>([]);
+    const { prices, loading } = useGoldPrices();
 
-    useEffect(() => {
-      const fetchRates = async () => {
-        const fetchedRates = await getTickerGoldPrices();
-        setRates(fetchedRates);
-      };
-      fetchRates();
-    }, []);
-
-    if (rates.length === 0) {
+    if (loading || prices.length === 0) {
         return <div className="h-12 bg-primary/10" />;
     }
 
-  const extendedRates = [...rates, ...rates]; // Duplicate for seamless loop
+    const liveRate = prices[0];
+    const tickerPrices = prices.map(p => ({
+        city: p.city,
+        rate: liveRate.rate24k.toLocaleString('en-IN', { 
+            minimumFractionDigits: 2, 
+            maximumFractionDigits: 2 
+        }),
+        change: `${p.trend === 'up' ? '+' : '-'}${(Math.random() * 0.5).toFixed(2)}%`,
+        trend: p.trend,
+    }));
+
+    const extendedRates = [...tickerPrices, ...tickerPrices]; // Duplicate for seamless loop
 
   return (
     <div className="w-full bg-primary/10 overflow-hidden h-12 flex items-center relative">

@@ -1,6 +1,5 @@
 'use client';
 
-import { useEffect, useState } from 'react';
 import {
   Bar,
   BarChart,
@@ -11,8 +10,8 @@ import {
   XAxis,
   YAxis,
 } from 'recharts';
-import { getCityGoldPrices } from '@/lib/gold-price-service';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from './ui/card';
+import { useGoldPrices } from '@/hooks/use-gold-prices';
 
 type PriceData = {
   city: string;
@@ -34,27 +33,13 @@ const CustomTooltip = ({ active, payload, label }: any) => {
 };
 
 export default function CityPriceComparisonChart() {
-  const [data, setData] = useState<PriceData[]>([]);
-  const [loading, setLoading] = useState(true);
+  const { prices, loading } = useGoldPrices();
 
-  useEffect(() => {
-    const fetchPrices = async () => {
-      try {
-        const prices = await getCityGoldPrices();
-        const chartData = prices.map(p => ({
-          city: p.city,
-          '24K Rate': p.rate24k,
-          '22K Rate': p.rate22k,
-        }));
-        setData(chartData);
-      } catch (error) {
-        console.error("Failed to fetch city prices for chart:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchPrices();
-  }, []);
+  const chartData: PriceData[] = prices.map(p => ({
+    city: p.city,
+    '24K Rate': p.rate24k,
+    '22K Rate': p.rate22k,
+  }));
 
   if (loading) {
       return (
@@ -81,7 +66,7 @@ export default function CityPriceComparisonChart() {
         <CardContent className="p-2 sm:p-4 md:p-6">
             <div className="w-full h-[300px] md:h-[400px]">
                 <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={data} margin={{ top: 5, right: 20, left: 0, bottom: 5 }}>
+                <BarChart data={chartData} margin={{ top: 5, right: 20, left: 0, bottom: 5 }}>
                     <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border) / 0.5)" />
                     <XAxis
                     dataKey="city"
